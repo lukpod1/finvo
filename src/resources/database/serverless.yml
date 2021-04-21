@@ -1,0 +1,34 @@
+service: database-service
+
+frameworkVersion: "2"
+
+plugins:
+  - serverless-dynamodb-local
+
+custom:
+  dynamodb:
+    stages:
+      - local
+    start:
+      migrate: true
+      noStart: true
+      port: 4566 
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'local'}
+  region: us-east-1
+
+resources:
+  Resources:
+    Users: ${file(tables/users.yml):Users}
+  
+  Outputs:
+    UsersArn:
+      Value:
+        Fn::GetAtt: 
+          - Users
+          - Arn
+      Export:
+        Name: ${self:provider.stage}-UsersArn
