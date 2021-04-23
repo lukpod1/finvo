@@ -1,10 +1,10 @@
 export const success = (body) => {
     return buildResponse(200, body);
-}
+};
 
 export const failure = (body) => {
     return buildResponse(500, body);
-}
+};
 
 const buildResponse = (statusCode, body) => {
     return {
@@ -15,4 +15,4 @@ const buildResponse = (statusCode, body) => {
         },
         body: JSON.stringify(body)
     };
-}
+};

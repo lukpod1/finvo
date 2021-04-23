@@ -6,6 +6,8 @@ plugins:
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
   - serverless-dynamodb-local
+  - serverless-bundle
+  - serverless-pseudo-parameters
 
 # Create an optimized package for our functions
 package:
@@ -33,7 +35,7 @@ provider:
 
 functions:
   createUser:
-    handler: handlers/create.createUser
+    handler: handlers/create.handler
     events:
       - http:
           path: /users
