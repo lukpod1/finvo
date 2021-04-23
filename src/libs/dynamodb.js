@@ -6,7 +6,7 @@ if (process.env.IS_OFFLINE) {
     options = {
         region: 'localhost',
         endpoint: 'http://localhost:4566'
-    }
+    };
 }
 
 const dynamodb = new DynamoDB.DocumentClient(options);
@@ -18,4 +18,4 @@ export default {
     scan: (params) => dynamodb.scan(params).promise(),
     update: (params) => dynamodb.update(params).promise(),
     delete: (params) => dynamodb.delete(params).promise(),
-}
+};

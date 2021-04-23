@@ -24,6 +24,6 @@ const createUser = async (event, context) => {
         failure(user);
         throw new createError.InternalServerError(error);
     }
-}
+};
 
 export const handler = middleware(createUser);
