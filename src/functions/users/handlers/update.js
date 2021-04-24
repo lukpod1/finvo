@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { success, failure } from '../../../libs/response';
@@ -8,26 +7,33 @@ import { getUserById } from './retrieve';
 const updateUser = async (event, context) => {
 
     const { id } = event.pathParameters;
-    const request = event.body;
+    const { username, email, password } = event.body;
 
-    const user = await getUserById(id);
+    const user = getUserById(id);
 
     const params = {
         TableName: process.env.UERS_TABLE,
         Key: {id},
-        UpdateExpression: "SET username = :username"
-    }
+        UpdateExpression: `
+            SET username = :username,
+                email = :email,
+                password = :password,
+        `,
+        ExpressionAttributes: {
+            ":username": username || null,
+            ":email": email || null,
+            ":password": password || null
+        },
+        ReturnValues: 'ALL_NEW'
+    };
 
-    // try {
-    //     await dynamoDb.put({
-    //         TableName: 'local-Users',
-    //         Item: user
-    //     });
-    //     return success(user);
-    // } catch (error) {
-    //     failure(user);
-    //     throw new createError.InternalServerError(error);
-    // }
+    try {
+        const response = await dynamoDb.update(params);
+        return success(response.Attributes);
+    } catch (error) {
+        failure(user);
+        throw new createError.InternalServerError(error);
+    }
 };
 
 export const handler = middleware(updateUser);

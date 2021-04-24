@@ -1,7 +1,7 @@
 import dynamoDb from '../../../libs/dynamodb';
 import middleware from '../../../libs/middleware';
 import createError from 'http-errors';
-import { success, failure } from '../../../libs/response';
+import { success } from '../../../libs/response';
 
 export const getUserById = async (id) => {
     let user = {};
@@ -23,13 +23,13 @@ export const getUserById = async (id) => {
     }
 
     return user;
-}
+};
 
 const retrive = (event, context) => {
     const {id} = event.pathParameters;
-    const user = await getUserById(id);
+    const user = getUserById(id);
 
     return success(user);
-}
+};
 
 export const handler = middleware(retrive);

@@ -5,7 +5,6 @@ frameworkVersion: '2'
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
-  - serverless-dynamodb-local
   - serverless-bundle
   - serverless-pseudo-parameters
 
@@ -30,6 +29,8 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
       Resource:
         - 'Fn::ImportValue': ${self:provider.stage}-UsersArn
 
@@ -40,4 +41,11 @@ functions:
       - http:
           path: /users
           method: post
+          cors: true
+  updateUser: 
+    handler: handlers/update.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: put
           cors: true

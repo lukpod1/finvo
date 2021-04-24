@@ -15,7 +15,7 @@ const createUser = async (event, context) => {
 
     try {
         await dynamoDb.put({
-            TableName: 'local-Users',
+            TableName: process.env.USERS_TABLE,
             Item: user
         });
         return success(user);
