@@ -5,8 +5,7 @@
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run migrate && npx sls offline",
-    "migrate": "npx sls dynamodb migrate"
+    "offline": "npx sls offline"
   },
   "keywords": [],
   "author": "",

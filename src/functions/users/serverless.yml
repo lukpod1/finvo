@@ -1,4 +1,4 @@
-service: users
+service: finance-service-users
 
 frameworkVersion: '2'
 
@@ -16,14 +16,14 @@ package:
 provider:
   name: aws
   runtime: nodejs14.x
-  stage: local
+  stage: ${opt:stage, 'dev'}
   region: 'us-east-1'
   tracing: 
     apiGateway: true
     lambda: true
 
   environment:
-    USERS_TABLE: ${self:provider.stage}-Users
+    USERS_TABLE: ${self:provider.stage}-DB-FS-Users
 
   iamRoleStatements:
     - Effect: Allow
@@ -31,8 +31,9 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:GetItem
+        - dynamodb:Scan
       Resource:
-        - 'Fn::ImportValue': ${self:provider.stage}-UsersArn
+        - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-UsersArn
 
 functions:
   createUser:
@@ -48,4 +49,11 @@ functions:
       - http:
           path: /users/{id}
           method: put
+          cors: true
+  findUser:
+    handler: handlers/find.handler
+    events:
+      - http:
+          path: /users
+          method: get
           cors: true

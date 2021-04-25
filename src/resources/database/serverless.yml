@@ -1,4 +1,4 @@
-service: database-service
+service: database-finance-service
 
 frameworkVersion: "2"
 
@@ -8,7 +8,7 @@ plugins:
 custom:
   dynamodb:
     stages:
-      - local
+      - dev
     start:
       migrate: true
       noStart: true
@@ -16,8 +16,8 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  stage: ${opt:stage, 'local'}
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
 
 resources:
@@ -31,4 +31,4 @@ resources:
           - Users
           - Arn
       Export:
-        Name: ${self:provider.stage}-UsersArn
+        Name: ${self:provider.stage}-DB-FS-UsersArn

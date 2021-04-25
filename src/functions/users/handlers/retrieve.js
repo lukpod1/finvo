@@ -9,7 +9,8 @@ export const getUserById = async (id) => {
     try {
         const result = await dynamoDb.get({
             TableName: process.env.USERS_TABLE,
-            Key: {id}
+            Key: { id },
+            ProjectionExpression: "id, username"
         });
 
         user = result.Item;

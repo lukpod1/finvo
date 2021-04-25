@@ -7,22 +7,19 @@ import { getUserById } from './retrieve';
 const updateUser = async (event, context) => {
 
     const { id } = event.pathParameters;
-    const { username, email, password } = event.body;
 
-    const user = getUserById(id);
+    const request = event.body;
+
+    const user = await getUserById(id);
 
     const params = {
-        TableName: process.env.UERS_TABLE,
+        TableName: process.env.USERS_TABLE,
         Key: {id},
-        UpdateExpression: `
-            SET username = :username,
-                email = :email,
-                password = :password,
-        `,
-        ExpressionAttributes: {
-            ":username": username || null,
-            ":email": email || null,
-            ":password": password || null
+        UpdateExpression: "SET username = :username, email = :email, password = :password",
+        ExpressionAttributeValues: {
+            ":username": request?.username || user.username,
+            ":email": request?.email || user.email,
+            ":password": request?.password || user.password
         },
         ReturnValues: 'ALL_NEW'
     };
