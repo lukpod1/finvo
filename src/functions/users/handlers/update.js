@@ -31,6 +31,7 @@ const updateUser = async (event, context) => {
         failure(user);
         throw new createError.InternalServerError(error);
     }
+
 };
 
 export const handler = middleware(updateUser);
