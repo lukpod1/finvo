@@ -12,7 +12,13 @@ custom:
     start:
       migrate: true
       noStart: true
-      port: 4566 
+      seed: true
+      port: 4566
+    seed:
+      finance:
+        sources:
+          - table: ${self:provider.stage}-DB-FS-Users
+            sources: [ '../seed/users.json' ] 
 
 provider:
   name: aws
