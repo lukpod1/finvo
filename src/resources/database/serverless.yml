@@ -29,12 +29,13 @@ provider:
 resources:
   Resources:
     Users: ${file(tables/users.yml):Users}
+    Accounts: ${file(tables/accounts.yml):Accounts}
   
   Outputs:
-    UsersArn:
+    AccountsArn:
       Value:
         Fn::GetAtt: 
-          - Users
+          - Accounts
           - Arn
       Export:
-        Name: ${self:provider.stage}-DB-FS-UsersArn
+        Name: ${self:provider.stage}-DB-FS-AccountsArn
