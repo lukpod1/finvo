@@ -6,6 +6,10 @@ Accounts:
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
+      - AttributeName: userId
+        AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH
+      - AttributeName: userId
+        KeyType: RANGE

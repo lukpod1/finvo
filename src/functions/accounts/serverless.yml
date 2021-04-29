@@ -1,0 +1,46 @@
+service: finance-service-accounts
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-dynamodb-local
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+# Create an optimized package for our functions
+package:
+  individually: true
+  excludeDevDependencies: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: 'us-east-1'
+  tracing: 
+    apiGateway: true
+    lambda: true
+  
+  environment:
+    ACCOUNTS_TABLE: ${self:provider.stage}-DB-FS-Accounts
+  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
+      Resource:
+        - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-AccountsArn
+
+functions:
+  createAccount:
+    handler: handlers/create.handler
+    events:
+      - http:
+          path: /accounts
+          method: post
+          cors: true
