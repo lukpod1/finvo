@@ -58,3 +58,10 @@ functions:
           path: /users
           method: get
           cors: true
+  signIn:
+    handler: handlers/signIn.handler
+    events:
+      - http:
+          path: /users/signin
+          method: post
+          cors: true
