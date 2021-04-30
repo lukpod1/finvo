@@ -44,3 +44,10 @@ functions:
           path: /accounts
           method: post
           cors: true
+  removeAccount:
+    handler: handlers/remove.handler
+    events:
+      - http:
+          path: /accounts/{id}
+          method: delete
+          cors: true
