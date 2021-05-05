@@ -1,20 +1,32 @@
 [
-    {
-        "id": "d3d3beed-6a48-466c-b2fd-6f58ae54f6ab",
-        "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782",
-        "name": "Principal",
-        "balance": 0
-    },
-    {
-        "id": "66ef75b1-ff7e-42f9-8394-7563c256045b",
-        "userId": "5ac69c16-cf0c-46be-840f-0a20cd5f28f7",
-        "name": "Principal",
-        "balance": 0
-    },
-    {
-        "id": "3bed9743-be28-4212-a37d-50db4448322a",
-        "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782",
-        "name": "Reserva",
-        "balance": 0
-    }
+  {
+    "id": "d3d3beed-6a48-466c-b2fd-6f58ae54f6ab",
+    "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782",
+    "name": "Principal",
+    "balance": 100
+  },
+  {
+    "id": "66ef75b1-ff7e-42f9-8394-7563c256045b",
+    "userId": "5ac69c16-cf0c-46be-840f-0a20cd5f28f7",
+    "name": "Principal",
+    "balance": 100
+  },
+  {
+    "id": "3bed9743-be28-4212-a37d-50db4448322a",
+    "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782",
+    "name": "Reserva",
+    "balance": 200
+  },
+  {
+    "name": "Principal",
+    "id": "5a17b75c-f79d-4a08-a7d6-e9bfd5778813",
+    "balance": 0,
+    "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782"
+  },
+  {
+    "name": "Reserva",
+    "id": "f1149aba-d828-47e7-bad9-32d5cd7e82ff",
+    "balance": 100,
+    "userId": "9f7f2a46-4f38-48bb-b222-e2df59e64782"
+  }
 ]

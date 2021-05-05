@@ -58,3 +58,10 @@ functions:
           path: /accounts/{id}
           method: put
           cors: true
+  findAccounts: 
+    handler: handlers/find.handler
+    events:
+      - http:
+          path: /accounts/{id}
+          method: post
+          cors: true

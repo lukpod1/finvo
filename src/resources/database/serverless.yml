@@ -18,7 +18,9 @@ custom:
       finance:
         sources:
           - table: ${self:provider.stage}-DB-FS-Users
-            sources: [ '../seed/users.json' ] 
+            sources: [ '../seed/users.json' ]
+          - table: ${self:provider.stage}-DB-FS-Accounts
+            sources: [ '../seed/accounts.json' ]  
 
 provider:
   name: aws
