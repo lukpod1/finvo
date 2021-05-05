@@ -23,7 +23,7 @@ const removeAccount = async (event, context) => {
     } catch (error) {
         failure(error);
         throw new createError.InternalServerError(error);
-    } 
+    }
 };
 
 export const handler = middleware(removeAccount);

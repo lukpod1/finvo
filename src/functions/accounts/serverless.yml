@@ -51,3 +51,10 @@ functions:
           path: /accounts/{id}
           method: delete
           cors: true
+  updateAccount: 
+    handler: handlers/update.handler
+    events:
+      - http:
+          path: /accounts/{id}
+          method: put
+          cors: true
