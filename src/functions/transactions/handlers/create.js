@@ -5,7 +5,6 @@ import { success, failure } from '../../../libs/response';
 import createError from 'http-errors';
 import { getAccountById } from '../../accounts/handlers/retrieve';
 import { updateAccount } from '../../accounts/handlers/update';
-// import { validateField } from '../../../libs/validateField';
 
 const createTransaction = async (event) => {
 

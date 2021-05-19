@@ -3,7 +3,6 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { success, failure } from '../../../libs/response';
 import createError from 'http-errors';
-// import { validateField } from '../../../libs/validateField';
 
 const createAccount = async (event, context) => {
 
