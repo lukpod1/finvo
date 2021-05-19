@@ -5,7 +5,7 @@ import createError from 'http-errors';
 import { getAccountById } from './retrieve';
 import { validateField } from '../../../libs/validateField';
 
-const updateAccount = async (event, context) => {
+export const updateAccount = async (event) => {
 
     const { id } = event.pathParameters;
 

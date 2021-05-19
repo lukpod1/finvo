@@ -1,0 +1,43 @@
+service: transactions
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+# Create an optimized package for our functions
+package:
+  individually: true
+  excludeDevDependencies: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, 'dev'}
+  region: 'us-east-1'
+  tracing: 
+    apiGateway: true
+    lambda: true
+  
+  environment:
+    TRANSACTIONS_TABLE: ${self:provider.stage}-DB-FS-Transactions
+  
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-TransactionsArn
+
+functions:
+  createTransaction:
+    handler: handlers/create.handler
+    events:
+      - http:
+          path: /transactions
+          method: post
+          cors: true

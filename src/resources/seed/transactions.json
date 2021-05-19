@@ -1,0 +1,29 @@
+[
+    {
+        "date": "2021-05-19",
+        "accountId": "66ef75b1-ff7e-42f9-8394-7563c256045b",
+        "amount": 20,
+        "comment": "",
+        "id": "5e051620-575f-46cf-a291-94cf4300f489",
+        "type": "EXPENSE",
+        "userId": "5ac69c16-cf0c-46be-840f-0a20cd5f28f7"
+      },
+      {
+        "date": "2021-05-19",
+        "accountId": "66ef75b1-ff7e-42f9-8394-7563c256045b",
+        "amount": 50,
+        "comment": "",
+        "id": "29793818-45d7-4d23-9706-de4e468aba94",
+        "type": "INCOME",
+        "userId": "5ac69c16-cf0c-46be-840f-0a20cd5f28f7"
+      },
+      {
+        "date": "2021-05-19",
+        "accountId": "66ef75b1-ff7e-42f9-8394-7563c256045b",
+        "amount": 55.5,
+        "comment": "",
+        "id": "5ac0b98c-e82c-4819-904f-80947ebc1315",
+        "type": "EXPENSE",
+        "userId": "5ac69c16-cf0c-46be-840f-0a20cd5f28f7"
+      }
+]

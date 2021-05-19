@@ -1,5 +1,8 @@
 import dynamoDb from '../../../libs/dynamodb';
 import createError from 'http-errors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const getAccountById = async (id, userId) => {
     let account = {};
