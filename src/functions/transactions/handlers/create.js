@@ -24,7 +24,6 @@ const createTransaction = async (event) => {
         userId
     };
 
-
     try {
         await dynamoDb.put({
             TableName: process.env.TRANSACTIONS_TABLE,
