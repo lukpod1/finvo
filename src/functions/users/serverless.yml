@@ -4,12 +4,11 @@ frameworkVersion: '2'
 
 plugins:
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-dotenv-plugin
   - serverless-dynamodb-local
   - serverless-bundle
   - serverless-pseudo-parameters
 
-# Create an optimized package for our functions
 package:
   individually: true
   excludeDevDependencies: true
