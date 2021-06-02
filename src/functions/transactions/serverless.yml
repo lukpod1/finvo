@@ -40,3 +40,10 @@ functions:
           path: /transactions
           method: post
           cors: true
+  getTransaction:
+    handler: handlers/retrieve.handler
+    events:
+      - http:
+          path: /transactions/{id}/{accountId}
+          method: get
+          cors: true
