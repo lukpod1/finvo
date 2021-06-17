@@ -47,3 +47,10 @@ functions:
           path: /transactions/{id}/{accountId}
           method: get
           cors: true
+  deleteTransaction:
+    handler: handlers/delete.handler
+    events:
+      - http:
+          path: /transactions/{id}
+          method: delete
+          cors: true

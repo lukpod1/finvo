@@ -3,7 +3,7 @@ import createError from 'http-errors';
 import middleware from '../../../libs/middleware';
 import { success } from '../../../libs/response';
 
-const getTransactionById = async (event) => {
+export const getTransactionById = async (event) => {
 
     const { id, accountId } = event.pathParameters;
 

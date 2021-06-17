@@ -20,6 +20,7 @@
     "serverless-dotenv-plugin": "^3.9.0",
     "serverless-offline": "^6.9.0",
     "serverless-pseudo-parameters": "^2.5.0",
+    "serverless-swagger-api": "^1.4.2",
     "webpack": "^4.35.2"
   },
   "dependencies": {
