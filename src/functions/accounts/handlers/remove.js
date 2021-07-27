@@ -5,13 +5,13 @@ import createError from 'http-errors';
 
 const removeAccount = async (event, context) => {
 
-    const { id } = event.pathParameters;
-    const { userId } = event.body;
+    const { id, userId } = event.pathParameters;
 
     try {
         const response = await dynamoDb.delete({
             TableName: process.env.ACCOUNTS_TABLE,
-            Key: {id, userId}
+            Key: {id, userId},
+            ReturnValues: "ALL_OLD"
         });
 
         if (!response.Attributes) {

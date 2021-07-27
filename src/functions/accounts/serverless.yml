@@ -5,7 +5,6 @@ frameworkVersion: '2'
 plugins:
   - serverless-offline
   - serverless-dotenv-plugin
-  - serverless-dynamodb-local
   - serverless-bundle
   - serverless-pseudo-parameters
 
@@ -32,6 +31,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:GetItem
         - dynamodb:Scan
+        - dynamodb:DeleteItem
       Resource:
         - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-AccountsArn
 
@@ -47,7 +47,7 @@ functions:
     handler: handlers/remove.handler
     events:
       - http:
-          path: /accounts/{id}
+          path: /accounts/{id}/{userId}
           method: delete
           cors: true
   updateAccount: 

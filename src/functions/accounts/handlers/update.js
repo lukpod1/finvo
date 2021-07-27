@@ -49,4 +49,32 @@ export const updateAccount = async (event) => {
 
 };
 
+export const updateAmountAndBuildAccountForUpdate = async (transaction, account) => {
+    if (transaction.type == "EXPENSE") {
+        account.balance -= transaction.amount;
+
+        const updatedAccount = {
+            pathParameters: { id: account.id },
+            body: {
+                balance: account.balance,
+                userId: account.userId
+            }
+        };
+
+        await updateAccount(updatedAccount);
+    } else {
+        account.balance += transaction.amount;
+
+        const updatedAccount = {
+            pathParameters: { id: account.id },
+            body: {
+                balance: account.balance,
+                userId: account.userId
+            }
+        };
+
+        await updateAccount(updatedAccount);
+    }
+};
+
 export const handler = middleware(updateAccount);
