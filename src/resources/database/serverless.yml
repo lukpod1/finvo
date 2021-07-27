@@ -18,11 +18,11 @@ custom:
       finance:
         sources:
           - table: ${self:provider.stage}-DB-FS-Users
-            sources: [ '../seed/users.json' ]
+            sources: ["../seed/users.json"]
           - table: ${self:provider.stage}-DB-FS-Accounts
-            sources: [ '../seed/accounts.json' ]
+            sources: ["../seed/accounts.json"]
           - table: ${self:provider.stage}-DB-FS-Transactions
-            sources: [ '../seed/transactions.json' ]
+            sources: ["../seed/transactions.json"]
 
 provider:
   name: aws
@@ -35,25 +35,25 @@ resources:
     Users: ${file(tables/users.yml):Users}
     Accounts: ${file(tables/accounts.yml):Accounts}
     Transactions: ${file(tables/transactions.yml):Transactions}
-  
+
   Outputs:
     UsersArn:
       Value:
-        Fn::GetAtt: 
+        Fn::GetAtt:
           - Users
           - Arn
       Export:
         Name: ${self:provider.stage}-DB-FS-UsersArn
     AccountsArn:
       Value:
-        Fn::GetAtt: 
+        Fn::GetAtt:
           - Accounts
           - Arn
       Export:
         Name: ${self:provider.stage}-DB-FS-AccountsArn
     TransactionsArn:
       Value:
-        Fn::GetAtt: 
+        Fn::GetAtt:
           - Transactions
           - Arn
       Export:
