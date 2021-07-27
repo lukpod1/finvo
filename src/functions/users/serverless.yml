@@ -64,14 +64,3 @@ functions:
           path: /users/signin
           method: post
           cors: true
-
-custom:
-  swaggerApi:
-    updateDeployments: true
-    usePackageVersion: true
-    apis:
-      PrimaryApi:
-        Name: ${self:provider.stage}-${self:service}-PrimaryApi
-        Body: ${file(./some-swagger-file.yaml)}
-        Lambda: ExampleLambdaFunction
-        Stage: dev
