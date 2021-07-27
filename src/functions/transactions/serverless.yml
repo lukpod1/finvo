@@ -24,11 +24,13 @@ provider:
   
   environment:
     TRANSACTIONS_TABLE: ${self:provider.stage}-DB-FS-Transactions
+    ACCOUNTS_TABLE: ${self:provider.stage}-DB-FS-Accounts
   
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:DeleteItem
       Resource:
         - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-TransactionsArn
 
@@ -51,6 +53,6 @@ functions:
     handler: handlers/delete.handler
     events:
       - http:
-          path: /transactions/{id}
+          path: /transactions/{id}/{accountId}
           method: delete
           cors: true

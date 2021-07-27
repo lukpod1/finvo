@@ -3,14 +3,25 @@ import createError from 'http-errors';
 import middleware from '../../../libs/middleware';
 import { success } from '../../../libs/response';
 
-export const getTransactionById = async (event) => {
+export const retrieveTransaction = async ({ table, keys }) => {
+    console.log(table, keys);
+    let response = await dynamoDb.get({
+        TableName: table,
+        Key: keys
+    });
+
+    return response.Item;
+};
+
+const getTransactionById = async (event) => {
 
     const { id, accountId } = event.pathParameters;
 
     try {
-        const response = await dynamoDb.get({
-            TableName: process.env.TRANSACTIONS_TABLE,
-            Key: { id, accountId }
+
+        const response = await retrieveTransaction({
+            table: process.env.TRANSACTIONS_TABLE,
+            keys: { id, accountId }
         });
 
         return success(response.Item);

@@ -4,7 +4,7 @@ import dynamoDb from '../../../libs/dynamodb';
 import { success, failure } from '../../../libs/response';
 import createError from 'http-errors';
 import { getAccountById } from '../../accounts/handlers/retrieve';
-import { updateAccount } from '../../accounts/handlers/update';
+import { updateAmountAndBuildAccountForUpdate } from '../../accounts/handlers/update';
 
 const createTransaction = async (event) => {
 
@@ -30,31 +30,7 @@ const createTransaction = async (event) => {
             Item: transaction
         });
 
-        if(type == "EXPENSE") {
-            account.balance -= amount;
-
-            const updatedAccount = {
-                pathParameters: {id: accountId},
-                body: {
-                    balance: account.balance,
-                    userId
-                }
-            };
-
-            await updateAccount(updatedAccount);
-        } else {
-            account.balance += amount;
-
-            const updatedAccount = {
-                pathParameters: {id: accountId},
-                body: {
-                    balance: account.balance,
-                    userId
-                }
-            };
-
-            await updateAccount(updatedAccount);
-        }
+        await updateAmountAndBuildAccountForUpdate(transaction, account);
 
         return success(transaction);
     } catch (error) {
