@@ -27,6 +27,10 @@ export const Responses = {
         return this.buildResponse(404, data);
     },
 
+    Conflict(data = {}) {
+        return this.buildResponse(409, data);
+    },
+
     InternalServerError(data = {}) {
         return this.buildResponse(500, data);
     }

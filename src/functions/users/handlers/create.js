@@ -2,10 +2,9 @@ import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 import { validateField } from '../../../libs/validateField';
 
-const createUser = async (event, context) => {
+async function createUser(event) {
 
     const { username, email, password } = event.body;
 
@@ -16,7 +15,7 @@ const createUser = async (event, context) => {
     });
 
     if(usernameIsValid) {
-        throw new createError.Conflict(`The "${username}" already exists`);
+        Responses.Conflict(`The "${username}" already exists`);
     }
 
     const emailIsValid = await validateField({
@@ -26,7 +25,7 @@ const createUser = async (event, context) => {
     });
 
     if(emailIsValid) {
-        throw new createError.Conflict(`The "${email}" already exists`);
+        Responses.Conflict(`The "${email}" already exists`);
     }
 
     const user = {
@@ -41,7 +40,7 @@ const createUser = async (event, context) => {
             TableName: process.env.USERS_TABLE,
             Item: user
         });
-        return Responses.OK(user);
+        Responses.OK(user);
     } catch (error) {
         Responses.InternalServerError(error);
     }

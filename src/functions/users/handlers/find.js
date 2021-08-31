@@ -1,7 +1,7 @@
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
-export const handler = async (event, context) => {
+export async function handler() {
     const params = {
         TableName: process.env.USERS_TABLE
     };

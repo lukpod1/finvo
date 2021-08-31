@@ -1,23 +1,24 @@
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
-export const getUserById = async (id) => {
-    let user = {};
+export async function getUserById(id) {
 
     try {
+
         const result = await dynamoDb.get({
             TableName: process.env.USERS_TABLE,
             Key: { id }
         });
 
-        user = result.Item;
+        const user = result.Item;
+
+        if (!user) {
+            Responses.NotFound(`User with ID "${id}" not found!`);
+        }
+
+        return user;
     } catch (error) {
-        return Responses.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
 
-    if(!user) {
-        return Responses.NotFound(`User with ID "${id}" not found!`);
-    }
-
-    return user;
-};
+}

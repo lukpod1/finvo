@@ -1,6 +1,6 @@
 import dynamoDb from './dynamodb';
 
-export const validateField = async (params) => {
+export async function validateField(params) {
     const { table, column, field } = params;
 
     const response = await dynamoDb.scan({

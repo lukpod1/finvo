@@ -3,8 +3,9 @@ import { success } from '../../../libs/response';
 import createError from 'http-errors';
 import { validateField } from '../../../libs/validateField';
 import middleware from '../../../libs/middleware';
+import { Responses } from '../../../libs/response';
 
-const signIn = async (event, context) => {
+async function signIn(event, context) {
 
     const { email, password } = event.body;
 
@@ -21,7 +22,7 @@ const signIn = async (event, context) => {
     });
 
     if (!emailIsValid || !passwordIsValid) {
-        throw new createError.NotFound(`Email or password is invalid.`);
+        Responses.NotFound(`Email or password is invalid.`);
     }
 
     try {
@@ -37,10 +38,10 @@ const signIn = async (event, context) => {
             }
         });
 
-        return success(response.Items[0]);
+        Responses.OK(response.Items[0]);
     } catch (error) {
-        throw new createError.NotFound(`User does not exist.`);
+        Responses.NotFound(`User does not exist.`);
     }
-};
+}
 
 export const handler = middleware(signIn);
