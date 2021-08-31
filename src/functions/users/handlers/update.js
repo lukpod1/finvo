@@ -1,7 +1,6 @@
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 import { getUserById } from './retrieve';
 import { validateField } from '../../../libs/validateField';
 
