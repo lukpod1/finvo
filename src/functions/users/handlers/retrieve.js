@@ -1,5 +1,5 @@
 import dynamoDb from '../../../libs/dynamodb';
-import createError from 'http-errors';
+import { Responses } from '../../../libs/response';
 
 export const getUserById = async (id) => {
     let user = {};
@@ -12,12 +12,11 @@ export const getUserById = async (id) => {
 
         user = result.Item;
     } catch (error) {
-        console.error(error);
-        throw new createError.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 
     if(!user) {
-        throw new createError.NotFound(`User with ID "${id}" not found!`);
+        return Responses.NotFound(`User with ID "${id}" not found!`);
     }
 
     return user;

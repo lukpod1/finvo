@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
-import { success, failure } from '../../../libs/response';
+import { Responses } from '../../../libs/response';
 import createError from 'http-errors';
 import { validateField } from '../../../libs/validateField';
 
@@ -41,10 +41,9 @@ const createUser = async (event, context) => {
             TableName: process.env.USERS_TABLE,
             Item: user
         });
-        return success(user);
+        return Responses.OK(user);
     } catch (error) {
-        failure(user);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
 };
 

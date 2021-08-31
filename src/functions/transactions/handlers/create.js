@@ -1,16 +1,16 @@
 import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
-import { success, failure } from '../../../libs/response';
+import { Responses } from '../../../libs/response';
 import createError from 'http-errors';
 import { getAccountById } from '../../accounts/handlers/retrieve';
 import { updateAmountAndBuildAccountForUpdate } from '../../accounts/handlers/update';
 
 const createTransaction = async (event) => {
 
-    let { amount, accountId, type, date, comment, userId } = event.body;
+    const { amount, accountId, type, date, comment, userId } = event.body;
 
-    date = new Date().toISOString().split('T')[0];
+    date = new Date().toISOString().split('T')[0]; // TODO
 
     let account = await getAccountById(accountId, userId);
 

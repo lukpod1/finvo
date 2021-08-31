@@ -1,18 +1,34 @@
-export const success = (body) => {
-    return buildResponse(200, body);
-};
+export const Responses = {
+    buildResponse(statusCode = 500, data = {}) {
+        return {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Methods': '*',
+                'Access-Control-Allow-Origin': '*',
+            },
+            statusCode,
+            body: JSON.stringify(data),
+        };
+    },
 
-export const failure = (body) => {
-    return buildResponse(500, body);
-};
+    OK(data = {}) {
+        return this.buildResponse(200, data);
+    },
 
-const buildResponse = (statusCode, body) => {
-    return {
-        statusCode: statusCode,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": true
-        },
-        body: JSON.stringify(body)
-    };
+    NoContent(data = {}) {
+        return this.buildResponse(204, data);
+    },
+
+    BadRequest(data = {}) {
+        return this.buildResponse(400, data);
+    },
+
+    NotFound(data = {}) {
+        return this.buildResponse(404, data);
+    },
+
+    InternalServerError(data = {}) {
+        return this.buildResponse(500, data);
+    }
+
 };

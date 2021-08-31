@@ -1,5 +1,5 @@
 import dynamoDb from '../../../libs/dynamodb';
-import {success} from '../../../libs/response';
+import { Responses } from '../../../libs/response';
 
 export const handler = async (event, context) => {
     const params = {
@@ -7,5 +7,5 @@ export const handler = async (event, context) => {
     };
 
     const result = await dynamoDb.scan(params);
-    return success(result.Items);
+    return Responses.OK(result.Items);
 };
