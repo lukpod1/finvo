@@ -1,12 +1,11 @@
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 import { retrieveTransaction } from './retrieve';
 import { getAccountById } from './../../accounts/handlers/retrieve';
 import { updateAmountAndBuildAccountForUpdate } from './../../accounts/handlers/update';
 
-const deleteTransaction = async (event, context) => {
+async function deleteTransaction(event, context) {
 
     const { id, accountId } = event.pathParameters;
 
@@ -30,14 +29,13 @@ const deleteTransaction = async (event, context) => {
         await updateAmountAndBuildAccountForUpdate(transaction, account);
 
         if (!response.Attributes) {
-            throw new createError.NotFound(`Transaction with ID "${id}" not found`);
+            Responses.NotFound(`Transaction with ID "${id}" not found`);
         }
 
-        return success(response.Attributes);
+        Responses.OK(response.Attributes);
     } catch (error) {
-        failure(error);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
-};
+}
 
 export const handler = middleware(deleteTransaction);

@@ -1,9 +1,8 @@
 import dynamoDb from '../../../libs/dynamodb';
-import createError from 'http-errors';
 import middleware from '../../../libs/middleware';
-import { success } from '../../../libs/response';
+import { Responses } from '../../../libs/response';
 
-export const retrieveTransaction = async ({ table, keys }) => {
+export default async function retrieveTransaction({ table, keys }) {
     console.log(table, keys);
     let response = await dynamoDb.get({
         TableName: table,
@@ -11,24 +10,23 @@ export const retrieveTransaction = async ({ table, keys }) => {
     });
 
     return response.Item;
-};
+}
 
-const getTransactionById = async (event) => {
+async function getTransactionById(event) {
 
     const { id, accountId } = event.pathParameters;
 
     try {
 
-        const response = await retrieveTransaction({
+        const response = retrieveTransaction({
             table: process.env.TRANSACTIONS_TABLE,
             keys: { id, accountId }
         });
 
-        return success(response.Item);
+        Responses.OK(response.Item);
     } catch (error) {
-        console.error(error);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
-};
+}
 
 export const handler = middleware(getTransactionById);

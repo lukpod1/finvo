@@ -2,15 +2,12 @@ import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 import { getAccountById } from '../../accounts/handlers/retrieve';
 import { updateAmountAndBuildAccountForUpdate } from '../../accounts/handlers/update';
 
-const createTransaction = async (event) => {
+async function createTransaction(event) {
 
-    const { amount, accountId, type, date, comment, userId } = event.body;
-
-    date = new Date().toISOString().split('T')[0]; // TODO
+    const { amount, accountId, type, date = new Date().toISOString().split('T')[0], comment, userId } = event.body;
 
     let account = await getAccountById(accountId, userId);
 
@@ -32,11 +29,10 @@ const createTransaction = async (event) => {
 
         await updateAmountAndBuildAccountForUpdate(transaction, account);
 
-        return success(transaction);
+        Responses.OK(transaction);
     } catch (error) {
-        failure(transaction);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
-};
+}
 
 export const handler = middleware(createTransaction);
