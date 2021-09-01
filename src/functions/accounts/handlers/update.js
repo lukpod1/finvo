@@ -1,11 +1,10 @@
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 import { getAccountById } from './retrieve';
 import { validateField } from '../../../libs/validateField';
 
-export const updateAccount = async (event) => {
+export async function updateAccount(event) {
 
     const { id } = event.pathParameters;
 
@@ -21,7 +20,7 @@ export const updateAccount = async (event) => {
         });
 
         if(nameIsValid) {
-            throw new createError.Conflict(`The "${name}" already exists`);
+            Responses.Conflict(`The "${name}" already exists`);
         }
     }
 
@@ -41,15 +40,14 @@ export const updateAccount = async (event) => {
 
     try {
         const response = await dynamoDb.update(params);
-        return success(response.Attributes);
+        Responses.OK(response.Attributes);
     } catch (error) {
-        failure(account);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
 
-};
+}
 
-export const updateAmountAndBuildAccountForUpdate = async (transaction, account) => {
+export async function updateAmountAndBuildAccountForUpdate(transaction, account) {
     if (transaction.type == "EXPENSE") {
         account.balance -= transaction.amount;
 
@@ -75,6 +73,6 @@ export const updateAmountAndBuildAccountForUpdate = async (transaction, account)
 
         await updateAccount(updatedAccount);
     }
-};
+}
 
 export const handler = middleware(updateAccount);

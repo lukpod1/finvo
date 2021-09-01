@@ -2,9 +2,8 @@ import { v4 as uuid } from 'uuid';
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import createError from 'http-errors';
 
-const createAccount = async (event, context) => {
+async function createAccount(event, context) {
 
     const { name, balance, userId } = event.body;
 
@@ -20,11 +19,10 @@ const createAccount = async (event, context) => {
             TableName: process.env.ACCOUNTS_TABLE,
             Item: account
         });
-        return success(account);
+        Responses.OK(account);
     } catch (error) {
-        failure(account);
-        throw new createError.InternalServerError(error);
+        Responses.InternalServerError(error);
     }
-};
+}
 
 export const handler = middleware(createAccount);

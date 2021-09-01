@@ -1,6 +1,7 @@
 # package directories
 node_modules
 jspm_packages
+sls-package-output
 
 # Serverless directories
 .serverless

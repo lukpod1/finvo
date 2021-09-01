@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "database": "cd src/resources/database && npm run start"
+    "database": "cd src/resources/database && npm run start",
+    "build-all": "npm run build-database && npm run build-users && npm run build-accounts && npm run build-transactions",
+    "build-database": "cd src/resources/database && npm run build",
+    "build-users": "cd src/functions/users && npm run build",
+    "build-accounts": "cd src/functions/accounts && npm run build",
+    "build-transactions": "cd src/functions/transactions && npm run build"
   },
   "keywords": [],
   "author": "",

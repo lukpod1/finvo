@@ -5,7 +5,8 @@
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "offline": "npx serverless offline"
+    "offline": "npx serverless offline",
+    "build": "serverless package --stage dev --package sls-package-output"
   },
   "keywords": [],
   "author": "",
