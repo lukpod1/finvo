@@ -16,12 +16,12 @@ export async function getUserById(event) {
         const user = result.Item;
 
         if (!user) {
-            Responses.NotFound(`User with ID "${id}" not found!`);
+            return Responses.NotFound(`User with ID "${id}" not found!`);
         }
 
-        Responses.OK(user);
+        return Responses.OK(user);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 
 }

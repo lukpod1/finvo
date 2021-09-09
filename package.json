@@ -10,7 +10,8 @@
     "build-database": "cd src/resources/database && npm run build",
     "build-users": "cd src/functions/users && npm run build",
     "build-accounts": "cd src/functions/accounts && npm run build",
-    "build-transactions": "cd src/functions/transactions && npm run build"
+    "build-transactions": "cd src/functions/transactions && npm run build",
+    "offline-users": "cd src/functions/users && npm run offline"
   },
   "keywords": [],
   "author": "",

@@ -7,6 +7,7 @@ import { validateField } from '../../../libs/validateField';
 async function createUser(event) {
 
     const { username, email, password } = event.body;
+    console.log('body request:', event.body);
 
     const usernameIsValid = await validateField({
         table: process.env.USERS_TABLE,
@@ -15,7 +16,7 @@ async function createUser(event) {
     });
 
     if(usernameIsValid) {
-        Responses.Conflict(`The "${username}" already exists`);
+        return Responses.Conflict(`The "${username}" already exists`);
     }
 
     const emailIsValid = await validateField({
@@ -25,7 +26,7 @@ async function createUser(event) {
     });
 
     if(emailIsValid) {
-        Responses.Conflict(`The "${email}" already exists`);
+        return Responses.Conflict(`The "${email}" already exists`);
     }
 
     const user = {
@@ -40,9 +41,9 @@ async function createUser(event) {
             TableName: process.env.USERS_TABLE,
             Item: user
         });
-        Responses.OK(user);
+        return Responses.OK(user);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 }
 

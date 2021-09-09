@@ -20,7 +20,7 @@ async function signIn(event, context) {
     });
 
     if (!emailIsValid || !passwordIsValid) {
-        Responses.NotFound(`Email or password is invalid.`);
+        return Responses.NotFound(`Email or password is invalid.`);
     }
 
     try {
@@ -33,9 +33,9 @@ async function signIn(event, context) {
             }
         });
 
-        Responses.OK(response.Items[0]);
+        return Responses.OK(response.Items[0]);
     } catch (error) {
-        Responses.NotFound(`User does not exist.`);
+        return Responses.NotFound(`User does not exist.`);
     }
 }
 
