@@ -10,7 +10,11 @@ async function updateUser(event, context) {
 
     const { username, email, password } = event.body;
 
-    const { body } = await getUserById(id);
+    const eventRequest = {
+        pathParameters: { id }
+    };
+
+    const { body } = await getUserById(eventRequest);
 
     if (username && username !== body.username) {
         const usernameIsValid = await validateField({
