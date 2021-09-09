@@ -10,9 +10,9 @@ async function updateUser(event, context) {
 
     const { username, email, password } = event.body;
 
-    const user = await getUserById(id);
+    const { body } = await getUserById(id);
 
-    if (username && username !== user.username) {
+    if (username && username !== body.username) {
         const usernameIsValid = await validateField({
             table: process.env.USERS_TABLE,
             column: "username",
@@ -24,7 +24,7 @@ async function updateUser(event, context) {
         }
     }
 
-    if (email && email !== user.email) {
+    if (email && email !== body.email) {
         const emailIsValid = await validateField({
             table: process.env.USERS_TABLE,
             column: "email",
@@ -42,9 +42,9 @@ async function updateUser(event, context) {
         Key: { id },
         UpdateExpression: "SET username = :username, email = :email, password = :password",
         ExpressionAttributeValues: {
-            ":username": username || user.username,
-            ":email": email || user.email,
-            ":password": password || user.password
+            ":username": username || body.username,
+            ":email": email || body.email,
+            ":password": password || body.password
         },
         ReturnValues: 'ALL_NEW'
     };
@@ -56,6 +56,6 @@ async function updateUser(event, context) {
         Responses.InternalServerError(error);
     }
 
-};
+}
 
 export const handler = middleware(updateUser);

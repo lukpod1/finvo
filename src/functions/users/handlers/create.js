@@ -44,6 +44,6 @@ async function createUser(event) {
     } catch (error) {
         Responses.InternalServerError(error);
     }
-};
+}
 
 export const handler = middleware(createUser);

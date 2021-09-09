@@ -50,17 +50,17 @@ functions:
           path: /users/{id}
           method: put
           cors: true
-  findUser:
-    handler: handlers/find.handler
-    events:
-      - http:
-          path: /users
-          method: get
-          cors: true
   signIn:
     handler: handlers/signIn.handler
     events:
       - http:
           path: /users/signin
           method: post
+          cors: true
+  retrieve: 
+    handler: handlers/retrieve.handler
+    events:
+      - http:
+          path: /users/{id}
+          method: get
           cors: true

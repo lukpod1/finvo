@@ -24,9 +24,6 @@ async function signIn(event, context) {
     }
 
     try {
-        console.log(process.env.USERS_TABLE);
-        console.log(email);
-        console.log(password);
         const response = await dynamoDb.scan({
             TableName: process.env.USERS_TABLE,
             FilterExpression: "email = :email AND password = :password",

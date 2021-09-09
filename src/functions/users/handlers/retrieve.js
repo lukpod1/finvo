@@ -1,7 +1,10 @@
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
+import middleware from '../../../libs/middleware';
 
-export async function getUserById(id) {
+export async function getUserById(event) {
+
+    const { id } = event.pathParameters;
 
     try {
 
@@ -16,9 +19,11 @@ export async function getUserById(id) {
             Responses.NotFound(`User with ID "${id}" not found!`);
         }
 
-        return user;
+        Responses.OK(user);
     } catch (error) {
         Responses.InternalServerError(error);
     }
 
 }
+
+export const handler = middleware(getUserById);
