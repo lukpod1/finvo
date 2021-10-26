@@ -3,6 +3,7 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 import { validateField } from '../../../libs/validateField';
+import { encrypt } from "../../../libs/encryption";
 
 async function createUser(event) {
 
@@ -29,11 +30,14 @@ async function createUser(event) {
         return Responses.Conflict(`The "${email}" already exists`);
     }
 
+    const hashedPassword = encrypt(password);
+
     const user = {
         id: uuid(),
         username,
         email,
-        password
+        password: hashedPassword.password,
+        iv: hashedPassword.iv
     };
 
     try {
