@@ -13,7 +13,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "serverless-dynamodb-local": "^0.2.39"
+  "devDependencies": {},
+  "dependencies": {
+    "serverless-dynamodb-local": "^0.2.40"
   }
 }
