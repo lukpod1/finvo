@@ -7,7 +7,6 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-dynamodb-local
   - serverless-bundle
-  - serverless-pseudo-parameters
 
 package:
   individually: true
@@ -18,6 +17,7 @@ provider:
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: 'us-east-1'
+  lambdaHashingVersion: 20201221
   tracing: 
     apiGateway: true
     lambda: true
