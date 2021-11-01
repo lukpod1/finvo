@@ -37,7 +37,6 @@ async function createUser(event) {
         username,
         email,
         password: hashedPassword.password,
-        iv: hashedPassword.iv
     };
 
     try {
