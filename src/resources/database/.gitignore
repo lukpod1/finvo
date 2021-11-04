@@ -6,3 +6,4 @@ sls-package-output
 # Serverless directories
 .serverless
 .webpack
+.dynamodb

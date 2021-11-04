@@ -27,6 +27,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "sass": "^1.43.4",
     "serverless": "^2.64.1",
     "uuid": "^8.3.2"
   }

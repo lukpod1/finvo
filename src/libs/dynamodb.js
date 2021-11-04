@@ -2,12 +2,12 @@ import { DynamoDB } from "aws-sdk";
 
 let options = {};
 
-if (process.env.IS_OFFLINE) {
-    options = {
-        region: 'localhost',
-        endpoint: 'http://localhost:4566'
-    };
-}
+// if (process.env.IS_OFFLINE) {
+//     options = {
+//         region: 'localhost',
+//         endpoint: 'http://localhost:4566'
+//     };
+// }
 
 const dynamodb = new DynamoDB.DocumentClient(options);
 

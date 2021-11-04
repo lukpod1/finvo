@@ -7,7 +7,6 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-dynamodb-local
   - serverless-bundle
-
 package:
   individually: true
   excludeDevDependencies: true

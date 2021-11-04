@@ -2,20 +2,31 @@ import crypto from "crypto";
 
 const paramsEncrypt = {
     algorithm: "aes-256-gcm",
-    key: "serverless",
-    type: "hex",
-    codification: "utf8",
+    key: "pppppppppppppppppppppppppppppppp"
 }
 
 export function encrypt(password) {
-    const cipher = crypto.createCipheriv(paramsEncrypt.algorithm, paramsEncrypt.key);
-    cipher.update(password);
+    const iv = Buffer.from(crypto.randomBytes(16));
+    const cipher = crypto.createCipheriv(paramsEncrypt.algorithm, Buffer.from(paramsEncrypt.key), iv);
 
-    return cipher.final(paramsEncrypt.type)
+    const encryptedPassword = Buffer.concat([
+        cipher.update(password),
+        cipher.final(),
+    ]);
+
+    return {
+        iv: iv.toString("hex"),
+        password: encryptedPassword.toString("hex"),
+    };
 }
 
-export function decrypt(password) {
-    const decipher = crypto.createDeciperiv(paramsEncrypt.algorithm, paramsEncrypt.key);
-    decipher.update(password, paramsEncrypt.type, paramsEncrypt.codification);
-    return decipher.final(paramsEncrypt.codification);
+export function decrypt(encryption) {
+    const decipher = crypto.createDecipheriv(paramsEncrypt.algorithm, Buffer.from(paramsEncrypt.key), Buffer.from(encryption.iv, "hex"));
+
+    const decryptedPassword = Buffer.concat([
+        decipher.update(Buffer.from(encryption.password, "hex")),
+        decipher.final(),
+    ]);
+
+    return decryptedPassword.toString();
 }
