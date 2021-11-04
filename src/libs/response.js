@@ -23,6 +23,10 @@ export const Responses = {
         return this.buildResponse(400, data);
     },
 
+    Unauthorized(data = {}) {
+        return this.buildResponse(401, data);
+    },
+
     NotFound(data = {}) {
         return this.buildResponse(404, data);
     },

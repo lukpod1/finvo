@@ -3,7 +3,7 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 import { validateField } from '../../../libs/validateField';
-import { encrypt } from "../../../libs/encryption";
+import { hash } from "../../../libs/encryption";
 
 async function createUser(event) {
 
@@ -16,7 +16,7 @@ async function createUser(event) {
         field: username
     });
 
-    if(usernameIsValid) {
+    if (usernameIsValid) {
         return Responses.Conflict(`The "${username}" already exists`);
     }
 
@@ -26,18 +26,17 @@ async function createUser(event) {
         field: email
     });
 
-    if(emailIsValid) {
+    if (emailIsValid) {
         return Responses.Conflict(`The "${email}" already exists`);
     }
 
-    const hashedPassword = encrypt(password);
+    const hashedPassword = await hash(password);
 
     const user = {
         id: uuid(),
         username,
         email,
-        password: hashedPassword.password,
-        iv: hashedPassword.iv
+        password: hashedPassword,
     };
 
     try {
@@ -45,7 +44,11 @@ async function createUser(event) {
             TableName: process.env.USERS_TABLE,
             Item: user
         });
-        return Responses.OK(user);
+
+        return Responses.OK({
+            message: "User created with success",
+            createdUser: user.email
+        });
     } catch (error) {
         return Responses.InternalServerError(error);
     }

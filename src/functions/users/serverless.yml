@@ -22,6 +22,7 @@ provider:
 
   environment:
     USERS_TABLE: ${self:provider.stage}-DB-FS-Users
+    JWT_KEY: finance-service-users-key
 
   iamRoleStatements:
     - Effect: Allow

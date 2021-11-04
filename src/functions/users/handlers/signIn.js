@@ -1,41 +1,46 @@
 import dynamoDb from '../../../libs/dynamodb';
-import { validateField } from '../../../libs/validateField';
 import middleware from '../../../libs/middleware';
 import { Responses } from '../../../libs/response';
+import { verify } from "../../../libs/encryption";
+import jwt from "jsonwebtoken";
 
-async function signIn(event, context) {
-
-    const { email, password } = event.body;
-
-    const emailIsValid = await validateField({
-        table: process.env.USERS_TABLE,
-        column: "email",
-        field: email
-    });
-
-    const passwordIsValid = await validateField({
-        table: process.env.USERS_TABLE,
-        column: "password",
-        field: password
-    });
-
-    if (!emailIsValid || !passwordIsValid) {
-        return Responses.NotFound(`Email or password is invalid.`);
-    }
+async function signIn(event) {
 
     try {
-        const response = await dynamoDb.scan({
+        const { email, password } = event.body;
+
+        const user = await dynamoDb.scan({
             TableName: process.env.USERS_TABLE,
-            FilterExpression: "email = :email AND password = :password",
+            FilterExpression: "email = :email",
             ExpressionAttributeValues: {
-                ":email": email,
-                ":password": password
+                ":email": email
             }
         });
 
-        return Responses.OK(response.Items[0]);
+        if (user.Items[0] < 1) {
+            return Responses.Unauthorized("Authentication Failure");
+        }
+
+        if (await verify(password, user.Items[0].password)) {
+            const token = jwt.sign({
+                userId: user.Items[0].userId,
+                email: user.Items[0].email,
+            },
+                process.env.JWT_KEY,
+                {
+                    expiresIn: "1h"
+                }
+            );
+
+            return Responses.OK({
+                message: "successfully authenticated",
+                token: token
+            });
+        }
+
+        return Responses.Unauthorized("Authentication Failure");
     } catch (error) {
-        return Responses.NotFound(`User does not exist.`);
+        return Responses.InternalServerError(`Authentication Failure`);
     }
 }
 

@@ -15,4 +15,4 @@ export async function validateField(params) {
     });
 
     return response.Items.length > 0;
-};
+}
