@@ -30,6 +30,9 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
         - dynamodb:DeleteItem
       Resource:
         - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-TransactionsArn
@@ -56,3 +59,10 @@ functions:
           path: /transactions/{id}/{accountId}
           method: delete
           cors: true
+  findTransactions:
+    handler: handlers/find.handler
+    events:
+      - http:
+          path: /transactions/{accountId}
+          method: post
+          cors: true       
