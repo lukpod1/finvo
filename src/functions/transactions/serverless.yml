@@ -1,6 +1,6 @@
 service: finance-service-transactions
 
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 plugins:
   - serverless-offline
@@ -17,42 +17,59 @@ provider:
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
   stage: ${opt:stage, 'dev'}
-  region: 'us-east-1'
-  tracing: 
+  region: "us-east-1"
+  tracing:
     apiGateway: true
     lambda: true
-  
+
   environment:
     TRANSACTIONS_TABLE: ${self:provider.stage}-DB-FS-Transactions
     ACCOUNTS_TABLE: ${self:provider.stage}-DB-FS-Accounts
-  
+    SLS_DEBUG: true
+
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
+        - dynamodb:Scan
         - dynamodb:DeleteItem
       Resource:
-        - 'Fn::ImportValue': ${self:provider.stage}-DB-FS-TransactionsArn
+        - "Fn::ImportValue": ${self:provider.stage}-DB-FS-TransactionsArn
+        - Fn::Join:
+            - "/"
+            -
+              - "Fn::ImportValue": ${self:provider.stage}-DB-FS-TransactionsArn
+              - "index"
+              - "integrationGsi"
 
 functions:
   createTransaction:
     handler: handlers/create.handler
     events:
       - http:
-          path: /transactions
+          path: /transaction
           method: post
           cors: true
   getTransaction:
     handler: handlers/retrieve.handler
     events:
       - http:
-          path: /transactions/{id}/{accountId}
+          path: /transaction/{id}/{accountId}
           method: get
           cors: true
   deleteTransaction:
     handler: handlers/delete.handler
     events:
       - http:
-          path: /transactions/{id}/{accountId}
+          path: /transaction/{id}/{accountId}
           method: delete
+          cors: true
+  findTransactions:
+    handler: handlers/find.handler
+    events:
+      - http:
+          path: /transactions/{accountId}
+          method: get
           cors: true
