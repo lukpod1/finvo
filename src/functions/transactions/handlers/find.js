@@ -21,6 +21,7 @@ async function findTransactions(event) {
         };
         console.log(params);
         const result = await dynamoDb.scan(params);
+        console.log(result.Items);
 
         Responses.OK(result.Items);
     } catch (error) {

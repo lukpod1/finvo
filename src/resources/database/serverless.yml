@@ -2,13 +2,23 @@ service: database-finance-service
 
 frameworkVersion: "2"
 
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+
+package:
+  excludeDevDependencies: true
+  individually: true
+
 plugins:
   - serverless-dynamodb-local
 
 custom:
   dynamodb:
     stages:
-      - dev
+      - ${self:provider.stage}
     start:
       migrate: true
       noStart: true
@@ -23,12 +33,6 @@ custom:
             sources: ["../seed/accounts.json"]
           - table: ${self:provider.stage}-DB-FS-Transactions
             sources: ["../seed/transactions.json"]
-
-provider:
-  name: aws
-  runtime: nodejs14.x
-  stage: ${opt:stage, 'dev'}
-  region: us-east-1
 
 resources:
   Resources:

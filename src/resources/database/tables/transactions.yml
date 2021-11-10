@@ -6,10 +6,19 @@ Transactions:
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
-      - AttributeName: accountId
-        AttributeType: S
+      # - AttributeName: accountId
+      #   AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH
-      - AttributeName: accountId
-        KeyType: RANGE
+      # - AttributeName: accountId
+      #   KeyType: RANGE
+    # GlobalSecondaryIndexes:
+    #   - IndexName: idTransactionAndAccountId
+    #     KeySchema:
+    #       - AttributeName: id
+    #         KeyType: HASH
+    #       - AttributeName: accountId
+    #         KeyType: RANGE
+    #     Projection:
+    #       ProjectionType: ALL
