@@ -25,6 +25,7 @@ export default class ApiStack extends sst.Stack {
                 "PUT    /notes/{id}": "src/update.main",
                 "DELETE /notes/{id}": "src/delete.main",
             },
+            cors: true
         });
 
         // Allow the API to access the table
