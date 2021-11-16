@@ -4,18 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "database": "cd src/resources/database && npm run start",
     "build-all": "npm run build-database && npm run build-users && npm run build-accounts && npm run build-transactions",
     "build-database": "cd src/resources/database && npm run build",
     "build-users": "cd src/functions/users && npm run build",
     "build-accounts": "cd src/functions/accounts && npm run build",
     "build-transactions": "cd src/functions/transactions && npm run build",
-    "offline-users": "cd src/functions/users && npm run offline"
+    "offline-users": "cd src/functions/users && npm run offline",
+    "test": "sst test",
+    "start": "sst start",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "eslintConfig": {
+    "extends": ["serverless-stack"]
+  },
   "devDependencies": {
     "jest": "^27.3.1",
     "serverless-bundle": "^5.0.2",
@@ -23,7 +30,8 @@
     "serverless-offline": "^8.2.0",
     "serverless-openapi-documentation": "^0.4.0",
     "serverless-pseudo-parameters": "^2.5.0",
-    "webpack": "^5.61.0"
+    "webpack": "^5.61.0",
+    "@aws-cdk/assert": "1.126.0"
   },
   "dependencies": {
     "@middy/core": "^2.5.2",
@@ -35,6 +43,9 @@
     "dotenv": "^10.0.0",
     "http-errors": "^1.8.0",
     "jshint": "^2.13.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "@serverless-stack/cli": "0.50.3",
+    "@serverless-stack/resources": "0.50.3",
+    "@aws-cdk/core": "1.126.0"
   }
 }
