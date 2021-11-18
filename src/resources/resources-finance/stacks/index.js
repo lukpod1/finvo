@@ -1,4 +1,4 @@
-import MyStack from "./MyStack";
+import DynamoDBStack from "./DynamoDBStack";
 
 export default function main(app) {
   // Set default runtime for all functions
@@ -6,7 +6,5 @@ export default function main(app) {
     runtime: "nodejs12.x"
   });
 
-  new MyStack(app, "my-stack");
-
-  // Add more stacks
+  new DynamoDBStack(app, "dynamodb");
 }
