@@ -1,6 +1,6 @@
 service: finance-service-users
 
-frameworkVersion: '2.64.1'
+frameworkVersion: '2.66.2'
 
 plugins:
   - serverless-offline

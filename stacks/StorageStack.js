@@ -2,19 +2,36 @@ import * as sst from "@serverless-stack/resources";
 
 export default class StorageStack extends sst.Stack {
     // Public reference to the table
-    table;
+    usersTable;
+    accountsTable;
+    transactionsTable;
     bucket;
 
     constructor(scope, id, props) {
         super(scope, id, props);
 
         // Create the DynamoDB table
-        const userTable = new sst.Table(this, "Users", {
-            billingMode: sst.dynamodb.BillingMode.PAY_PER_REQUEST, // Use on-demand billing mode
+        this.usersTable = new sst.Table(this, "Users", {
             fields: {
-                userId: sst.TableFieldType.STRING,
+                id: sst.TableFieldType.STRING,
             },
-            primaryIndex: { partitionKey: "userId", sortKey: "noteId" },
+            primaryIndex: { partitionKey: "id"},
+        });
+
+        this.accountsTable = new sst.Table(this, "Accounts", {
+            fields: {
+                id: sst.TableFieldType.STRING,
+                userId: sst.TableFieldType.STRING
+            },
+            primaryIndex: { partitionKey: "id", sortKey: "userId" },
+        });
+
+        this.transactionsTable = new sst.Table(this, "Transactions", {
+            fields: {
+                id: sst.TableFieldType.STRING,
+                accountId: sst.TableFieldType.STRING,
+            },
+            primaryIndex: { partitionKey: "id", sortKey: "accountId" },
         });
 
         // Create an S3 bucket

@@ -8,7 +8,6 @@ import { hash } from "../../../libs/encryption";
 async function createUser(event) {
 
     const { username, email, password } = event.body;
-    console.log('body request:', event.body);
 
     const usernameIsValid = await validateField({
         table: process.env.USERS_TABLE,
@@ -47,6 +46,7 @@ async function createUser(event) {
 
         return Responses.OK({
             message: "User created with success",
+            user: user.id,
             createdUser: user.email
         });
     } catch (error) {

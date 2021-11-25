@@ -29,29 +29,29 @@ export default class DynamoDBStack extends sst.Stack {
         // Output values
         new CfnOutput(this, "UsersName", {
             value: userTable.tableName,
-            exportName: app.logicalPrefixedName("RsrcUserName"),
+            exportName: app.logicalPrefixedName("UserName"),
         });
         new CfnOutput(this, "UsersArn", {
             value: userTable.tableArn,
-            exportName: app.logicalPrefixedName("RsrcUserArn"),
+            exportName: app.logicalPrefixedName("UserArn"),
         });
 
         new CfnOutput(this, "AccountsName", {
             value: accountTable.tableName,
-            exportName: app.logicalPrefixedName("RsrcAccountName"),
+            exportName: app.logicalPrefixedName("AccountName"),
         });
         new CfnOutput(this, "AccountsArn", {
             value: accountTable.tableArn,
-            exportName: app.logicalPrefixedName("RsrcAccountArn"),
+            exportName: app.logicalPrefixedName("AccountArn"),
         });
 
         new CfnOutput(this, "TransactionsName", {
             value: transactionTable.tableName,
-            exportName: app.logicalPrefixedName("RsrcTransactionName"),
+            exportName: app.logicalPrefixedName("TransactionName"),
         });
         new CfnOutput(this, "TransactionsArn", {
             value: transactionTable.tableArn,
-            exportName: app.logicalPrefixedName("RsrcTransactionArn"),
+            exportName: app.logicalPrefixedName("TransactionArn"),
         });
 
 

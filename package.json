@@ -21,31 +21,32 @@
   "author": "",
   "license": "ISC",
   "eslintConfig": {
-    "extends": ["serverless-stack"]
+    "extends": [
+      "serverless-stack"
+    ]
   },
   "devDependencies": {
-    "jest": "^27.3.1",
-    "serverless-bundle": "^5.0.2",
-    "serverless-dotenv-plugin": "^3.10.0",
-    "serverless-offline": "^8.2.0",
-    "serverless-openapi-documentation": "^0.4.0",
-    "serverless-pseudo-parameters": "^2.5.0",
-    "webpack": "^5.61.0",
-    "@aws-cdk/assert": "1.126.0"
+    "@aws-cdk/assert": "1.126.0",
+    "jest": "^27.3.1"
   },
   "dependencies": {
+    "@aws-cdk/core": "1.126.0",
     "@middy/core": "^2.5.2",
     "@middy/http-error-handler": "^2.5.2",
     "@middy/http-event-normalizer": "^2.5.2",
     "@middy/http-json-body-parser": "^2.5.2",
     "@middy/validator": "^2.5.2",
+    "@serverless-stack/cli": "0.50.3",
+    "@serverless-stack/resources": "0.50.3",
     "aws-sdk": "^2.1019.0",
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "http-errors": "^1.8.0",
     "jshint": "^2.13.1",
-    "uuid": "^8.3.2",
-    "@serverless-stack/cli": "0.50.3",
-    "@serverless-stack/resources": "0.50.3",
-    "@aws-cdk/core": "1.126.0"
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.2.1",
+    "source-map-support": "^0.5.21",
+    "uuid": "^8.3.2"
   }
 }

@@ -17,28 +17,29 @@ async function signIn(event) {
             }
         });
 
-        if (user.Items[0] < 1) {
-            return Responses.Unauthorized("Authentication Failure");
+        if (user.Items.length == 1) {
+            if (await verify(password, user.Items[0].password)) {
+                const token = jwt.sign({
+                    id: user.Items[0].id,
+                    email: user.Items[0].email,
+                },
+                    process.env.JWT_KEY,
+                    {
+                        expiresIn: "1h"
+                    }
+                );
+
+                return Responses.OK({
+                    message: "successfully authenticated",
+                    user: user.Items[0].id,
+                    token: token
+                });
+            }
+            return Responses.Unauthorized("Incorrect password");
+
         }
 
-        if (await verify(password, user.Items[0].password)) {
-            const token = jwt.sign({
-                userId: user.Items[0].userId,
-                email: user.Items[0].email,
-            },
-                process.env.JWT_KEY,
-                {
-                    expiresIn: "1h"
-                }
-            );
-
-            return Responses.OK({
-                message: "successfully authenticated",
-                token: token
-            });
-        }
-
-        return Responses.Unauthorized("Authentication Failure");
+        return Responses.Unauthorized("Incorrect email");
     } catch (error) {
         return Responses.InternalServerError(`Authentication Failure`);
     }
