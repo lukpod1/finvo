@@ -2,7 +2,7 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
-async function removeAccount(event, context) {
+async function removeAccount(event) {
 
     const { id, userId } = event.pathParameters;
 
@@ -17,9 +17,9 @@ async function removeAccount(event, context) {
             Responses.NotFound(`Account with ID "${id}" not found`);
         }
 
-        Responses.OK(response.Attributes);
+        return Responses.OK(response.Attributes);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 }
 

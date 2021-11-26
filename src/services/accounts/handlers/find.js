@@ -1,7 +1,7 @@
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
-export async function handler(event, context) {
+export async function handler(event) {
     const { id } = event.pathParameters;
     const { userId } = event.body;
 

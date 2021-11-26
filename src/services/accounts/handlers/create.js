@@ -3,7 +3,7 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
-async function createAccount(event, context) {
+async function createAccount(event) {
 
     const { name, balance, userId } = event.body;
 
@@ -19,9 +19,9 @@ async function createAccount(event, context) {
             TableName: process.env.ACCOUNTS_TABLE,
             Item: account
         });
-        Responses.OK(account);
+        return Responses.OK(account);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 }
 

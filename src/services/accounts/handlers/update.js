@@ -6,9 +6,9 @@ import { validateField } from '../../../libs/validateField';
 
 export async function updateAccount(event) {
 
-    const { id } = event.pathParameters;
+    const { id, userId } = event.pathParameters;
 
-    const {name, balance, userId} = event.body;
+    const { name, balance } = event.body;
 
     const account = await getAccountById(id, userId);
 
