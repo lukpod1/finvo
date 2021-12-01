@@ -30,7 +30,7 @@ export async function updateAccount(event) {
         UpdateExpression: "SET #name = :name, balance = :balance",
         ExpressionAttributeValues: {
             ":name": name || account.name,
-            ":balance": balance || balance.email,
+            ":balance": balance || account.balance,
         },
         ExpressionAttributeNames: {
             "#name": "name"
@@ -40,9 +40,9 @@ export async function updateAccount(event) {
 
     try {
         const response = await dynamoDb.update(params);
-        Responses.OK(response.Attributes);
+        return Responses.OK(response.Attributes);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 
 }

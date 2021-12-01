@@ -22,7 +22,7 @@ export default class AccountStack extends sst.Stack {
                 "POST   /accounts": "src/services/accounts/handlers/create.handler",
                 "DELETE   /accounts/{id}/{userId}": "src/services/accounts/handlers/remove.handler",
                 "PUT    /accounts/{id}/{userId}": "src/services/accounts/handlers/update.handler",
-                "POST    /accounts/{id}": "src/services/accounts/handlers/find.handler",
+                "POST   /accounts/{id}/{userId}": "src/services/accounts/handlers/find.handler",
             },
             cors: true
         });
