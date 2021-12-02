@@ -7,8 +7,6 @@ async function findTransactions(event) {
     const { accountId } = event.pathParameters;
     try {
 
-        console.log(accountId);
-
         const params = {
             TableName: process.env.TRANSACTIONS_TABLE,
             FilterExpression: "#accountId = :accountId",
@@ -19,13 +17,11 @@ async function findTransactions(event) {
                 ":accountId": accountId
             }
         };
-        console.log(params);
         const result = await dynamoDb.scan(params);
-        console.log(result.Items);
 
-        Responses.OK(result.Items);
+        return Responses.OK(result.Items);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 
 }

@@ -7,31 +7,32 @@ import { updateAmountAndBuildAccountForUpdate } from '../../accounts/handlers/up
 
 async function createTransaction(event) {
 
-    const { amount, accountId, type, date = new Date().toISOString().split('T')[0], comment, userId } = event.body;
-
-    let account = await getAccountById(accountId, userId);
-
-    const transaction = {
-        id: uuid(),
-        amount,
-        accountId,
-        type,
-        date,
-        comment,
-        userId
-    };
+    const { amount, accountId, type, timestamp, comment, userId } = event.body;
 
     try {
+        let account = await getAccountById(accountId, userId);
+
+        const transaction = {
+            id: uuid(),
+            amount,
+            accountId,
+            type,
+            timestamp:  new Date().toISOString().split('T')[0],
+            comment,
+            userId
+        };
+
+        await updateAmountAndBuildAccountForUpdate(transaction, account);
+
+        console.log(process.env.TRANSACTIONS_TABLE);
         await dynamoDb.put({
             TableName: process.env.TRANSACTIONS_TABLE,
             Item: transaction
         });
 
-        await updateAmountAndBuildAccountForUpdate(transaction, account);
-
-        Responses.OK(transaction);
+        return Responses.OK(transaction);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 }
 

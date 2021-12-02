@@ -1,6 +1,7 @@
 import StorageStack from "./StorageStack";
 import UserStack from "./UserStack";
 import AccountStack from "./AccountStack";
+import TransactionStack from "./TransactionStack";
 //import AuthStack from "./AuthStack";
 
 export default function main(app) {
@@ -20,8 +21,14 @@ export default function main(app) {
     accountsTable: storageStack.accountsTable,
   });
 
+  new TransactionStack(app, "transaction-api", {
+      transactionsTable: storageStack.transactionsTable,
+      accountsTable: storageStack.accountsTable,
+  });
+
   // new AuthStack(app, "auth", {
   //   api: apiStack.api,
   //   bucket: storageStack.bucket,
   // });
 }
+

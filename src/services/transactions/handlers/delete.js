@@ -5,15 +5,19 @@ import { retrieveTransaction } from './retrieve';
 import { getAccountById } from './../../accounts/handlers/retrieve';
 import { updateAmountAndBuildAccountForUpdate } from './../../accounts/handlers/update';
 
-async function deleteTransaction(event, context) {
+async function deleteTransaction(event) {
 
     const { id, accountId } = event.pathParameters;
+    
+    const transaction = await retrieveTransaction({
+        table: process.env.TRANSACTIONS_TABLE,
+        keys: { id, accountId }
+    });
+    if (!transaction) {
+        return Responses.NotFound(`Transaction with ID "${id}" not found`);
+    }
 
     try {
-        const transaction = await retrieveTransaction({
-            table: process.env.TRANSACTIONS_TABLE,
-            keys: { id, accountId }
-        });
 
         const account = await getAccountById(accountId, transaction.userId);
 
@@ -23,18 +27,11 @@ async function deleteTransaction(event, context) {
             ReturnValues: 'ALL_OLD'
         });
 
-        console.log(`Transaction to delete: `, transaction);
-        console.log(`Account: `, account);
-
         await updateAmountAndBuildAccountForUpdate(transaction, account);
 
-        if (!response.Attributes) {
-            Responses.NotFound(`Transaction with ID "${id}" not found`);
-        }
-
-        Responses.OK(response.Attributes);
+        return Responses.OK(response.Attributes);
     } catch (error) {
-        Responses.InternalServerError(error);
+        return Responses.InternalServerError(error);
     }
 }
 

@@ -47,31 +47,33 @@ export async function updateAccount(event) {
 
 }
 
+async function updateAmount(account) {
+    const params = {
+        TableName: process.env.ACCOUNTS_TABLE,
+        Key: {id: account.id, userId: account.userId},
+        UpdateExpression: "SET #name = :name, balance = :balance",
+        ExpressionAttributeValues: {
+            ":name": account.name,
+            ":balance": account.balance,
+        },
+        ExpressionAttributeNames: {
+            "#name": "name"
+        },
+        ReturnValues: 'ALL_NEW'
+    };
+
+    await dynamoDb.update(params);
+}
+
 export async function updateAmountAndBuildAccountForUpdate(transaction, account) {
     if (transaction.type == "EXPENSE") {
         account.balance -= transaction.amount;
 
-        const updatedAccount = {
-            pathParameters: { id: account.id },
-            body: {
-                balance: account.balance,
-                userId: account.userId
-            }
-        };
-
-        await updateAccount(updatedAccount);
+        await updateAmount(account);
     } else {
         account.balance += transaction.amount;
 
-        const updatedAccount = {
-            pathParameters: { id: account.id },
-            body: {
-                balance: account.balance,
-                userId: account.userId
-            }
-        };
-
-        await updateAccount(updatedAccount);
+        await updateAmount(account);
     }
 }
 
