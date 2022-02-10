@@ -14,11 +14,11 @@ class User {
 }
 
 async function updateUser(event) {
-    
+
     const { id } = event.pathParameters;
-    
+
     const { username, email, password } = event.body;
-    
+
     const eventRequest = {
         pathParameters: { id }
     };
@@ -37,65 +37,51 @@ async function updateUser(event) {
     const { body } = await getUserById(eventRequest);
 
     const data = JSON.parse(body);
-    
+
     const user = new User(data.id, data.username, data.email, data.password);
 
-    if (!username) {
-        params.ExpressionAttributeValues[':username'] = user.username
-    } else {
-        const usernameIsValid = await validateField({
-            table: process.env.USERS_TABLE,
-            column: "username",
-            field: username
-        });
+    let fieldsForValid = {
+        fields: [
+            { field: username, column: "username"},
+            { field: email, column: "email"},
+            { field: password, column: "password"},
+        ],
+        params,
+        user
+    };
 
-        if (usernameIsValid) {
-            return Responses.Conflict(`The "${username}" already exists`);
-        }else {
-            params.ExpressionAttributeValues[':username'] = username;
-        }
-    }
-
-    if (!email) {
-        params.ExpressionAttributeValues[':email'] = user.email;
-    } else {
-        const emailIsValid = await validateField({
-            table: process.env.USERS_TABLE,
-            column: "email",
-            field: email
-        });
-
-        if (emailIsValid) {
-            return Responses.Conflict(`The "${email}" already exists`);
-        } else {
-            params.ExpressionAttributeValues[':email'] = email;
-        }
-    }
-
-    if (!password) {
-        console.log("password não está preenchido")
-        params.ExpressionAttributeValues[':password'] = user.password;
-    } else {
-        const passwordIsValid = await validateField({
-            table: process.env.USERS_TABLE,
-            column: "password",
-            field: password
-        });
-
-        if (passwordIsValid) {
-            return Responses.Conflict(`The "${password}" already exists`);
-        } else {
-            params.ExpressionAttributeValues[':password'] = password;
-        }
-    }
-
+    const userUpdate = await validateFieldUpdateUser(fieldsForValid);
+    
     try {
-        const response = await dynamoDb.update(params);
+        const response = await dynamoDb.update(userUpdate);
         return Responses.OK(response.Attributes);
     } catch (error) {
         return Responses.InternalServerError(error);
     }
 
+}
+
+async function validateFieldUpdateUser(data) {
+
+    for (const element of data.fields) {
+        if (!element.field) {
+            data.params.ExpressionAttributeValues[`:${element.column}`] = data.user[`${element.column}`];
+        } else {
+            const fieldValid = await validateField({
+                table: process.env.USERS_TABLE,
+                column: element.column,
+                field: element.field
+            });
+    
+            if (fieldValid) {
+                throw Responses.Conflict(`The "${element.field}" already exists`);
+            } else {
+                data.params.ExpressionAttributeValues[`:${element.column}`] = element.field;
+            }
+        }
+    }
+
+    return data.params;
 }
 
 export const handler = middleware(updateUser);

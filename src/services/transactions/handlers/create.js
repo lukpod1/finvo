@@ -7,7 +7,7 @@ import { updateAmountAndBuildAccountForUpdate } from '../../accounts/handlers/up
 
 async function createTransaction(event) {
 
-    const { amount, accountId, type, timestamp, comment, userId } = event.body;
+    const { amount, accountId, type, comment, userId } = event.body;
 
     try {
         let account = await getAccountById(accountId, userId);
