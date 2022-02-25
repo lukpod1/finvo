@@ -5,11 +5,11 @@ import { Responses } from '../../../libs/response';
 
 async function createAccount(event) {
 
-    const { name, balance, userId } = event.body;
+    const { name, balance } = event.body;
 
     const account = {
         id: uuid(),
-        userId,
+        user: event.requestContext.authorizer,
         name,
         balance
     };

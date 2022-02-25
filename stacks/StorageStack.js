@@ -14,8 +14,12 @@ export default class StorageStack extends sst.Stack {
         this.usersTable = new sst.Table(this, "Users", {
             fields: {
                 id: sst.TableFieldType.STRING,
+                email: sst.TableFieldType.STRING
             },
             primaryIndex: { partitionKey: "id"},
+            globalIndexes: { 
+                emailGsi: { partitionKey: "email" }
+            }
         });
 
         this.accountsTable = new sst.Table(this, "Accounts", {

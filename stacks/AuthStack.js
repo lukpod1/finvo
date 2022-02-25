@@ -1,53 +1,57 @@
-import * as iam from "@aws-cdk/aws-iam";
 import * as sst from "@serverless-stack/resources";
+import { VerificationEmailStyle } from "aws-cdk-lib/aws-cognito";
 
 export default class AuthStack extends sst.Stack {
 
-    auth;
+    // Public reference to the API
+    authorizer;
 
     constructor(scope, id, props) {
         super(scope, id, props);
 
-        const { api, bucket } = props;
+        const postConfirmation = new sst.Function(this, "ConfirmUserSignUp", {
+            handler: "src/services/authentication/confirm-user-signup.handler"
+        })
 
-        // Create a Cognito User Poll and Identity Poll
-        this.auth = new sst.Auth(this, "Auth", {
+        this.authorizer = new sst.Auth(this, "Auth", {
             cognito: {
                 userPool: {
-                    // Users can login with their email and password
-                    signInAliases: { email: true },
+                    signInAliases: {
+                        email: true,
+                    },
+                    selfSignUpEnabled: true,
+                    signInCaseSensitive: false,
+                    userVerification: {
+                        emailSubject: "Verify your email!",
+                        emailBody: "Hello, Thanks for signing up! {####}",
+                        emailStyle: VerificationEmailStyle.CODE
+                    },
+                    autoVerify: {
+                        email: true
+                    },
+                    passwordPolicy: {
+                        minLength: 8,
+                        requireLowercase: false,
+                        requireUppercase: false,
+                        requireDigits: false,
+                        requireSymbols: false
+                    }
+                },
+                userPoolClient: {
+                    authFlows: {userPassword: true},
+                },
+                triggers: {
+                    postConfirmation
                 }
             }
         });
 
-        this.auth.attachPermissionsForAuthUsers([
-            // Allow access to the API
-            api,
-            // Policy granting access to a specific folder in the bucket
-            new iam.PolicyStatement({
-                actions: ["s3:*"],
-                effect: iam.Effect.ALLOW,
-                resources: [
-                    bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-
-                ]
-            }),
-            // Policy granting access to a specific folder in the bucket
-            new iam.PolicyStatement({
-                actions: ["s3:*"],
-                effect: iam.Effect.ALLOW,
-                resources: [
-                    bucket.bucketArn + "/private/${cognito-identity.amazonaws.com:sub}/*",
-                ],
-            }),
-        ]);
-
-        // Show the auth resources in the output
         this.addOutputs({
-            Region: scope.region,
-            UserPoolId: this.auth.cognitoUserPool.userPoolId,
-            IdentityPoolId: this.auth.cognitoCfnIdentityPool.ref,
-            UserPoolClientId: this.auth.cognitoUserPoolClient.userPoolClientId,
+            UserPoolId: this.authorizer.cognitoUserPool.userPoolId,
+            UserPoolClientId: this.authorizer.cognitoUserPoolClient.userPoolClientId,
+            IdentityPool: this.authorizer.cognitoIdentityPoolId,
+            ConfirmUserSignupArn: postConfirmation.functionArn,
+            ConfirmUserSignupName: postConfirmation.functionName,
         });
 
     }

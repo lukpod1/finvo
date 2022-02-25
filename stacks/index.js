@@ -2,7 +2,7 @@ import StorageStack from "./StorageStack";
 import UserStack from "./UserStack";
 import AccountStack from "./AccountStack";
 import TransactionStack from "./TransactionStack";
-//import AuthStack from "./AuthStack";
+import AuthStack from "./AuthStack";
 
 export default function main(app) {
   // Set default runtime for all functions
@@ -13,7 +13,10 @@ export default function main(app) {
   // Add more stacks
   const storageStack = new StorageStack(app, "storage");
   
+  const authStack = new AuthStack(app, "auth");
+  
   new UserStack(app, "user-api", {
+    auth: authStack.authorizer,
     usersTable: storageStack.usersTable,
   });
 
@@ -26,9 +29,5 @@ export default function main(app) {
       accountsTable: storageStack.accountsTable,
   });
 
-  // new AuthStack(app, "auth", {
-  //   api: apiStack.api,
-  //   bucket: storageStack.bucket,
-  // });
 }
 

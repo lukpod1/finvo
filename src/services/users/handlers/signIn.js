@@ -19,15 +19,7 @@ async function signIn(event) {
 
         if (user.Items.length == 1) {
             if (await verify(password, user.Items[0].password)) {
-                const token = jwt.sign({
-                    id: user.Items[0].id,
-                    email: user.Items[0].email,
-                },
-                    process.env.JWT_KEY,
-                    {
-                        expiresIn: "1h"
-                    }
-                );
+                const token = jwt.sign(user.Items[0], process.env.JWT_SECRET);
 
                 return Responses.OK({
                     message: "successfully authenticated",

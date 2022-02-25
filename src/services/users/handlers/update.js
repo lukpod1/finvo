@@ -34,6 +34,7 @@ async function updateUser(event) {
         ReturnValues: 'ALL_NEW'
     };
 
+    console.log(event.requestContext.authorizer.role);
     const { body } = await getUserById(eventRequest);
 
     const data = JSON.parse(body);
