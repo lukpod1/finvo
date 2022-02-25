@@ -9,7 +9,7 @@ export default class AuthStack extends sst.Stack {
     constructor(scope, id, props) {
         super(scope, id, props);
 
-        const postConfirmation = new sst.Function(this, "ConfirmUserSignUp", {
+        const confirmUserSignUp = new sst.Function(this, "ConfirmUserSignUp", {
             handler: "src/services/authentication/confirm-user-signup.handler"
         })
 
@@ -41,7 +41,7 @@ export default class AuthStack extends sst.Stack {
                     authFlows: {userPassword: true},
                 },
                 triggers: {
-                    postConfirmation
+                    postConfirmation: confirmUserSignUp
                 }
             }
         });
@@ -50,8 +50,8 @@ export default class AuthStack extends sst.Stack {
             UserPoolId: this.authorizer.cognitoUserPool.userPoolId,
             UserPoolClientId: this.authorizer.cognitoUserPoolClient.userPoolClientId,
             IdentityPool: this.authorizer.cognitoIdentityPoolId,
-            ConfirmUserSignupArn: postConfirmation.functionArn,
-            ConfirmUserSignupName: postConfirmation.functionName,
+            ConfirmUserSignupArn: confirmUserSignUp.functionArn,
+            ConfirmUserSignupName: confirmUserSignUp.functionName,
         });
 
     }
