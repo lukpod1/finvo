@@ -1,5 +1,7 @@
 import * as sst from "@serverless-stack/resources";
-import { VerificationEmailStyle } from "aws-cdk-lib/aws-cognito";
+import { VerificationEmailStyle, UserPoolOperation } from "aws-cdk-lib/aws-cognito";
+import * as iam from "aws-cdk-lib/aws-iam";
+import * as s3 from "aws-cdk-lib/aws-s3";
 
 export default class AuthStack extends sst.Stack {
 
@@ -10,12 +12,14 @@ export default class AuthStack extends sst.Stack {
         super(scope, id, props);
 
         const confirmUserSignUp = new sst.Function(this, "ConfirmUserSignUp", {
-            handler: "src/services/authentication/confirm-user-signup.handler"
+            handler: "src/services/authentication/confirm-user-signup.handler",
         })
 
+        // Create a Cognito User Pool and Identity Pool
         this.authorizer = new sst.Auth(this, "Auth", {
             cognito: {
                 userPool: {
+                    // Users can login with their email and password
                     signInAliases: {
                         email: true,
                     },
@@ -38,7 +42,7 @@ export default class AuthStack extends sst.Stack {
                     }
                 },
                 userPoolClient: {
-                    authFlows: {userPassword: true},
+                    authFlows: { userPassword: true },
                 },
                 triggers: {
                     postConfirmation: confirmUserSignUp
@@ -46,10 +50,12 @@ export default class AuthStack extends sst.Stack {
             }
         });
 
+        // this.authorizer.attachPermissionsForAuthUsers([])
+
         this.addOutputs({
             UserPoolId: this.authorizer.cognitoUserPool.userPoolId,
             UserPoolClientId: this.authorizer.cognitoUserPoolClient.userPoolClientId,
-            IdentityPool: this.authorizer.cognitoIdentityPoolId,
+            IdentityPoolId: this.authorizer.cognitoCfnIdentityPool.ref,
             ConfirmUserSignupArn: confirmUserSignUp.functionArn,
             ConfirmUserSignupName: confirmUserSignUp.functionName,
         });
