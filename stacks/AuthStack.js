@@ -1,7 +1,5 @@
-import * as sst from "@serverless-stack/resources";
-import { VerificationEmailStyle, UserPoolOperation } from "aws-cdk-lib/aws-cognito";
-import * as iam from "aws-cdk-lib/aws-iam";
-import * as s3 from "aws-cdk-lib/aws-s3";
+  import * as sst from "@serverless-stack/resources";
+import { VerificationEmailStyle } from "aws-cdk-lib/aws-cognito";
 
 export default class AuthStack extends sst.Stack {
 
@@ -11,8 +9,14 @@ export default class AuthStack extends sst.Stack {
     constructor(scope, id, props) {
         super(scope, id, props);
 
+        const { usersTable } = props;
+
         const confirmUserSignUp = new sst.Function(this, "ConfirmUserSignUp", {
-            handler: "src/services/authentication/confirm-user-signup.handler",
+            handler: "services/authentication/confirm-user-signup.handler",
+            srcPath: "src/",
+            environment: {
+                USERS_TABLE: usersTable.tableName,
+            }
         })
 
         // Create a Cognito User Pool and Identity Pool
@@ -50,7 +54,7 @@ export default class AuthStack extends sst.Stack {
             }
         });
 
-        // this.authorizer.attachPermissionsForAuthUsers([])
+        confirmUserSignUp.attachPermissions(["dynamodb", "cognito", usersTable])
 
         this.addOutputs({
             UserPoolId: this.authorizer.cognitoUserPool.userPoolId,

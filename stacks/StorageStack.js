@@ -1,4 +1,5 @@
 import * as sst from "@serverless-stack/resources";
+import { ProjectionType, StreamViewType } from "aws-cdk-lib/aws-dynamodb";
 
 export default class StorageStack extends sst.Stack {
     // Public reference to the table
@@ -14,12 +15,19 @@ export default class StorageStack extends sst.Stack {
         this.usersTable = new sst.Table(this, "Users", {
             fields: {
                 id: sst.TableFieldType.STRING,
-                email: sst.TableFieldType.STRING
+                email: sst.TableFieldType.STRING,
+                screenName: sst.TableFieldType.STRING
             },
             primaryIndex: { partitionKey: "id"},
             globalIndexes: { 
-                emailGsi: { partitionKey: "email" }
-            }
+                byScreenName: { 
+                    partitionKey: "screenName",
+                    indexProps: {
+                        projectionType: ProjectionType.ALL
+                    }
+                }
+            },
+            stream: StreamViewType.NEW_AND_OLD_IMAGES
         });
 
         this.accountsTable = new sst.Table(this, "Accounts", {

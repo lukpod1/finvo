@@ -13,7 +13,9 @@ export default function main(app) {
   // Add more stacks
   const storageStack = new StorageStack(app, "storage");
   
-  const authStack = new AuthStack(app, "auth");
+  const authStack = new AuthStack(app, "auth", {
+    usersTable: storageStack.usersTable
+  });
   
   new UserStack(app, "user-api", {
     auth: authStack.authorizer,
