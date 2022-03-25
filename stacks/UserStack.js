@@ -1,3 +1,4 @@
+import { HttpUserPoolAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 import * as sst from "@serverless-stack/resources";
 // import * as apigAuthorizers from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
@@ -9,14 +10,15 @@ export default class UserStack extends sst.Stack {
     constructor(scope, id, props) {
         super(scope, id, props);
 
-        const { usersTable } = props;
+        const { usersTable, auth } = props;
 
         // Create the API
         this.usersApi = new sst.Api(this, "UsersApi", {
-            // defaultAuthorizer: new apigAuthorizers.HttpUserPoolAuthorizer("Authorizer", authorizer.userPool, {
-            //     userPoolClients: [authorizer.userPoolClient],
-            // }),
-            // defaultAuthorizationType: sst.ApiAuthorizationType.JWT,
+            defaultAuthorizationType: sst.ApiAuthorizationType.JWT,
+            defaultAuthorizer: new HttpUserPoolAuthorizer("Authorizer", auth.cognitoUserPool, {
+                userPoolClients: [auth.cognitoUserPoolClient]
+            }),
+            defaultAuthorizationScopes: ["user.id", "user.email"],
             defaultFunctionProps: {
                 environment: {
                     USERS_TABLE: usersTable.tableName,
