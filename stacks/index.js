@@ -28,6 +28,7 @@ export default function main(app) {
   });
 
   new TransactionStack(app, "transaction-api", {
+      auth: authStack.authorizer,
       transactionsTable: storageStack.transactionsTable,
       accountsTable: storageStack.accountsTable,
   });
