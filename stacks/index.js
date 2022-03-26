@@ -23,6 +23,7 @@ export default function main(app) {
   });
 
   new AccountStack(app, "account-api", {
+    auth: authStack.authorizer,
     accountsTable: storageStack.accountsTable,
   });
 
