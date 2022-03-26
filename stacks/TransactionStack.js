@@ -1,4 +1,5 @@
 import * as sst from "@serverless-stack/resources";
+import { HttpUserPoolAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
 export default class TransactionStack extends sst.Stack {
     // Public reference to the API
@@ -7,11 +8,14 @@ export default class TransactionStack extends sst.Stack {
     constructor(scope, id, props) {
         super(scope, id, props);
 
-        const { transactionsTable, accountsTable } = props;
+        const { transactionsTable, accountsTable, auth } = props;
 
         // Create the API
         this.transactionsApi = new sst.Api(this, "TransactionsApi", {
-            // defaultAuthorizationType: "AWS_IAM",
+            defaultAuthorizationType: sst.ApiAuthorizationType.JWT,
+            defaultAuthorizer: new HttpUserPoolAuthorizer("Authorizer", auth.cognitoUserPool, {
+                userPoolClients: [auth.cognitoUserPoolClient]
+            }),
             defaultFunctionProps: {
                 environment: {
                     TRANSACTIONS_TABLE: transactionsTable.tableName,
