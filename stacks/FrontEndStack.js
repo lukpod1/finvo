@@ -19,6 +19,8 @@ export default class FrontEndStack extends sst.Stack {
                 ACCOUNTS_API_URL: accountsApi.url,
                 TRANSACTIONS_API_URL: transactionsApi.url
             },
+            buildOutput: "dist",
+            buildCommand: "yarn && yarn build",
         })
 
         // Show the URLs in the output
