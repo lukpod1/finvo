@@ -7,6 +7,7 @@ before_compile:
   - echo "Install YARN"
   - npm install --global yarn
   - yarn --version
+  - cd frontend && yarn
 
 #compile:
 #  - echo "Override compile"
