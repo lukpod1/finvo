@@ -46,7 +46,7 @@ export default class AuthStack extends sst.Stack {
                     }
                 },
                 userPoolClient: {
-                    authFlows: { userPassword: true },
+                    authFlows: { userPassword: true, userSrp: true },
                 },
                 triggers: {
                     postConfirmation: confirmUserSignUp

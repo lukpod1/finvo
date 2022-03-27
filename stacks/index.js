@@ -36,7 +36,9 @@ export default function main(app) {
 
   new FrontEndStack(app, "lify-app", {
     auth: authStack.authorizer,
-    userApi: userStack.usersApi
+    usersApi: userStack.usersApi,
+    accountsApi: accountStack.accountsApi,
+    transactionsApi: transactionStack.transactionsApi
   })
 
 }
