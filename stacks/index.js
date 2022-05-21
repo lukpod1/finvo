@@ -3,7 +3,6 @@ import UserStack from "./UserStack";
 import AccountStack from "./AccountStack";
 import TransactionStack from "./TransactionStack";
 import AuthStack from "./AuthStack";
-import FrontEndStack from "./FrontEndStack";
 
 export default function main(app) {
   // Set default runtime for all functions
@@ -33,13 +32,6 @@ export default function main(app) {
       transactionsTable: storageStack.transactionsTable,
       accountsTable: storageStack.accountsTable,
   });
-
-  new FrontEndStack(app, "lify-app", {
-    auth: authStack.authorizer,
-    usersApi: userStack.usersApi,
-    accountsApi: accountStack.accountsApi,
-    transactionsApi: transactionStack.transactionsApi
-  })
 
 }
 

@@ -12,16 +12,17 @@ export default class AuthStack extends sst.Stack {
         const { usersTable } = props;
 
         const confirmUserSignUp = new sst.Function(this, "ConfirmUserSignUp", {
-            handler: "services/authentication/confirm-user-signup.handler",
-            srcPath: "src/",
+            handler: "backend/services/authentication/confirm-user-signup.handler",
             environment: {
                 USERS_TABLE: usersTable.tableName,
             }
         })
 
+        console.log(confirmUserSignUp)
+
         // Create a Cognito User Pool and Identity Pool
         this.authorizer = new sst.Auth(this, "Auth", {
-            cognito: {
+            cdk: {
                 userPool: {
                     // Users can login with their email and password
                     signInAliases: {
@@ -47,19 +48,19 @@ export default class AuthStack extends sst.Stack {
                 },
                 userPoolClient: {
                     authFlows: { userPassword: true, userSrp: true },
-                },
-                triggers: {
-                    postConfirmation: confirmUserSignUp
                 }
+            },
+            triggers: {
+                postConfirmation: confirmUserSignUp
             }
         });
 
         confirmUserSignUp.attachPermissions(["dynamodb", "cognito", usersTable])
 
         this.addOutputs({
-            UserPoolId: this.authorizer.cognitoUserPool.userPoolId,
-            UserPoolClientId: this.authorizer.cognitoUserPoolClient.userPoolClientId,
-            IdentityPoolId: this.authorizer.cognitoCfnIdentityPool.ref,
+            UserPoolId: this.authorizer.userPoolId,
+            UserPoolClientId: this.authorizer.userPoolClientId,
+            IdentityPoolId: this.authorizer.cognitoIdentityPoolId,
             ConfirmUserSignupArn: confirmUserSignUp.functionArn,
             ConfirmUserSignupName: confirmUserSignUp.functionName,
         });

@@ -14,51 +14,46 @@ export default class StorageStack extends sst.Stack {
         // Create the DynamoDB table
         this.usersTable = new sst.Table(this, "Users", {
             fields: {
-                id: sst.TableFieldType.STRING,
-                email: sst.TableFieldType.STRING,
-                screenName: sst.TableFieldType.STRING
+                id: "string",
+                email: "string",
+                screenName: "string"
             },
             primaryIndex: { partitionKey: "id"},
             globalIndexes: { 
                 byScreenName: { 
                     partitionKey: "screenName",
-                    indexProps: {
-                        projectionType: ProjectionType.ALL
-                    }
+                    projection: "all"
                 }
             },
-            stream: StreamViewType.NEW_AND_OLD_IMAGES
+            stream: "new_and_old_images"
         });
 
         this.accountsTable = new sst.Table(this, "Accounts", {
             fields: {
-                id: sst.TableFieldType.STRING,
-                userId: sst.TableFieldType.STRING
+                id: "string",
+                userId: "string"
             },
             primaryIndex: { partitionKey: "id", sortKey: "userId" },
         });
 
         this.transactionsTable = new sst.Table(this, "Transactions", {
             fields: {
-                id: sst.TableFieldType.STRING,
-                accountId: sst.TableFieldType.STRING,
+                id: "string",
+                accountId: "string",
             },
             primaryIndex: { partitionKey: "id", sortKey: "accountId" },
         });
 
         // Create an S3 bucket
-        this.bucket = new sst.Bucket(this, "Uploads", {
-            s3Bucket: {
-                // Allow client side access to the bucket from a different domain
-                cors: [
-                    {
-                        maxAge: 3000,
-                        allowedOrigins: ["*"],
-                        allowedHeaders: ["*"],
-                        allowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
-                    },
-                ],
-            }
-        });
+        // this.bucket = new sst.Bucket(this, "Uploads", {
+        //     cors: [
+        //         {
+        //             maxAge: 3000,
+        //             allowedOrigins: ["*"],
+        //             allowedHeaders: ["*"],
+        //             allowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
+        //         },
+        //     ],
+        // });
     }
 }

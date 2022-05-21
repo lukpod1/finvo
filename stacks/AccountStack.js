@@ -12,21 +12,23 @@ export default class AccountStack extends sst.Stack {
 
         // Create the API
         this.accountsApi = new sst.Api(this, "AccountsApi", {
-            defaultAuthorizationType: sst.ApiAuthorizationType.JWT,
-            defaultAuthorizer: new HttpUserPoolAuthorizer("Authorizer", auth.cognitoUserPool, {
-                userPoolClients: [auth.cognitoUserPoolClient]
-            }),
-            defaultFunctionProps: {
-                environment: {
-                    ACCOUNTS_TABLE: accountsTable.tableName,
-                    
+            authorizers: {
+                jwt: {
+                    type: "user_pool",
+                    userPool: {
+                        id: auth.userPoolId,
+                        clientIds: [auth.userPoolClientId]
+                    }
                 }
             },
+            defaults: {
+                authorizer: "jwt"
+            },
             routes: {
-                "POST   /accounts": "src/services/accounts/handlers/create.handler",
-                "DELETE   /accounts/{id}/{userId}": "src/services/accounts/handlers/remove.handler",
-                "PUT    /accounts/{id}/{userId}": "src/services/accounts/handlers/update.handler",
-                "POST   /accounts/{id}/{userId}": "src/services/accounts/handlers/find.handler",
+                "POST   /accounts": "backend/services/accounts/handlers/create.handler",
+                "DELETE   /accounts/{id}/{userId}": "backend/services/accounts/handlers/remove.handler",
+                "PUT    /accounts/{id}/{userId}": "backend/services/accounts/handlers/update.handler",
+                "POST   /accounts/{id}/{userId}": "backend/services/accounts/handlers/find.handler",
             },
             cors: true
         });

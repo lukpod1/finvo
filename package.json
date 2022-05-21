@@ -4,13 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "database": "cd src/resources/database && npm run start",
-    "build-all": "npm run build-database && npm run build-users && npm run build-accounts && npm run build-transactions",
-    "build-database": "cd src/resources/database && npm run build",
-    "build-users": "cd src/functions/users && npm run build",
-    "build-accounts": "cd src/functions/accounts && npm run build",
-    "build-transactions": "cd src/functions/transactions && npm run build",
-    "offline-users": "cd src/functions/users && npm run offline",
     "test": "sst test",
     "start": "sst start",
     "build": "sst build",
@@ -18,7 +11,7 @@
     "remove": "sst remove"
   },
   "keywords": [],
-  "author": "",
+  "author": "José Lucas <lukasalvespod1@gmail.com>",
   "license": "ISC",
   "eslintConfig": {
     "extends": [
@@ -30,16 +23,16 @@
     "jest": "^27.3.1"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigatewayv2-alpha": "2.15.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "2.15.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-alpha": "2.24.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "2.24.0-alpha.0",
     "@middy/core": "^2.5.2",
     "@middy/http-error-handler": "^2.5.2",
     "@middy/http-event-normalizer": "^2.5.2",
     "@middy/http-json-body-parser": "^2.5.2",
     "@middy/validator": "^2.5.2",
-    "@serverless-stack/cli": "0.69.0",
-    "@serverless-stack/resources": "0.69.0",
-    "aws-cdk-lib": "2.15.0",
+    "@serverless-stack/cli": "1.1.2",
+    "@serverless-stack/resources": "1.1.2",
+    "aws-cdk-lib": "2.24.0",
     "aws-sdk": "^2.1019.0",
     "bcrypt": "^5.0.1",
     "chalk": "^4.1.2",
@@ -56,5 +49,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "repository": "git@github.com:lukpod1/finance-service.git"
 }

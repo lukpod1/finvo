@@ -12,21 +12,23 @@ export default class TransactionStack extends sst.Stack {
 
         // Create the API
         this.transactionsApi = new sst.Api(this, "TransactionsApi", {
-            defaultAuthorizationType: sst.ApiAuthorizationType.JWT,
-            defaultAuthorizer: new HttpUserPoolAuthorizer("Authorizer", auth.cognitoUserPool, {
-                userPoolClients: [auth.cognitoUserPoolClient]
-            }),
-            defaultFunctionProps: {
-                environment: {
-                    TRANSACTIONS_TABLE: transactionsTable.tableName,
-                    ACCOUNTS_TABLE: accountsTable.tableName
+            authorizers: {
+                jwt: {
+                    type: "user_pool",
+                    userPool: {
+                        id: auth.userPoolId,
+                        clientIds: [auth.userPoolClientId]
+                    }
                 }
             },
+            defaults: {
+                authorizer: "jwt"
+            },
             routes: {
-                "POST   /transactions": "src/services/transactions/handlers/create.handler",
-                "GET    /transactions/{id}/{accountId}": "src/services/transactions/handlers/retrieve.handler",
-                "DELETE   /transactions/{id}/{accountId}": "src/services/transactions/handlers/delete.handler",
-                "GET    /transactions/{accountId}": "src/services/transactions/handlers/find.handler",
+                "POST   /transactions": "backend/services/transactions/handlers/create.handler",
+                "GET    /transactions/{id}/{accountId}": "backend/services/transactions/handlers/retrieve.handler",
+                "DELETE   /transactions/{id}/{accountId}": "backend/services/transactions/handlers/delete.handler",
+                "GET    /transactions/{accountId}": "backend/services/transactions/handlers/find.handler",
             },
             cors: true
         });
