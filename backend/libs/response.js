@@ -15,6 +15,10 @@ export const Responses = {
         return this.buildResponse(200, data);
     },
 
+    Created(data = {}) {
+        return this.buildResponse(201, data);
+    },
+
     NoContent(data = {}) {
         return this.buildResponse(204, data);
     },

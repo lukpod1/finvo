@@ -6,6 +6,7 @@ export default class StorageStack extends sst.Stack {
     usersTable;
     accountsTable;
     transactionsTable;
+    photosTable;
     bucket;
 
     constructor(scope, id, props) {
@@ -44,16 +45,31 @@ export default class StorageStack extends sst.Stack {
             primaryIndex: { partitionKey: "id", sortKey: "accountId" },
         });
 
-        // Create an S3 bucket
-        // this.bucket = new sst.Bucket(this, "Uploads", {
-        //     cors: [
-        //         {
-        //             maxAge: 3000,
-        //             allowedOrigins: ["*"],
-        //             allowedHeaders: ["*"],
-        //             allowedMethods: ["GET", "PUT", "POST", "DELETE", "HEAD"],
-        //         },
-        //     ],
-        // });
+        this.photosTable = new sst.Table(this, "Photos", {
+            fields: {
+                id: "string",
+                eventId: "string",
+            },
+            primaryIndex: { partitionKey: "eventId", sortKey: "id" },
+        });
+
+        this.bucket = new sst.Bucket(this, "PhotosBucket", {
+            cors: [
+                {
+                    allowedOrigins: ["*"],
+                    allowedHeaders: ["*"],
+                    allowedMethods: ["PUT"],
+                },
+            ],
+            notifications: {
+                s3ProcessUploadedPhoto: {
+                    function: {
+                        handler: "backend/services/photos/process-uploaded-photo.handler",
+                        permissions: [this.bucket, this.photosTable]
+                    },
+                    events: ["object_created"],
+                }
+            }
+        });
     }
 }
