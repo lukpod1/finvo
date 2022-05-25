@@ -21,7 +21,12 @@ export default class UserStack extends sst.Stack {
                 }
             },
             defaults: {
-                authorizer: "jwt"
+                authorizer: "jwt",
+                function: {
+                    environment: {
+                        USERS_TABLE: usersTable.tableName,
+                    }
+                }
             },
             routes: {
                 "PUT    /users/{id}": "backend/services/users/handlers/update.handler",

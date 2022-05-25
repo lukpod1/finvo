@@ -22,7 +22,13 @@ export default class TransactionStack extends sst.Stack {
         }
       },
       defaults: {
-        authorizer: "jwt"
+        authorizer: "jwt",
+        function: {
+          environment: {
+            TRANSACTIONS_TABLE: transactionsTable.tableName,
+            ACCOUNTS_TABLE: accountsTable.tableName
+          }
+        }
       },
       routes: {
         "POST   /transactions": "backend/services/transactions/handlers/create.handler",
@@ -30,7 +36,7 @@ export default class TransactionStack extends sst.Stack {
         "DELETE   /transactions/{id}/{accountId}": "backend/services/transactions/handlers/delete.handler",
         "GET    /transactions/{accountId}": "backend/services/transactions/handlers/find.handler",
       },
-      cors: true
+      cors: true,
     });
 
     // Allow the API to access the table

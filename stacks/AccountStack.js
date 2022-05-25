@@ -1,5 +1,4 @@
 import * as sst from "@serverless-stack/resources";
-import { HttpUserPoolAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
 export default class AccountStack extends sst.Stack {
     // Public reference to the API
@@ -22,7 +21,12 @@ export default class AccountStack extends sst.Stack {
                 }
             },
             defaults: {
-                authorizer: "jwt"
+                authorizer: "jwt",
+                function: {
+                    environment: {
+                        ACCOUNTS_TABLE: accountsTable.tableName,
+                    }
+                }
             },
             routes: {
                 "POST   /accounts": "backend/services/accounts/handlers/create.handler",
