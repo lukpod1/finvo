@@ -5,7 +5,6 @@ export default class StorageStack extends sst.Stack {
     usersTable;
     accountsTable;
     transactionsTable;
-    photosTable;
     bucket;
 
     constructor(scope, id, props) {
