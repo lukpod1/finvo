@@ -1,5 +1,4 @@
 import * as sst from "@serverless-stack/resources";
-import { ProjectionType, StreamViewType } from "aws-cdk-lib/aws-dynamodb";
 
 export default class StorageStack extends sst.Stack {
     // Public reference to the table
@@ -45,31 +44,5 @@ export default class StorageStack extends sst.Stack {
             primaryIndex: { partitionKey: "id", sortKey: "accountId" },
         });
 
-        this.photosTable = new sst.Table(this, "Photos", {
-            fields: {
-                id: "string",
-                eventId: "string",
-            },
-            primaryIndex: { partitionKey: "eventId", sortKey: "id" },
-        });
-
-        this.bucket = new sst.Bucket(this, "PhotosBucket", {
-            cors: [
-                {
-                    allowedOrigins: ["*"],
-                    allowedHeaders: ["*"],
-                    allowedMethods: ["PUT"],
-                },
-            ],
-            notifications: {
-                s3ProcessUploadedPhoto: {
-                    function: {
-                        handler: "backend/services/photos/process-uploaded-photo.handler",
-                        permissions: [this.bucket, this.photosTable]
-                    },
-                    events: ["object_created"],
-                }
-            }
-        });
     }
 }
