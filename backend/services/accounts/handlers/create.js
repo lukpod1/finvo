@@ -3,16 +3,23 @@ import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 
+class Account {
+    constructor(id, user, name, balance) {
+        this.id = id;
+        this.user = user;
+        this.name = name;
+        this.balance = balance;
+    }
+}
+
 async function createAccount(event) {
 
-    const { name, balance } = event.body;
-
-    const account = {
-        id: uuid(),
-        user: event.requestContext.authorizer,
-        name,
-        balance
-    };
+    const account = new Account(
+        uuid(),
+        event.requestContext.authorizer,
+        event.body.data.name,
+        event.body.data.balance
+    );
 
     try {
         await dynamoDb.put({

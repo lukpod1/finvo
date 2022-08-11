@@ -37,7 +37,6 @@ export default class UserStack extends sst.Stack {
 
         // Allow the API to access the table
         this.usersApi.attachPermissions([usersTable]);
-        //authorizer.attachPermissionsForAuthUsers([this.usersApi]);
 
         // Show the API endpoint in the output
         this.addOutputs({
