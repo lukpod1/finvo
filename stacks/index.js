@@ -17,17 +17,17 @@ export default function main(app) {
     usersTable: storageStack.usersTable
   });
   
-  const userStack = new UserStack(app, "user-api", {
+  new UserStack(app, "user-api", {
     auth: authStack.authorizer,
     usersTable: storageStack.usersTable,
   });
 
-  const accountStack = new AccountStack(app, "account-api", {
+  new AccountStack(app, "account-api", {
     auth: authStack.authorizer,
     accountsTable: storageStack.accountsTable,
   });
 
-  const transactionStack = new TransactionStack(app, "transaction-api", {
+  new TransactionStack(app, "transaction-api", {
       auth: authStack.authorizer,
       transactionsTable: storageStack.transactionsTable,
       accountsTable: storageStack.accountsTable,
