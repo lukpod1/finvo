@@ -1,28 +1,28 @@
-before_compile:
-  - echo "Before compile"
-  - echo "Set Node version 14.17.0"
-  - n 14.17.0
-  - echo "Install NPM"
-  - npm i -g npm@latest
-  - echo "Install YARN"
-  - npm install --global yarn
-  - yarn --version
-  - cd frontend && yarn
+# before_compile:
+#   - echo "Before compile"
+#   - echo "Set Node version 14.17.0"
+#   - n 14.17.0
+#   - echo "Install NPM"
+#   - npm i -g npm@latest
+#   - echo "Install YARN"
+#   - npm install --global yarn
+#   - yarn --version
+#   - cd frontend && yarn
 
-#compile:
-#  - echo "Override compile"
+# #compile:
+# #  - echo "Override compile"
 
-before_build:
-  - echo "Before build"
+# before_build:
+#   - echo "Before build"
 
-before_deploy:
-  - echo "Before deploy"
+# before_deploy:
+#   - echo "Before deploy"
 
-after_deploy:
-  - echo "After deploy"
+# after_deploy:
+#   - echo "After deploy"
 
-before_remove:
-  - echo "Before deploy"
+# before_remove:
+#   - echo "Before deploy"
 
-after_remove:
-  - echo "After deploy"
+# after_remove:
+#   - echo "After deploy"
