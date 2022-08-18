@@ -7,7 +7,7 @@ import AuthStack from "./AuthStack";
 export default function main(app) {
   // Set default runtime for all functions
   app.setDefaultFunctionProps({
-    runtime: "nodejs12.x"
+    runtime: "nodejs16.x"
   });
 
   // Add more stacks
