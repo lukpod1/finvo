@@ -1,5 +1,4 @@
 import * as sst from "@serverless-stack/resources";
-import { HttpUserPoolAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
 export default class TransactionStack extends sst.Stack {
   // Public reference to the API

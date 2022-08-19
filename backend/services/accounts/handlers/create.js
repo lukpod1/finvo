@@ -13,10 +13,11 @@ class Account {
 }
 
 async function createAccount(event) {
+    console.log('LOGGER', event);
 
     const account = new Account(
         uuid(),
-        event.requestContext.authorizer,
+        event.requestContext.authorizer.iam.cognitoIdentity.identityId,
         event.body.data.name,
         event.body.data.balance
     );
