@@ -52,5 +52,9 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "repository": "git@github.com:lukpod1/finance-service.git"
+  "repository": "git@github.com:lukpod1/finance-service.git",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
 }
