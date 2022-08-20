@@ -1,22 +1,22 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "sst-env -- next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "sst-env -- vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@sls-next/lambda-at-edge": "^3.7.0",
-    "next": "12.2.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@serverless-stack/static-site-env": "^1.8.1",
-    "eslint": "^8.22.0",
-    "eslint-config-next": "12.2.5"
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.1",
+    "vite": "^3.0.7"
   }
 }

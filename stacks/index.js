@@ -3,7 +3,7 @@ import UserStack from "./UserStack";
 import AccountStack from "./AccountStack";
 import TransactionStack from "./TransactionStack";
 import AuthStack from "./AuthStack";
-import NextStack from "./NextStack";
+import WebStack from "./WebStack";
 
 export default function main(app) {
   // Set default runtime for all functions
@@ -34,7 +34,7 @@ export default function main(app) {
       accountsTable: storageStack.accountsTable,
   });
 
-  new NextStack(app, "lify-app", {
+  new WebStack(app, "lify-app", {
     auth: authStack.authorizer,
     usersApi: userStack.usersApi,
     accountsApi: accountStack.accountsApi,

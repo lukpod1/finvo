@@ -1,13 +1,13 @@
 import * as sst from "@serverless-stack/resources";
 
-export default class NextStack extends sst.Stack {
+export default class WebStack extends sst.Stack {
 
   constructor(scope, id, props) {
     super(scope, id, props);
 
     const { auth, usersApi, accountsApi, transactionsApi } = props;
 
-    const site = new sst.NextjsSite(this, "Site", {
+    const site = new sst.ViteStaticSite(this, "Site", {
       path: "frontend",
       environment: {
         USER_POOL_ID: auth.userPoolId,
