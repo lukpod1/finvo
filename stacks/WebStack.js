@@ -7,9 +7,12 @@ export default class WebStack extends sst.Stack {
 
     const { auth, usersApi, accountsApi, transactionsApi } = props;
 
+    const cognitoRegion = 'us-east-1'
+
     const site = new sst.ViteStaticSite(this, "Site", {
       path: "frontend",
       environment: {
+        VITE_COGNITO_REGION: cognitoRegion,
         VITE_USER_POOL_ID: auth.userPoolId,
         VITE_USER_POOL_CLIENT_ID: auth.userPoolClientId,
         VITE_IDENTITY_POOL_ID: auth.cognitoIdentityPoolId,
