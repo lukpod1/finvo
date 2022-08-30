@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const user = {
   name: 'Tom Cook',
@@ -43,9 +43,10 @@ function Navbar() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
-                      {navigation.map((item) => (
+                      {navigation.map((item, index) => (
                         <>
-                          <Link
+                          <NavLink
+                            key={index}
                             to={item.path}
                             className={classNames(
                               item.current
@@ -56,7 +57,7 @@ function Navbar() {
                             aria-current={item.current ? 'page' : undefined}
                           >
                             {item.name}
-                          </Link>
+                          </NavLink>
                         </>
                       ))}
                     </div>
@@ -126,9 +127,9 @@ function Navbar() {
 
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {navigation.map((item) => (
+                {navigation.map((item, index) => (
                   <Disclosure.Button
-                    key={item.name}
+                    key={index}
                     as="a"
                     href={item.path}
                     className={classNames(
@@ -159,9 +160,9 @@ function Navbar() {
                   </button>
                 </div>
                 <div className="mt-3 px-2 space-y-1">
-                  {userNavigation.map((item) => (
+                  {userNavigation.map((item, index) => (
                     <Disclosure.Button
-                      key={item.name}
+                      key={index}
                       as="a"
                       href={item.path}
                       className="block px-3 py-2 rounded-md text-base font-medium text-indigo-400 hover:text-white hover:bg-indigo-700"
