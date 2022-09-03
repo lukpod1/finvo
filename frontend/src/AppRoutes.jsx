@@ -11,21 +11,25 @@ import SignUp from './pages/SignUp'
 import ConfirmSignUp from './pages/ConfirmSignUp'
 import ResetPassword from "./pages/ResetPassword"
 import Default from './components/Default'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route element={<Layout />}>
-        <Route path="dashboard" element={<DashBoard />} />
-        <Route path="transactions" element={<Transactions />}>
-          <Route path="expenses" element={<Expenses />} />
-          <Route path="invoices" element={<Invoices />} />
+      <Route element={<ProtectedRoute/>}>
+        <Route element={<Layout />}>
+          <Route index path="dashboard" element={<DashBoard />} />
+          <Route path="transactions" element={<Transactions />}>
+            <Route path="expenses" element={<Expenses />} />
+            <Route path="invoices" element={<Invoices />} />
+          </Route>
+          <Route path="accounts" element={<Accounts />} />
         </Route>
-        <Route path="accounts" element={<Accounts />} />
       </Route>
-      <Route element={<Default />}>
-        <Route path="/" element={<SignIn />} />
-        <Route path="signin" element={<SignIn />} />
+
+      <Route element={<Default/>}>
+        <Route path="/" element={<SignIn />}/>
+        <Route path="signin" element={<SignIn />}/>
         <Route path="signup" element={<SignUp />} />
         <Route path="confirm-signup" element={<ConfirmSignUp />} />
         <Route path="reset-password" element={<ResetPassword />} />
@@ -34,7 +38,6 @@ export default function AppRoutes() {
             Not Found
           </h1>
         } />
-
       </Route>
     </Routes>
   )

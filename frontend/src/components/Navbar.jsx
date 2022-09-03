@@ -11,14 +11,14 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', path: 'dashboard', current: true },
-  { name: 'Transactions', path: 'transactions', current: false },
-  { name: 'Accounts', path: 'accounts', current: false },
+  { id: '1', name: 'Dashboard', path: '/dashboard', current: true },
+  { id: '2', name: 'Transactions', path: '/transactions', current: false },
+  { id: '3', name: 'Accounts', path: '/accounts', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { id: '1', name: 'Your Profile', href: '#' },
+  { id: '2', name: 'Settings', href: '#' },
+  { id: '3', name: 'Sign out', href: '#' },
 ]
 
 function classNames(...classes) {
@@ -43,10 +43,10 @@ function Navbar() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
-                      {navigation.map((item, index) => (
+                      {navigation.map((item) => (
                         <>
                           <NavLink
-                            key={index}
+                            key={item.id}
                             to={item.path}
                             className={classNames(
                               item.current
@@ -92,7 +92,7 @@ function Navbar() {
                       >
                         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                           {userNavigation.map((item) => (
-                            <Menu.Item key={item.name}>
+                            <Menu.Item key={item.id}>
                               {({ active }) => (
                                 <a
                                   href={item.path}
@@ -127,9 +127,9 @@ function Navbar() {
 
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {navigation.map((item, index) => (
+                {navigation.map((item) => (
                   <Disclosure.Button
-                    key={index}
+                    key={item.id}
                     as="a"
                     href={item.path}
                     className={classNames(
@@ -160,9 +160,9 @@ function Navbar() {
                   </button>
                 </div>
                 <div className="mt-3 px-2 space-y-1">
-                  {userNavigation.map((item, index) => (
+                  {userNavigation.map((item) => (
                     <Disclosure.Button
-                      key={index}
+                      key={item.id}
                       as="a"
                       href={item.path}
                       className="block px-3 py-2 rounded-md text-base font-medium text-indigo-400 hover:text-white hover:bg-indigo-700"

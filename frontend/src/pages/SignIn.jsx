@@ -1,7 +1,26 @@
 import { Link, useNavigate } from "react-router-dom";
 
+import { useFormik } from "formik";
+import { Auth } from 'aws-amplify';
+import { AUTH_USER_TOKEN_KEY } from "../utils/constants";
+
 function SignIn() {
-  
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: ""
+    },
+    onSubmit: values => {
+      Auth.signIn(values.email, values.password)
+        .then((user) => {
+          localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken)
+          navigate("/dashboard")
+        })
+    }
+  })
+
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -21,7 +40,7 @@ function SignIn() {
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
@@ -35,6 +54,8 @@ function SignIn() {
                 required
                 className="appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
+                onChange={formik.handleChange}
+                value={formik.values.email}
               />
             </div>
             <div>
@@ -49,6 +70,8 @@ function SignIn() {
                 required
                 className="my-3 appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
               />
             </div>
           </div>
@@ -58,8 +81,6 @@ function SignIn() {
               <Link to="/reset-password" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
               </Link>
-              {/* <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-              </a> */}
             </div>
           </div>
 
