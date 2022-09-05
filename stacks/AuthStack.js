@@ -19,7 +19,7 @@ export default class AuthStack extends sst.Stack {
         })
 
         // Create a Cognito User Pool and Identity Pool
-        this.authorizer = new sst.Auth(this, "Auth", {
+        this.authorizer = new sst.Cognito(this, "Auth", {
             cdk: {
                 userPool: {
                     // Users can login with their email and password
