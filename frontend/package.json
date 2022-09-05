@@ -16,7 +16,8 @@
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "6"
+    "react-router-dom": "6",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@serverless-stack/static-site-env": "^1.8.1",
