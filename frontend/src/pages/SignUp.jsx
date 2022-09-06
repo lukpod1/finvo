@@ -1,24 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
 import { Auth } from 'aws-amplify';
 
 function SignUp() {
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      disableSubmit: true
     },
-    onSubmit: values => {
-      
-    }
+    onSubmit: async (values) => {
+      await Auth.signUp({ username: values.email, password: values.password })
+        .then((user) => {
+          navigate(`/confirm-signup?email=${user.user.getUsername()}`)
+        }).catch((error) => {
+          console.log('error signing up:', error);
+        })
+    },
   })
 
-  const compareToFirstPassword = () => {
+  const compareToFirstPassword = (event) => {
 
-  }
+    const { value } = event.target;
+    formik.setFieldValue('confirmPassword', value)
+
+    if (value && value !== formik.values.password) {
+      console.log('Two passwords that you enter is inconsistent')
+      formik.setFieldValue('disableSubmit', true)
+    } else if (value === formik.values.password) {
+      formik.setFieldValue('disableSubmit', false)
+      console.log('correct')
+    }
+  };
 
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -40,7 +58,7 @@ function SignUp() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -55,6 +73,8 @@ function SignUp() {
                 required
                 className="appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
+                value={formik.values.email}
+                onChange={formik.handleChange}
               />
             </div>
             <div>
@@ -69,6 +89,8 @@ function SignUp() {
                 required
                 className="my-3 appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
               />
             </div>
             <div>
@@ -78,31 +100,31 @@ function SignUp() {
               <input
                 id="confirm-password"
                 name="confirm-password"
-                type="confirm-password"
+                type="password"
                 autoComplete="confirm-password"
                 required
                 className="my-3 appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Confirm Password"
+                value={formik.values.confirmPassword}
+                onChange={compareToFirstPassword}
               />
             </div>
 
           </div>
 
           <div>
-            <Link to="/confirm-signup" type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Create Account
-            </Link>
-            {/* <button
+            <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={formik.values.disableSubmit}
+              className={formik.values.disableSubmit ?
+                "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-slate-400 hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400" :
+                "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"}
             >
               Create Account
-            </button> */}
+            </button>
           </div>
         </form>
       </div>
-
     </div>
   );
 }
