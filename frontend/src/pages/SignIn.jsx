@@ -12,8 +12,8 @@ function SignIn() {
       email: "",
       password: ""
     },
-    onSubmit: values => {
-      Auth.signIn(values.email, values.password)
+    onSubmit: async (values) => {
+      await Auth.signIn(values.email, values.password)
         .then((user) => {
           localStorage.setItem(AUTH_USER_TOKEN_KEY, user.signInUserSession.accessToken.jwtToken)
           navigate("/dashboard")
