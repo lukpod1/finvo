@@ -46,7 +46,7 @@ function ConfirmSignUp() {
           <h2 className="mt-6 text-center text-3xl tracking-tight font-bold text-gray-900">
             Lify App
           </h2>
-          <div className="bg-white py-3 rounded text-center">
+          <div className="py-3 rounded text-center">
             <h1 className="text-2xl font-bold">We Emailed You!</h1>
             <div className="flex flex-col mt-4">
               <span>Your code is on the way. To log in, enter the code we sent you. It may take a minute to arrive</span>
