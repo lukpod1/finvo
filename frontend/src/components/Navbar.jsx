@@ -2,30 +2,45 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
-import { NavLink } from 'react-router-dom'
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-const navigation = [
-  { id: '1', name: 'Dashboard', path: '/dashboard', current: true },
-  { id: '2', name: 'Transactions', path: '/transactions', current: false },
-  { id: '3', name: 'Accounts', path: '/accounts', current: false },
-]
-const userNavigation = [
-  { id: '1', name: 'Your Profile', href: '#' },
-  { id: '2', name: 'Settings', href: '#' },
-  { id: '3', name: 'Sign out', href: '#' },
-]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Auth } from 'aws-amplify'
+import { AUTH_USER_TOKEN_KEY } from '../utils/constants'
 
 function Navbar() {
+  const navigate = useNavigate()
+
+  const classNames = (...classes) => {
+    return classes.filter(Boolean).join(' ')
+  }
+  const handleLogout = () => {
+    Auth.signOut({ global: true })
+      .then(() => {
+        localStorage.removeItem(AUTH_USER_TOKEN_KEY)
+        navigate("/signin")
+      }).catch((error) => {
+        console.error("error", error.message)
+      })
+  }
+
+  const user = {
+    name: 'Tom Cook',
+    email: 'tom@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  }
+
+  const navigation = [
+    { id: '1', name: 'Dashboard', path: '/dashboard', current: true },
+    { id: '2', name: 'Transactions', path: '/transactions', current: false },
+    { id: '3', name: 'Accounts', path: '/accounts', current: false },
+  ]
+
+  const userNavigation = [
+    { id: '1', name: 'Your Profile', href: '#', action: undefined },
+    { id: '2', name: 'Settings', href: '#', action: undefined },
+    { id: '3', name: 'Sign out', href: '#', action: handleLogout },
+  ]
+
   return (
     <>
       <Disclosure as="nav" className="bg-indigo-800">
@@ -50,8 +65,8 @@ function Navbar() {
                             to={item.path}
                             className={classNames(
                               item.current
-                              ? 'bg-indigo-900 text-yellow-500'
-                              : 'text-yellow-300 hover:bg-indigo-700 hover:text-white',
+                                ? 'bg-indigo-900 text-yellow-500'
+                                : 'text-yellow-300 hover:bg-indigo-700 hover:text-white',
                               'px-3 py-2 rounded-md text-sm font-medium'
                             )}
                             aria-current={item.current ? 'page' : undefined}
@@ -95,6 +110,7 @@ function Navbar() {
                             <Menu.Item key={item.id}>
                               {({ active }) => (
                                 <a
+                                  onClick={item.action}
                                   href={item.path}
                                   className={classNames(
                                     active ? 'bg-indigo-100' : '',
@@ -162,6 +178,7 @@ function Navbar() {
                 <div className="mt-3 px-2 space-y-1">
                   {userNavigation.map((item) => (
                     <Disclosure.Button
+                      onClick={item.action}
                       key={item.id}
                       as="a"
                       href={item.path}
@@ -176,8 +193,8 @@ function Navbar() {
           </>
         )}
       </Disclosure>
+      <Outlet />
     </>
-
   );
 }
 
