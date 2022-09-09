@@ -12,12 +12,13 @@ import ConfirmSignUp from './pages/ConfirmSignUp'
 import ResetPassword from "./pages/ResetPassword"
 import Default from './components/Default'
 import ProtectedRoute from './components/ProtectedRoute'
+import Navbar from './components/Navbar'
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<ProtectedRoute/>}>
-        <Route element={<Layout />}>
+        <Route element={<Navbar />}>
           <Route index path="dashboard" element={<DashBoard />} />
           <Route path="transactions" element={<Transactions />}>
             <Route path="expenses" element={<Expenses />} />

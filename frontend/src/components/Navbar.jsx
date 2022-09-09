@@ -1,10 +1,11 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
-import { AUTH_USER_TOKEN_KEY } from '../utils/constants'
+import { AUTH_USER_TOKEN_KEY, ENDPOINT_USERS } from '../utils/constants'
+import instance from '../utils/axios'
 
 function Navbar() {
   const navigate = useNavigate()
@@ -40,6 +41,23 @@ function Navbar() {
     { id: '2', name: 'Settings', href: '#', action: undefined },
     { id: '3', name: 'Sign out', href: '#', action: handleLogout },
   ]
+
+  useEffect(() => {
+    async function getCurrentUser() {
+      const user = await Auth.currentUserInfo()
+      return user.attributes.email
+    }
+
+    getCurrentUser().then((email) => {
+      instance.get(ENDPOINT_USERS, { params: { email } })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('response:', response.data)
+            return response.data
+          }
+        })
+    })
+  }, [])
 
   return (
     <>
