@@ -2,28 +2,29 @@ import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 import middleware from '../../../libs/middleware';
 
-export async function getUserById(event) {
+export async function getUser(event) {
 
-    const { id } = event.pathParameters;
+    const { email } = event.queryStringParameters;
 
     try {
 
-        const result = await dynamoDb.get({
+        const result = await dynamoDb.scan({
             TableName: process.env.USERS_TABLE,
-            Key: { id }
+            FilterExpression: "#email = :email",
+            ExpressionAttributeNames: {
+                "#email": "email"
+            },
+            ExpressionAttributeValues: {
+                ":email": email
+            },
+            ReturnConsumedCapacity: "TOTAL"
         });
 
-        const user = result.Item;
-
-        if (!user) {
-            return Responses.NotFound(`User with ID "${id}" not found!`);
-        }
-
-        return Responses.OK(user);
+        return Responses.OK(result.Items[0]);
     } catch (error) {
         return Responses.InternalServerError(error);
     }
 
 }
 
-export const handler = middleware(getUserById);
+export const handler = middleware(getUser);

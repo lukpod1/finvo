@@ -30,7 +30,7 @@ export default class UserStack extends sst.Stack {
             },
             routes: {
                 "PUT    /users/{id}": "backend/services/users/handlers/update.handler",
-                "GET    /users/{id}": "backend/services/users/handlers/retrieve.handler",
+                "GET    /users": "backend/services/users/handlers/retrieve.handler",
             },
             cors: true
         });
