@@ -2,21 +2,16 @@ import chance from "chance";
 import dynamodb from "../../libs/dynamodb";
 
 module.exports.handler = async (event) => {
+    console.log('EVENT', event)
     const email = event.request.userAttributes['email'];
-    const suffix = chance.Chance().string({
-        length: 8,
-        casing: 'upper',
-        alpha: true,
-        numeric: true
-    });
-
-    const screenName = `${email.replace(/[^a-zA-Z0-9]/g, '')}${suffix}`;
+    const fullName = event.request.userAttributes['name'];
 
     if (event.triggerSource === "PostConfirmation_ConfirmSignUp") {
         const user = {
             id: event.userName,
             email,
-            screenName,
+            fullName,
+            imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
             createdAt: new Date().toJSON(),
         }
 

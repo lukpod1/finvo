@@ -13,6 +13,7 @@ export default class AuthStack extends sst.Stack {
 
         const confirmUserSignUp = new sst.Function(this, "ConfirmUserSignUp", {
             handler: "backend/services/authentication/confirm-user-signup.handler",
+            timeout: 30,
             environment: {
                 USERS_TABLE: usersTable.tableName,
             }
@@ -22,7 +23,9 @@ export default class AuthStack extends sst.Stack {
         this.authorizer = new sst.Cognito(this, "Auth", {
             cdk: {
                 userPool: {
-                    // Users can login with their email and password
+                    standardAttributes: {
+                        fullname: { required: true, mutable: false }
+                    },
                     signInAliases: {
                         email: true,
                     },
