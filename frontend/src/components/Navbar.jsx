@@ -19,7 +19,7 @@ function Navbar() {
   }
 
   const handleLogout = () => {
-    Auth.signOut({ global: true })
+    Auth.signOut()
       .then(() => {
         localStorage.removeItem(AUTH_USER_TOKEN_KEY)
         navigate("/signin")
