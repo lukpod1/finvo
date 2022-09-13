@@ -1,18 +1,23 @@
-import { Fragment, useEffect } from 'react'
+import { createContext, Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useOutlet } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import { AUTH_USER_TOKEN_KEY, ENDPOINT_USERS } from '../utils/constants'
 import instance from '../utils/axios'
 
+export const Context = createContext({})
+
 function Navbar() {
+  const [user, setUser] = useState({});
   const navigate = useNavigate()
+  const outlet = useOutlet()
 
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ')
   }
+
   const handleLogout = () => {
     Auth.signOut({ global: true })
       .then(() => {
@@ -21,13 +26,6 @@ function Navbar() {
       }).catch((error) => {
         console.error("error", error.message)
       })
-  }
-
-  const user = {
-    name: 'Tom Cook',
-    email: 'tom@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   }
 
   const navigation = [
@@ -44,24 +42,19 @@ function Navbar() {
 
   useEffect(() => {
     async function getCurrentUser() {
-      const user = await Auth.currentUserInfo()
-      return user.attributes.email
+      const userInfo = await Auth.currentUserInfo()
+      const { data, status } = await instance.get(ENDPOINT_USERS, { params: { email: userInfo.attributes.email } })
+      if (status === 200) {
+        setUser(data)
+      }
     }
-
-    getCurrentUser().then((email) => {
-      instance.get(ENDPOINT_USERS, { params: { email } })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('response:', response.data)
-            return response.data
-          }
-        })
-    })
+    getCurrentUser()
   }, [])
 
   return (
     <>
-      <Disclosure as="nav" className="bg-indigo-800">
+    <Context.Provider value={{ ...user }}>
+    <Disclosure as="nav" className="bg-indigo-800">
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -182,7 +175,7 @@ function Navbar() {
                     <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
                   </div>
                   <div className="ml-3">
-                    <div className="text-base font-medium leading-none text-white">{user.name}</div>
+                    <div className="text-base font-medium leading-none text-white">{user.fullName}</div>
                     <div className="text-sm font-medium leading-none text-indigo-400">{user.email}</div>
                   </div>
                   <button
@@ -211,7 +204,8 @@ function Navbar() {
           </>
         )}
       </Disclosure>
-      <Outlet />
+      {outlet}
+    </Context.Provider>
     </>
   );
 }

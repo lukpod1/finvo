@@ -11,11 +11,18 @@ function SignUp() {
     initialValues: {
       email: "",
       password: "",
+      fullName: "",
       confirmPassword: "",
       disableSubmit: true
     },
-    onSubmit: async (values) => {
-      await Auth.signUp({ username: values.email, password: values.password })
+    onSubmit: (values) => {
+      Auth.signUp({
+        username: values.email,
+        password: values.password,
+        attributes: {
+          name: values.fullName
+        }
+      })
         .then((user) => {
           navigate(`/confirm-signup?email=${user.user.getUsername()}`)
         }).catch((error) => {
@@ -60,7 +67,22 @@ function SignUp() {
 
         <form className="mt-8 space-y-6" onSubmit={formik.handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="rounded-md shadow-sm -space-y-px"><div>
+              <label htmlFor="fullname" className="sr-only">
+                Full Name
+              </label>
+              <input
+                id="fullname"
+                name="fullName"
+                type="text"
+                autoComplete="fullName"
+                required
+                className="appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Full Name"
+                value={formik.values.fullName}
+                onChange={formik.handleChange}
+              />
+            </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -71,7 +93,7 @@ function SignUp() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="my-3 appearance-none rounded-xl relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 value={formik.values.email}
                 onChange={formik.handleChange}
