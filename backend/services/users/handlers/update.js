@@ -1,15 +1,16 @@
 import middleware from '../../../libs/middleware';
 import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
-import { getUserById } from './retrieve';
+import { getUser } from './retrieve';
 import { validateField } from '../../../libs/validateField';
 
 class User {
-    constructor(id, username, email, password) {
+    constructor(id, fullName, email, password, imageUrl) {
         this.id = id;
-        this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
+        this.imageUrl = imageUrl;
     }
 }
 
@@ -17,17 +18,17 @@ async function updateUser(event) {
 
     const { id } = event.pathParameters;
 
-    const { username, email, password } = event.body;
+    const { fullName, email, password } = event.body;
 
     const eventRequest = {
-        pathParameters: { id }
+        queryStringParameters: { email }
     };
     const params = {
         TableName: process.env.USERS_TABLE,
         Key: { id },
-        UpdateExpression: "SET username = :username, email = :email, password = :password",
+        UpdateExpression: "SET fullName = :fullName, email = :email, password = :password",
         ExpressionAttributeValues: {
-            ":username": "",
+            ":fullName": "",
             ":email": "",
             ":password": ""
         },
@@ -35,15 +36,15 @@ async function updateUser(event) {
     };
 
     console.log(event.requestContext.authorizer.role);
-    const { body } = await getUserById(eventRequest);
+    const { body } = await getUser(eventRequest);
 
     const data = JSON.parse(body);
 
-    const user = new User(data.id, data.username, data.email, data.password);
+    const user = new User(data.id, data.fullName, data.email, data.password);
 
     let fieldsForValid = {
         fields: [
-            { field: username, column: "username"},
+            { field: fullName, column: "fullName"},
             { field: email, column: "email"},
             { field: password, column: "password"},
         ],
