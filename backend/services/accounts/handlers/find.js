@@ -1,18 +1,25 @@
-import dynamoDb from '../../../libs/dynamodb';
 import { Responses } from '../../../libs/response';
 import middleware from '../../../libs/middleware';
+import { DynamoDB } from "aws-sdk";
+
+const dynamodb = new DynamoDB.DocumentClient();
 
 export async function find(event) {
-    const { id, userId } = event.pathParameters;
-
-    const params = {
-        TableName: process.env.ACCOUNTS_TABLE,
-        Key: { id, userId }
-    };
+    const { userId } = event.queryStringParameters;
 
     try {
-        const result = await dynamoDb.scan(params);
-        return Responses.OK(result.Items);
+        const result = await dynamodb.scan({
+            TableName: process.env.ACCOUNTS_TABLE,
+            FilterExpression: "#userId = :userId",
+            ExpressionAttributeNames: {
+                "#userId": "userId"
+            },
+            ExpressionAttributeValues: {
+                ":userId": userId
+            },
+            ReturnConsumedCapacity: "TOTAL"
+        });
+        return Responses.OK({items: result.Items, count: result.Count});
     } catch(error) {
         return Responses.InternalServerError(error);
     }

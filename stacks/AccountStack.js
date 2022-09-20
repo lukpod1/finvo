@@ -29,10 +29,10 @@ export default class AccountStack extends sst.Stack {
                 }
             },
             routes: {
+                "GET   /accounts": "backend/services/accounts/handlers/find.handler",
                 "POST   /accounts": "backend/services/accounts/handlers/create.handler",
                 "DELETE   /accounts/{id}/{userId}": "backend/services/accounts/handlers/remove.handler",
                 "PUT    /accounts/{id}/{userId}": "backend/services/accounts/handlers/update.handler",
-                "POST   /accounts/{id}/{userId}": "backend/services/accounts/handlers/find.handler",
             },
             cors: true
         });
