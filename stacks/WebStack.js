@@ -9,7 +9,7 @@ export default class WebStack extends sst.Stack {
 
     const cognitoRegion = 'us-east-1'
 
-    const site = new sst.ViteStaticSite(this, "Site", {
+    const site = new sst.StaticSite(this, "Site", {
       path: "frontend",
       environment: {
         VITE_COGNITO_REGION: cognitoRegion,
