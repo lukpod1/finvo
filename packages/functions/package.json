@@ -1,0 +1,17 @@
+{
+  "name": "@finance-service/functions",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind 'vitest'",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/aws-lambda": "^8.10.110",
+    "sst": "rc"
+  },
+  "dependencies": {
+    "sst": "rc"
+  }
+}
