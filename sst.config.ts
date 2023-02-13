@@ -1,6 +1,6 @@
 import { SSTConfig } from "sst";
+import { AUTH } from "./stacks/AuthStack";
 import { API } from "./stacks/MyStack";
-import { Api } from "sst/constructs";
 
 export default {
   config(_input) {
@@ -13,6 +13,6 @@ export default {
     app.setDefaultFunctionProps({
       runtime: "nodejs14.x",
     })
-    app.stack(API)
+    app.stack(API).stack(AUTH)
   },
 } satisfies SSTConfig;
