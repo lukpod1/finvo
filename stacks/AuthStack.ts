@@ -8,6 +8,7 @@ export function AUTH({ stack }: StackContext) {
     const auth = new Auth(stack, "auth", {
         authenticator: {
             handler: "packages/functions/src/auth.handler",
+            bind: [api.api]
         }
     });
 

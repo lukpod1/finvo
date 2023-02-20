@@ -9,13 +9,16 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [session, setSession] = useState(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter();
 
   const getSession = async () => {
     const token = localStorage.getItem('session');
     if (token) {
-      setSession(token);
+      const user = await getUserInfo(token);
+      if (user) setSession(user);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -30,17 +33,44 @@ export default function Home() {
     }
   }, [router])
 
+  const getUserInfo = async (session: any) => {
+    try {
+      const reponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/session`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${session}`
+          },
+        }
+      )
+      return reponse.json()
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   const signOut = async () => {
     localStorage.removeItem('session')
     setSession(null)
   }
 
+  if (loading) return <div>Loading...</div>
+
   return (
     <div className="container">
-      <h2>SST Auth Google</h2>
+      <h2>Finance Service</h2>
       {(session ? (
-        <div>
-          <h3>Logged in</h3>
+        <div className="profile">
+          <p>Welcome {session.name}!</p>
+          <img 
+            src={session.picture} 
+            style={{ borderRadius: "50%" }}
+            width={100}
+            height={100}
+            alt="" 
+          />
+          <p>{session.email}</p>
           <button onClick={(signOut)}>Sign out</button>
         </div>
       ) : (
