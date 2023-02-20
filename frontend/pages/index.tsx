@@ -1,14 +1,14 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const inter = Inter({ subsets: ['latin'] })
+interface User {
+  email?: string
+  name?: string
+  picture?: string
+}
 
 export default function Home() {
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState<User>()
   const [loading, setLoading] = useState(true)
   const router = useRouter();
 
@@ -52,33 +52,60 @@ export default function Home() {
 
   const signOut = async () => {
     localStorage.removeItem('session')
-    setSession(null)
+    setSession({})
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <div className="container">
+    <div className="w-full h-screen flex flex-col items-center text-center">
       <h2>Finance Service</h2>
       {(session ? (
-        <div className="profile">
+        <div className="rounded-sm">
           <p>Welcome {session.name}!</p>
-          <img 
-            src={session.picture} 
+          <img
+            className="mx-auto"
+            src={session.picture}
             style={{ borderRadius: "50%" }}
             width={100}
             height={100}
-            alt="" 
+            alt=""
           />
           <p>{session.email}</p>
-          <button onClick={(signOut)}>Sign out</button>
+          <button
+            className="
+            w-full
+            p-3
+            border-none
+            rounded
+            bg-blue-900
+            text-white
+            text-sm
+            cursor-pointer
+            "
+            onClick={(signOut)}>
+            Sign out
+          </button>
         </div>
       ) : (
         <div>
           <a href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google/authorize`}
             rel="noreferrer"
           >
-            <button>Sign in with Google</button>
+            <button
+              className="
+             w-full
+             p-3
+             border-none
+             rounded
+             bg-blue-900
+             text-white
+             text-sm
+             cursor-pointer
+             "
+            >Sign in with Google</button>
           </a>
         </div>
       ))}
