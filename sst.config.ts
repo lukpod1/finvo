@@ -2,7 +2,7 @@ import { SSTConfig } from "sst";
 import { AUTH } from "./stacks/AuthStack";
 import { Database } from "./stacks/DatabaseStack";
 import { FrontEnd } from "./stacks/FrontEndStack";
-import { API } from "./stacks/MyStack";
+import { API } from "./stacks/ApiStack";
 
 export default {
   config(_input) {

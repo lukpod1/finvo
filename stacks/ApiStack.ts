@@ -10,7 +10,6 @@ export function API({ stack }: StackContext) {
       }
     },
     routes: {
-      "GET /": "packages/functions/src/lambda.handler",
       "GET /session": "packages/functions/src/session.handler" 
     },
   });

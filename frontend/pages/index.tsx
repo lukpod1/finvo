@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-interface User {
+type User = {
   email?: string
   name?: string
   picture?: string
 }
 
 export default function Home() {
-  const [session, setSession] = useState<User>()
+  const [session, setSession] = useState<User | undefined>();
   const [loading, setLoading] = useState(true)
   const router = useRouter();
 
@@ -52,7 +52,7 @@ export default function Home() {
 
   const signOut = async () => {
     localStorage.removeItem('session')
-    setSession({})
+    setSession(undefined)
   }
 
   if (loading) {
@@ -62,15 +62,12 @@ export default function Home() {
   return (
     <div className="w-full h-screen flex flex-col items-center text-center">
       <h2>Finance Service</h2>
-      {(session ? (
-        <div className="rounded-sm">
+      {session ? (
+        <div className="p-5 rounded-sm">
           <p>Welcome {session.name}!</p>
           <img
-            className="mx-auto"
+            className="mx-auto w-28 h-28 rounded-full"
             src={session.picture}
-            style={{ borderRadius: "50%" }}
-            width={100}
-            height={100}
             alt=""
           />
           <p>{session.email}</p>
@@ -96,19 +93,19 @@ export default function Home() {
           >
             <button
               className="
-             w-full
-             p-3
-             border-none
-             rounded
-             bg-blue-900
-             text-white
-             text-sm
-             cursor-pointer
-             "
+              w-full
+              p-3
+              border-none
+              rounded
+              bg-blue-900
+              text-white
+              text-sm
+              cursor-pointer
+              "
             >Sign in with Google</button>
           </a>
         </div>
-      ))}
+      )}
     </div>
   )
 }

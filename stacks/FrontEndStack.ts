@@ -1,5 +1,5 @@
 import { NextjsSite, StackContext, use } from "sst/constructs";
-import { API } from "./MyStack";
+import { API } from "./ApiStack";
 
 export function FrontEnd({ stack }: StackContext) {
     

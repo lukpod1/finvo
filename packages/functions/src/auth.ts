@@ -1,10 +1,10 @@
-import { AuthHandler, GoogleAdapter, Session } from "sst/node/auth";
-import { DynamoDBClient, PutItemCommand, TableAlreadyExistsException } from "@aws-sdk/client-dynamodb";
+import { AuthHandler, GoogleAdapter, Session, SessionTypes } from "sst/node/auth";
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table"
 import { marshall } from "@aws-sdk/util-dynamodb"
-const GOOGLE_CLIENT_ID = "823613221886-o4at5m3kucnh8lf0i3ml4dtohkbnpfq0.apps.googleusercontent.com";
+import { Config } from "sst/node/config";
 
-declare module "@serverless-stack/node/auth" {
+declare module "sst/node/auth" {
     export interface SessionTypes {
         user: {
             userID: string;
@@ -16,18 +16,18 @@ export const handler = AuthHandler({
     providers: {
         google: GoogleAdapter({
             mode: "oidc",
-            clientID: GOOGLE_CLIENT_ID,
+            clientID: Config.GOOGLE_CLIENT_ID,
             onSuccess: async (tokenset) => {
-                const claims = tokenset.claims();
+                const user = tokenset.claims();
 
                 const ddb = new DynamoDBClient({})
                 await ddb.send(new PutItemCommand({
                     TableName: Table.users.tableName,
                     Item: marshall({
-                        id: claims.sub,
-                        email: claims.email,
-                        picture: claims.picture,
-                        name: claims.given_name,
+                        id: user.sub,
+                        email: user.email,
+                        picture: user.picture,
+                        name: user.given_name,
                     })
                 }))
                 
@@ -35,7 +35,7 @@ export const handler = AuthHandler({
                     redirect: "http://localhost:3000",
                     type: "user",
                     properties: {
-                        userID: claims.sub,
+                        userID: user.sub,
                     }
                 })
             }
