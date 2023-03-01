@@ -3,6 +3,7 @@ import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table"
 import { marshall } from "@aws-sdk/util-dynamodb"
 import { Config } from "sst/node/config";
+import { NextjsSite } from "sst/node/site";
 
 declare module "sst/node/auth" {
     export interface SessionTypes {
@@ -30,9 +31,11 @@ export const handler = AuthHandler({
                         name: user.given_name,
                     })
                 }))
-                
+
                 return Session.parameter({
-                    redirect: "http://localhost:3000",
+                    redirect: process.env.IS_LOCAL
+                        ? "http://localhost:3000"
+                        : NextjsSite.site.url,
                     type: "user",
                     properties: {
                         userID: user.sub,
