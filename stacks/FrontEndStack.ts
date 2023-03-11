@@ -12,7 +12,7 @@ export function FrontEnd({ stack }: StackContext) {
         }
     })
 
-    stack.addOutputs({
-        URL: site.url as string,
-    })
+    // stack.addOutputs({
+    //     URL: site.url,
+    // })
 }
