@@ -13,6 +13,6 @@ export function FrontEnd({ stack }: StackContext) {
     })
 
     stack.addOutputs({
-        URL: site.url || "localhost"
+        URL: site.url || "http://localhost:3000"
     })
 }
