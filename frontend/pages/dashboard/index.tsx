@@ -12,17 +12,16 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true)
     const router = useRouter();
 
-    const getSession = async () => {
-        const token = localStorage.getItem('session');
-        if (token) {
-            const user = await getUserInfo(token);
-            if (user) setSession(user);
-        }
-    };
-
     useEffect(() => {
+        const getSession = async () => {
+            const token = localStorage.getItem('session');
+            if (token) {
+                const user = await getUserInfo(token);
+                if (user) setSession(user);
+            }
+        };
         getSession();
-    }, []);
+    }, [setSession]);
 
     const getUserInfo = async (session: any) => {
         try {
@@ -49,7 +48,7 @@ export default function Dashboard() {
     return (
         <div>
             <p>
-            {session?.email}
+                {session?.email}
 
             </p>
 
