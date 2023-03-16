@@ -2,6 +2,3 @@ before_compile:
   - echo "Before compile"
   - echo "Set Node version 16.0.0"
   - n 16.0.0
-  - echo "Install NPM"
-  - npm i -g npm@latest
-  - npm install -g pnpm@latest
