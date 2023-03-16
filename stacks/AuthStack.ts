@@ -18,8 +18,4 @@ export function AUTH({ stack }: StackContext) {
         api: api.api,
         prefix: "/auth"
     })
-
-    stack.addOutputs({
-        GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID.id
-    })
 }
