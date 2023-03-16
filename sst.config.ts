@@ -17,7 +17,7 @@ export default {
     })
     app.stack(Database)
     app.stack(API)
-    app.stack(FrontEnd)
+    // app.stack(FrontEnd)
     app.stack(AUTH)
   },
 } satisfies SSTConfig;
