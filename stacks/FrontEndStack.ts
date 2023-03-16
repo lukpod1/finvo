@@ -10,7 +10,7 @@ export function FrontEnd({ stack }: StackContext) {
         environment: {
             NEXT_PUBLIC_API_URL: api.api.url,
         },
-        buildCommand: "npx open-nextjs@latest build && npx next-sitemap",
+        buildCommand: "npx open-next@latest build && npx next-sitemap",
     })
 
     stack.addOutputs({
