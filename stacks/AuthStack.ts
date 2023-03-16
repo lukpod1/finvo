@@ -10,12 +10,12 @@ export function AUTH({ stack }: StackContext) {
     const auth = new Auth(stack, "auth", {
         authenticator: {
             handler: "packages/functions/src/auth.handler",
-            bind: [api.api, GOOGLE_CLIENT_ID],
+            bind: [api, GOOGLE_CLIENT_ID],
         }
     });
 
     auth.attach(stack, {
-        api: api.api,
+        api: api,
         prefix: "/auth"
     })
 }

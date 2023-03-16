@@ -17,7 +17,5 @@ export function API({ stack }: StackContext) {
     ApiEndpoint: api.url,
   });
 
-  return {
-    api,
-  }
+  return api;
 }
