@@ -2,5 +2,3 @@ before_compile:
   - echo "Before compile"
   - echo "Set Node version 16.0.0"
   - n 16.0.0
-  - pnpm install open-next@latest -w
-  - cd packages/frontend && npx open-next@latest build
