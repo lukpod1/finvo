@@ -6,11 +6,11 @@ export function FrontEnd({ stack }: StackContext) {
     const api = use(API);
 
     const site = new NextjsSite(stack, "site", {
-        path: "packages/frontend",
+        path: "frontend",
         environment: {
             NEXT_PUBLIC_API_URL: api.url,
         },
-        buildCommand: "npx open-next@latest build && npx next-sitemap",
+        //buildCommand: "npx open-next@latest build && npx next-sitemap",
     })
 
     stack.addOutputs({

@@ -1,4 +1,4 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "moduleResolution": "node"
+  "exclude": ["packages"]
 }
