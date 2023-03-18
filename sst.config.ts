@@ -12,9 +12,6 @@ export default {
     };
   },
   stacks(app) {
-    app.setDefaultFunctionProps({
-      runtime: "nodejs14.x",
-    })
     app.stack(Database)
     app.stack(API)
     app.stack(FrontEnd)
