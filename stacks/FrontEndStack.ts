@@ -8,7 +8,7 @@ export function FrontEnd({ stack }: StackContext) {
     const site = new NextjsSite(stack, "site", {
         path: "frontend/",
         environment: {
-            NEXT_PUBLIC_API_URL: api.url,
+            API_URL: api.url,
         },
         //buildCommand: "npx open-next@latest build && npx next-sitemap",
     })
