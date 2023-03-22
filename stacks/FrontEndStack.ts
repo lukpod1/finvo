@@ -8,13 +8,15 @@ export function FrontEnd({ stack }: StackContext) {
     const site = new NextjsSite(stack, "site", {
         path: "frontend",
         environment: {
-            API_URL: apiStack.api.url,
-        }
+            NEXT_PUBLIC_API_URL: apiStack.api.url,
+            BASE_URL: apiStack.api.url
+        },
     })
 
     site.attachPermissions([apiStack.api])
 
     stack.addOutputs({
         URL: site.url || "http://localhost:3000",
+        BaseUrl: apiStack.api.url
     })
 }
