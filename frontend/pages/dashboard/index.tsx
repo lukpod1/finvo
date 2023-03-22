@@ -7,7 +7,7 @@ type User = {
     picture: string
 }
 
-export default function Dashboard() {
+export default function Dashboard({ BASE_URL }) {
     const [session, setSession] = useState<User>();
     const [isLoading, setLoading] = useState(false);
     const router = useRouter();
@@ -16,7 +16,7 @@ export default function Dashboard() {
         setLoading(true);
         const token = localStorage.getItem('session');
         if (token) {
-            fetch(`${process.env.BASE_URL}/session`, {
+            fetch(`${BASE_URL}/session`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -65,4 +65,14 @@ export default function Dashboard() {
             </button>
         </div>
     )
+}
+
+export async function getServerSideProps() {
+    const BASE_URL = process.env.API_URL;
+
+    return {
+        props: {
+            BASE_URL
+        }
+    }
 }
