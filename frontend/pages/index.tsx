@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
+export const revalidate = false
+
 export default function Home() {
   const router = useRouter();
 
