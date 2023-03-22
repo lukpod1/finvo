@@ -12,6 +12,8 @@ export function FrontEnd({ stack }: StackContext) {
         }
     })
 
+    site.attachPermissions([apiStack.api])
+
     stack.addOutputs({
         URL: site.url || "http://localhost:3000",
     })
