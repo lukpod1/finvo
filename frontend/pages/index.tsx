@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-export default function Home() {  
+export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
@@ -22,10 +22,8 @@ export default function Home() {
           </h1>
         </div>
         <div className="w-full self-center flex flex-col justify-center items-center">
-          <Link href={`${process.env.API_URL}/auth/google/authorize`}>
-            <button
-              className="bg-black text-white rounded-md px-8 py-4 text-sm sm:text-lg md:text-xl lg:text-2xl hover:bg-white hover:text-black hover:border-black border-2 border-black transition duration-300 ease-in-out"
-            >
+          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google/authorize`}>
+            <button className="bg-black text-white rounded-md px-8 py-4 text-sm sm:text-lg md:text-xl lg:text-2xl hover:bg-white hover:text-black hover:border-black border-2 border-black transition duration-300 ease-in-out">
               Continue with Google
             </button>
           </Link>

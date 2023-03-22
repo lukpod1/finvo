@@ -3,25 +3,19 @@ import { API } from "./ApiStack";
 
 export function AUTH({ stack }: StackContext) {
 
-    const api = use(API);
+    const apiStack = use(API);
 
     const GOOGLE_CLIENT_ID = new Config.Secret(stack, "GOOGLE_CLIENT_ID");
 
     const auth = new Auth(stack, "auth", {
         authenticator: {
             handler: "packages/functions/src/auth.handler",
-            bind: [api, GOOGLE_CLIENT_ID],
+            bind: [apiStack.api, GOOGLE_CLIENT_ID],
         }
     });
 
-    api.bind([GOOGLE_CLIENT_ID]);
-
     auth.attach(stack, {
-        api: api,
+        api: apiStack.api,
         prefix: "/auth"
-    })
-
-    stack.addOutputs({
-        GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID.id,
     })
 }

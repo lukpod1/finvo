@@ -9,36 +9,33 @@ type User = {
 
 export default function Dashboard() {
     const [session, setSession] = useState<User>();
-    const [loading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
-        const getSession = async () => {
-            const token = localStorage.getItem('session');
-            if (token) {
-                const user = await getUserInfo(token);
-                if (user) setSession(user);
-            }
-        };
-        getSession();
-    }, [setSession]);
-
-    const getUserInfo = async (session: any) => {
-        try {
-            const reponse = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/session`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${session}`
-                    },
-                }
-            )
-            return reponse.json();
-        } catch (error) {
-            alert(error)
+        setLoading(true);
+        const token = localStorage.getItem('session');
+        if (token) {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    setSession(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
-    }
+    }, []);
+
+    if (isLoading) return <p>Loading...</p>
+    if (!session) return <p>No profile data</p>
 
     const signOut = async () => {
         localStorage.removeItem('session');

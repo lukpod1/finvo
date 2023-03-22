@@ -3,14 +3,13 @@ import { API } from "./ApiStack";
 
 export function FrontEnd({ stack }: StackContext) {
     
-    const api = use(API);
+    const apiStack = use(API);
 
     const site = new NextjsSite(stack, "site", {
-        path: "frontend/",
+        path: "frontend",
         environment: {
-            API_URL: api.url,
-        },
-        //buildCommand: "npx open-next@latest build && npx next-sitemap",
+            NEXT_PUBLIC_API_URL: apiStack.api.url,
+        }
     })
 
     stack.addOutputs({
