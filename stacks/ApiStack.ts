@@ -3,6 +3,7 @@ import { Database } from "./DatabaseStack";
 
 export function API({ stack }: StackContext) {
   const dbUsers = use(Database)
+  
   const api = new Api(stack, "api", {
     defaults: {
       function: {
@@ -13,6 +14,7 @@ export function API({ stack }: StackContext) {
       "GET /session": "packages/functions/src/session.handler" 
     },
   });
+
   stack.addOutputs({
     ApiEndpoint: api.url,
   });
