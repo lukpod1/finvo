@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { API_URL } from "../api/api-url";
 
 type User = {
     email: string
@@ -16,7 +17,7 @@ export default function Dashboard() {
         setLoading(true);
         const token = localStorage.getItem('session');
         if (token) {
-            fetch(`${process.env.API_URL}/session`, {
+            fetch(`${API_URL}/session`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
