@@ -16,7 +16,7 @@ export default function Dashboard() {
         setLoading(true);
         const token = localStorage.getItem('session');
         if (token) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
+            fetch(`${process.env.API_URL}/session`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`

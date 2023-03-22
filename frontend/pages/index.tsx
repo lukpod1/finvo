@@ -24,7 +24,7 @@ export default function Home() {
           </h1>
         </div>
         <div className="w-full self-center flex flex-col justify-center items-center">
-          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google/authorize`} rel="noreferrer">
+          <Link href={`${process.env.API_URL}/auth/google/authorize`} rel="noreferrer">
             <button className="bg-black text-white rounded-md px-8 py-4 text-sm sm:text-lg md:text-xl lg:text-2xl hover:bg-white hover:text-black hover:border-black border-2 border-black transition duration-300 ease-in-out">
               Continue with Google
             </button>
