@@ -16,7 +16,7 @@ export default function Dashboard(props: any) {
         setLoading(true);
         const token = localStorage.getItem('session');
         if (token) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
+            fetch(`${props.baseUrl}/session`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -67,10 +67,10 @@ export default function Dashboard(props: any) {
     )
 }
 
-// export async function getServerSideProps() {
-//     return {
-//         props: {
-//             baseUrl: process.env.NEXT_PUBLIC_API_URL,
-//         }
-//     }
-// }
+export async function getServerSideProps() {
+    return {
+        props: {
+            baseUrl: process.env.NEXT_PUBLIC_API_URL,
+        }
+    }
+}
