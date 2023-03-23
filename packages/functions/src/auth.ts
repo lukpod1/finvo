@@ -19,6 +19,7 @@ export const handler = AuthHandler({
             mode: "oidc",
             clientID: Config.GOOGLE_CLIENT_ID,
             onSuccess: async (tokenset) => {
+                console.log("TOKENSET:", tokenset)
                 const user = tokenset.claims();
 
                 const ddb = new DynamoDBClient({})
