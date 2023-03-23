@@ -28,12 +28,6 @@ export default function Home(props: any) {
             </button>
           </a>
         </div>
-
-        <div>
-          NEXT_PUBLIC_API_URL: {process.env.NEXT_PUBLIC_API_URL}
-        </div>
-
-        BASE_URL: {process.env.BASE_URL}
       </div>
     </div>
   )

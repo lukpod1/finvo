@@ -33,9 +33,7 @@ export const handler = AuthHandler({
                 }))
 
                 return Session.parameter({
-                    redirect: process.env.IS_LOCAL
-                        ? "http://localhost:3000"
-                        : NextjsSite.site.url,
+                    redirect: NextjsSite.site.url || "http://localhost:3000",
                     type: "user",
                     properties: {
                         userID: user.sub,
