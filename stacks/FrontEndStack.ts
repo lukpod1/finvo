@@ -19,4 +19,8 @@ export function FrontEnd({ stack }: StackContext) {
         URL: site.url || "http://localhost:3000",
         BaseUrl: apiStack.api.url
     })
+
+    return {
+        site
+    }
 }
