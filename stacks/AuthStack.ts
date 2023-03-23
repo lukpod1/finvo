@@ -14,6 +14,8 @@ export function AUTH({ stack }: StackContext) {
         }
     });
 
+    apiStack.api.bind([GOOGLE_CLIENT_ID])
+
     auth.attach(stack, {
         api: apiStack.api,
         prefix: "/auth"
