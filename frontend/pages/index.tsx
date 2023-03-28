@@ -17,7 +17,7 @@ export default function Home(props: any) {
     <div className="bg-black h-screen flex flex-col justify-center items-center">
       <div className="bg-white h-3/4 w-4/5 rounded-lg shadow-lg flex flex-col justify-center items-center animate-fade-in">
         <div className="w-full">
-          <h1 className="text-center text-2xl md:text-4xl font-bold mb-6">
+          <h1 className="text-black text-center text-2xl md:text-4xl font-bold mb-6">
             Finance Service
           </h1>
         </div>

@@ -14,7 +14,7 @@ export function AUTH({ stack }: StackContext) {
             handler: "packages/functions/src/auth.handler",
             bind: [apiStack.api, GOOGLE_CLIENT_ID],
             environment: {
-                SITE_URL: frontEndStack.site.url || "localhost:3000",
+                SITE_URL: frontEndStack.site.url || "http://localhost:3000",
             }
         }
     });
