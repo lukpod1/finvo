@@ -36,11 +36,11 @@ export const handler = AuthHandler({
                 const { NextjsSite } = await import('sst/node/site');
 
                 return Session.parameter({
-                    redirect: process.env.SITE_URL|| "http://localhost:3000",
+                    redirect: `${process.env.SITE_URL}/login`|| "http://localhost:3000/login",
                     type: "user",
                     properties: {
                         userID: user.sub,
-                    }
+                    },
                 })
             }
         }),

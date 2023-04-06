@@ -1,52 +1,9 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { User } from "@/domain/User";
 import Image from "next/image";
 
-
-type User = {
-    email: string
-    name: string
-    picture: string
-}
-
-export default function Dashboard(props: any) {
-    const [session, setSession] = useState<User>();
-    const [isLoading, setLoading] = useState(false);
-    const router = useRouter();
-
-    useEffect(() => {
-        setLoading(true);
-        const token = localStorage.getItem('session');
-        if (token) {
-            fetch(`${props.baseUrl}/session`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    setSession(data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
-    }, []);
-
-    if (isLoading) return <p>Loading...</p>
-    if (!session) return <p>No profile data</p>
-
-    const signOut = async () => {
-        localStorage.removeItem('session');
-        router.push('/');
-    }
-
+export default function Navbar({ session, signOut }: { session: User; signOut: () => void; }): JSX.Element {
     return (
-
-        <div className="bg-white h-screen">
+        <>
             <div className="navbar bg-base-100">
                 <div className="navbar-start">
                     <div className="dropdown">
@@ -79,26 +36,11 @@ export default function Dashboard(props: any) {
                             </div>
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-md w-52">
-                            <li>
-                                <a className="justify-between">
-                                    Profile
-                                    <span className="badge">New</span>
-                                </a>
-                            </li>
-                            <li><a>Settings</a></li>
                             <li><a onClick={signOut}>Logout</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    )
-}
-
-export async function getServerSideProps() {
-    return {
-        props: {
-            baseUrl: process.env.NEXT_PUBLIC_API_URL
-        }
-    }
+        </>
+    );
 }

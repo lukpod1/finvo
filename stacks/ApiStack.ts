@@ -3,7 +3,7 @@ import { Database } from "./DatabaseStack";
 
 export function API({ stack }: StackContext) {
   const dbUsers = use(Database)
-  
+
   const api = new Api(stack, "api", {
     defaults: {
       function: {
