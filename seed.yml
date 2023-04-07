@@ -3,7 +3,7 @@ before_compile:
   - echo "Set Node version 18x"
   - n 18.15.0
   - echo "Install NPM"
-  - npm i -g npm@9.6.5
+  - npm i -g npm@9.6.3
   - echo "Install YARN"
   - npm install --global yarn
   - yarn --version
