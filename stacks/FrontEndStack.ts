@@ -11,6 +11,7 @@ export function FrontEnd({ stack }: StackContext) {
             NEXT_PUBLIC_API_URL: apiStack.api.url,
             BASE_URL: apiStack.api.url
         },
+        buildCommand: "npx open-next@0.7.0 build",
     })
 
     site.attachPermissions([apiStack.api])
