@@ -1,7 +1,7 @@
-# before_compile:
-#   - echo "Before compile"
-#   - echo "Set Node version 16.0.0"
-#   - n 16.15.1
+before_compile:
+  - echo "Before compile"
+  - echo "Set Node version 18x"
+  - n 18.15.0
 #   - echo "Install NPM"
 #   - npm i -g npm@8.11.0
 #   - echo "Install YARN"
