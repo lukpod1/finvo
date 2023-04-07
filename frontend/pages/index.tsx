@@ -54,26 +54,57 @@ export default function Home(props: any) {
       <Navbar session={session} signOut={handleSignOut} />
       <Header title="Dashboard" />
 
-      <main>
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <div className="flex flex-row justify-center py-10">
-              <div className="flex flex-col rounded-xl bg-white w-80 h-28">
-                <div className="h-4 m-4 font-medium text-slate-400">Current Balance</div>
-                <div className="h-4 m-3 font-medium text-neutral-600 text-4xl">R$ 20.000,00</div>
-              </div>
-              <div className="flex flex-col rounded-xl bg-white mx-10 w-80 h-28">
-                <div className="h-4 m-4 font-medium text-slate-400">Expenses</div>
-                <div className="h-4 m-3 font-medium text-red-600 text-4xl">R$ 20.000,00</div>
-              </div>
-              <div className="flex flex-col rounded-xl bg-white w-80 h-28">
-                <div className="h-4 m-4 font-medium text-slate-400">Invoices</div>
-                <div className="h-4 m-3 font-medium text-green-600 text-color text-4xl">R$ 20.000,00</div>
-              </div>
-            </div>
+      <main className="">
+        <div className="flex flex-col w-full lg:flex-row container mx-auto px-4">
+          <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
+            <div className="font-medium text-slate-400">Current Balance</div>
+            <div className="font-medium text-neutral-600 text-4xl">R$ 20.000,00</div>
+          </div>
+          <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
+            <div className="font-medium text-slate-400">Expenses</div>
+            <div className="font-medium text-red-600 text-4xl">R$ 20.000,00</div>
+          </div>
+          <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
+            <div className="font-medium text-slate-400">Invoices</div>
+            <div className="font-medium text-green-600 text-color text-4xl">R$ 20.000,00</div>
           </div>
         </div>
       </main>
+
+      <section>
+        <div className="overflow-x-auto flex flex-col w-full lg:flex-row container mx-auto px-4 py-3">
+          <table className="table table-zebra w-full">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Job</th>
+                <th>Favorite Color</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>1</th>
+                <td>Cy Ganderton</td>
+                <td>Quality Control Specialist</td>
+                <td>Blue</td>
+              </tr>
+              <tr>
+                <th>2</th>
+                <td>Hart Hagerty</td>
+                <td>Desktop Support Technician</td>
+                <td>Purple</td>
+              </tr>
+              <tr>
+                <th>3</th>
+                <td>Brice Swyre</td>
+                <td>Tax Accountant</td>
+                <td>Red</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </>
   )
 }

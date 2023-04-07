@@ -10,7 +10,7 @@ export default function Navbar({ session, signOut }: { session: User; signOut: (
                         <label tabIndex={0} className="btn btn-ghost lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                         </label>
-                        <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-md w-52">
+                        <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-md w-52 border">
                             <li><a>Dashboard</a></li>
                             <li><a>Accounts</a></li>
                             <li><a>Transactions</a></li>
@@ -35,7 +35,7 @@ export default function Navbar({ session, signOut }: { session: User; signOut: (
                                 <Image width={40} height={40} src={session.picture} alt="profile picture" />
                             </div>
                         </label>
-                        <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-md w-52">
+                        <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-md w-32 border">
                             <li><a onClick={signOut}>Logout</a></li>
                         </ul>
                     </div>
