@@ -1,24 +1,30 @@
 import { NextjsSite, StackContext, use } from "sst/constructs";
-import { API } from "./ApiStack";
+import { Accounts } from "./AccountStack";
+import { Session } from "./SessionStack";
 
 export function FrontEnd({ stack }: StackContext) {
-    
-    const apiStack = use(API);
+
+    const sessionStack = use(Session);
+    const accountStack = use(Accounts);
 
     const site = new NextjsSite(stack, "site", {
         path: "frontend",
         environment: {
-            NEXT_PUBLIC_API_URL: apiStack.api.url,
-            BASE_URL: apiStack.api.url
+            NEXT_PUBLIC_API_URL: sessionStack.sessionApi.url,
+            BASE_URL: sessionStack.sessionApi.url,
+            ACCOUNTS_API_URL: accountStack.accountsApi.url,
         },
         buildCommand: "npx open-next@0.7.0 build",
-    })
+    });
 
-    site.attachPermissions([apiStack.api])
+    site.attachPermissions([
+        sessionStack.sessionApi, 
+        accountStack.accountsApi
+    ]);
 
     stack.addOutputs({
         URL: site.url || "http://localhost:3000",
-        BaseUrl: apiStack.api.url
+        BaseUrl: sessionStack.sessionApi.url
     })
 
     return {

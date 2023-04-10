@@ -1,10 +1,12 @@
-import { Auth, Config, StackContext, use } from "sst/constructs";
-import { API } from "./ApiStack";
+import { Api, Auth, Config, StackContext, use } from "sst/constructs";
 import { FrontEnd } from "./FrontEndStack";
+import { Database } from "./DatabaseStack";
+import { Session } from "./SessionStack";
 
-export function AUTH({ stack }: StackContext) {
+export function Authentication({ stack }: StackContext) {
 
-    const apiStack = use(API);
+    const { dbAccounts } = use(Database);
+    const sessionStack = use(Session);
     const frontEndStack = use(FrontEnd);
 
     const GOOGLE_CLIENT_ID = new Config.Secret(stack, "GOOGLE_CLIENT_ID");
@@ -12,17 +14,17 @@ export function AUTH({ stack }: StackContext) {
     const auth = new Auth(stack, "auth", {
         authenticator: {
             handler: "packages/functions/src/auth.handler",
-            bind: [apiStack.api, GOOGLE_CLIENT_ID],
+            bind: [sessionStack.sessionApi, GOOGLE_CLIENT_ID, dbAccounts],
             environment: {
                 SITE_URL: frontEndStack.site.url || "http://localhost:3000",
             },
         }
     });
 
-    apiStack.api.bind([GOOGLE_CLIENT_ID])
+    sessionStack.sessionApi.bind([GOOGLE_CLIENT_ID])
 
     auth.attach(stack, {
-        api: apiStack.api,
+        api: sessionStack.sessionApi,
         prefix: "/auth"
     })
 }

@@ -1,8 +1,9 @@
 import { SSTConfig } from "sst";
-import { AUTH } from "./stacks/AuthStack";
+import { Authentication } from "./stacks/AuthStack";
 import { Database } from "./stacks/DatabaseStack";
 import { FrontEnd } from "./stacks/FrontEndStack";
-import { API } from "./stacks/ApiStack";
+import { Accounts } from "./stacks/AccountStack";
+import { Session } from "./stacks/SessionStack";
 
 export default {
   config(_input) {
@@ -13,8 +14,9 @@ export default {
   },
   stacks(app) {
     app.stack(Database)
-    app.stack(API)
+    app.stack(Session)
+    app.stack(Accounts)
     app.stack(FrontEnd)
-    app.stack(AUTH)
+    app.stack(Authentication)
   },
 } satisfies SSTConfig;
