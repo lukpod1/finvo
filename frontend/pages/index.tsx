@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextPageContext } from 'next';
 import { User } from '@/domain/User';
-import Image from "next/image";
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
-
+import { Balance } from '@/domain/Balance';
 
 export default function Home(props: any) {
   const router = useRouter();
   const [session, setSession] = useState<User | null>(null);
   const [isLoading, setLoading] = useState(false);
+  const [balance, setBalance] = useState<Balance>({} as Balance);
 
   useEffect(() => {
     const token = localStorage.getItem('session');
@@ -21,33 +21,49 @@ export default function Home(props: any) {
 
   useEffect(() => {
     setLoading(true);
+    getSession().then((data) => {
+      setSession(data);
+      return data.id;
+    }).then((userId) => {
+      return getBalance(userId);
+    }).then((data) => {
+      setBalance(data);
+      setLoading(false);
+    }).catch(error => {
+      console.log(error);
+    });
+  }, []);
+
+  const getSession = async () => {
     const token = localStorage.getItem('session');
     if (token) {
-      fetch(`${props.baseUrl}/session`, {
+      const response = await fetch(`${props.baseUrl}/session`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
         },
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          setSession(data);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      });
+      const data = await response.json();
+      return data;
     }
-  }, []);
+    return null;
+  }
 
-  if (isLoading) return <p>Loading...</p>
-  if (!session) return <p>No profile data</p>
+  const getBalance = async (userId: string) => {
+    const response = await fetch(`${props.accountsApiUrl}/accounts/balance?userId=${userId}`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    return data;
+  }
 
   const handleSignOut = async () => {
     localStorage.removeItem('session');
     router.push('/login');
   }
+
+  if (isLoading) return <p>Loading...</p>
+  if (!session) return <p>No profile data</p>
 
   return (
     <>
@@ -58,20 +74,20 @@ export default function Home(props: any) {
         <div className="flex flex-col w-full lg:flex-row container mx-auto px-4">
           <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
             <div className="font-medium text-slate-400">Current Balance</div>
-            <div className="font-medium text-neutral-600 text-4xl">R$ 20.000,00</div>
+            <div className="font-medium text-neutral-600 text-4xl">R$ {balance.totalBalance}</div>
           </div>
           <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
             <div className="font-medium text-slate-400">Expenses</div>
-            <div className="font-medium text-red-600 text-4xl">R$ 20.000,00</div>
+            <div className="font-medium text-red-600 text-4xl">R$ {balance.totalExpenses}</div>
           </div>
           <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
             <div className="font-medium text-slate-400">Invoices</div>
-            <div className="font-medium text-green-600 text-color text-4xl">R$ 20.000,00</div>
+            <div className="font-medium text-green-600 text-color text-4xl">R$ {balance.totalInvoices}</div>
           </div>
         </div>
       </main>
 
-      <section>
+      {/* <section>
         <div className="overflow-x-auto flex flex-col w-full lg:flex-row container mx-auto px-4 py-3">
           <table className="table table-zebra w-full">
             <thead>
@@ -104,7 +120,7 @@ export default function Home(props: any) {
             </tbody>
           </table>
         </div>
-      </section>
+      </section> */}
     </>
   )
 }
@@ -114,6 +130,7 @@ export async function getServerSideProps(context: NextPageContext) {
   return {
     props: {
       baseUrl: process.env.NEXT_PUBLIC_API_URL,
+      accountsApiUrl: process.env.NEXT_PUBLIC_ACCOUNTS_API_URL
     }
   }
 }

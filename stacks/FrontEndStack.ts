@@ -12,7 +12,7 @@ export function FrontEnd({ stack }: StackContext) {
         environment: {
             NEXT_PUBLIC_API_URL: sessionStack.sessionApi.url,
             BASE_URL: sessionStack.sessionApi.url,
-            ACCOUNTS_API_URL: accountStack.accountsApi.url,
+            NEXT_PUBLIC_ACCOUNTS_API_URL: accountStack.accountsApi.url,
         },
         buildCommand: "npx open-next@0.7.0 build",
     });
