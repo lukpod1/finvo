@@ -26,6 +26,7 @@ export function Database({ stack }: StackContext) {
       id: "string",
       amount: "number",
       date: "string",
+      description: "string",
       type: "string",
       accountId: "string",
       userId: "string",

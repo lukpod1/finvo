@@ -5,14 +5,22 @@ import { User } from '@/domain/User';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import { Balance } from '@/domain/Balance';
+import Layout from '@/components/Layout';
+import { getSession } from '@/hooks/getSession';
 
-export default function Home(props: any) {
+interface DashBoardProps {
+  session: User;
+  accountsApiUrl: string;
+  userId: string;
+}
+
+export default function DashBoard(props: any) {
   const router = useRouter();
-  const [session, setSession] = useState<User | null>(null);
-  const [isLoading, setLoading] = useState(false);
   const [balance, setBalance] = useState<Balance>({} as Balance);
+  const [session, setSession] = useState<User>({} as User);
 
   useEffect(() => {
+
     const token = localStorage.getItem('session');
     if (!token) {
       router.push('/login');
@@ -20,56 +28,30 @@ export default function Home(props: any) {
   }, [])
 
   useEffect(() => {
-    setLoading(true);
+    console.log("PROPS: ", props)
     getSession().then((data) => {
+      console.log("DATA: ", data)
       setSession(data);
-      return data.id;
-    }).then((userId) => {
-      return getBalance(userId);
-    }).then((data) => {
-      setBalance(data);
-      setLoading(false);
+      getBalance(data).then((data) => {
+        setBalance(data);
+      }).catch(error => {
+        console.log(error);
+      });
     }).catch(error => {
       console.log(error);
     });
-  }, []);
+  }, [])
 
-  const getSession = async () => {
-    const token = localStorage.getItem('session');
-    if (token) {
-      const response = await fetch(`${props.baseUrl}/session`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      return data;
-    }
-    return null;
-  }
-
-  const getBalance = async (userId: string) => {
-    const response = await fetch(`${props.accountsApiUrl}/accounts/balance?userId=${userId}`, {
+  const getBalance = async (session: User) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts/balance?userId=${session.id}`, {
       method: 'GET',
     });
     const data = await response.json();
     return data;
   }
 
-  const handleSignOut = async () => {
-    localStorage.removeItem('session');
-    router.push('/login');
-  }
-
-  if (isLoading) return <p>Loading...</p>
-  if (!session) return <p>No profile data</p>
-
   return (
-    <>
-      <Navbar session={session} signOut={handleSignOut} />
-      <Header title="Dashboard" />
-
+    <Layout>
       <main className="">
         <div className="flex flex-col w-full lg:flex-row container mx-auto px-4">
           <div className="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center mx-2 my-2">
@@ -87,7 +69,7 @@ export default function Home(props: any) {
         </div>
       </main>
 
-      {/* <section>
+      <section>
         <div className="overflow-x-auto flex flex-col w-full lg:flex-row container mx-auto px-4 py-3">
           <table className="table table-zebra w-full">
             <thead>
@@ -120,17 +102,8 @@ export default function Home(props: any) {
             </tbody>
           </table>
         </div>
-      </section> */}
-    </>
+      </section>
+    </Layout>
   )
 }
 
-export async function getServerSideProps(context: NextPageContext) {
-
-  return {
-    props: {
-      baseUrl: process.env.NEXT_PUBLIC_API_URL,
-      accountsApiUrl: process.env.NEXT_PUBLIC_ACCOUNTS_API_URL
-    }
-  }
-}

@@ -1,15 +1,16 @@
-import { NextPageContext } from "next"
+import { NextPageContext } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export default function Login(props: any) {
+export default function Login() {
     const router = useRouter();
+
     useEffect(() => {
         const token = router.query.token;
         if (token) {
             localStorage.setItem('session', token.toString());
-            router.push('/');
+            router.push('/dashboard');
         }
     }, [router])
 
@@ -22,7 +23,7 @@ export default function Login(props: any) {
                     </h1>
                 </div>
                 <div className="w-full self-center flex flex-col justify-center items-center">
-                    <Link href={`${props.baseUrl}/auth/google/authorize`}>
+                    <Link href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google/authorize`}>
                         <button className="bg-black text-white rounded-md px-8 py-4 text-sm sm:text-lg md:text-xl lg:text-2xl hover:bg-white hover:text-black hover:border-black border-2 border-black transition duration-300 ease-in-out">
                             Continue with Google
                         </button>
@@ -30,14 +31,5 @@ export default function Login(props: any) {
                 </div>
             </div>
         </div>
-    )
-}
-
-export async function getServerSideProps(context: NextPageContext) {
-
-    return {
-        props: {
-            baseUrl: process.env.NEXT_PUBLIC_API_URL,
-        }
-    }
+    );
 }
