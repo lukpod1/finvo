@@ -17,8 +17,8 @@ export const handler = ApiHandler(async () => {
     try {
         const { amount, date, description, type, accountId, userId }: TransactionDTO = await schema.validate(useJsonBody());
         const transaction = new Transaction(randomUUID(), amount, date, description, type as TransactionType , accountId, userId);
+        
         const account = new Account(accountId, 0, '', userId);
-
         await account.updateAccountBalance(transaction);
 
         await Transaction.save(transaction);

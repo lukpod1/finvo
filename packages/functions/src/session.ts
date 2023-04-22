@@ -1,5 +1,5 @@
 import { Table } from "sst/node/table";
-import { ApiHandler } from "sst/node/api";
+import { ApiHandler, useCookie, useCookies, useHeaders } from "sst/node/api";
 import { useSession } from "sst/node/auth";
 import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";

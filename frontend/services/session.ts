@@ -1,4 +1,4 @@
-export const getSession = async () => {
+export async function fetchSession() {
     const token = localStorage.getItem('session');
     if (token) {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
@@ -10,5 +10,4 @@ export const getSession = async () => {
         const data = await response.json();
         return data;
     }
-    return null;
 }

@@ -6,9 +6,10 @@ import { Account } from "@finance-service/core/domain/account";
 const ddb = new DynamoDB({});
 
 async function getAccounts(userId: string | undefined) {
-    const result = await ddb.scan({
+    const result = await ddb.query({
         TableName: Table.accounts.tableName,
-        FilterExpression: "#userId = :userId",
+        IndexName: "userIdIndex",
+        KeyConditionExpression: "#userId = :userId",
         ExpressionAttributeNames: {
             "#userId": "userId",
         },

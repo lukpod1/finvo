@@ -17,10 +17,13 @@
     "daisyui": "^2.51.5",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "js-cookie": "^3.0.4",
     "next": "13.2.4",
+    "nookies": "^2.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

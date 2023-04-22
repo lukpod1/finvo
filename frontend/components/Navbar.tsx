@@ -1,15 +1,21 @@
-import { User } from "@/domain/User";
+import { useSessionStore } from "@/contexts/session";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-export default function Navbar({ session }: { session: User; }): JSX.Element {
+export default function Navbar() {
     const router = useRouter();
+    const { session, fetchSession } = useSessionStore();
 
     const handleSignOut = async () => {
         localStorage.removeItem('session');
         router.push('/login');
     }
+
+    useEffect(() => {
+        fetchSession();
+    }, [])
 
     return (
         <>

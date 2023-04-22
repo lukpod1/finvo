@@ -22,19 +22,16 @@ export class Account {
     }
 
     async save() {
-        const params: PutItemCommandInput = {
-            TableName: Table.accounts.tableName,
-            Item: {
-                id: { S: this.id },
-                balance: { N: this.balance.toString() },
-                name: { S: this.name },
-                userId: { S: this.userId },
-            },
-        };
-
         try {
-            const command = new PutItemCommand(params);
-            await Account.client.send(command);
+            await Account.client.send(new PutItemCommand({
+                TableName: Table.accounts.tableName,
+                Item: {
+                    id: { S: this.id },
+                    balance: { N: this.balance.toString() },
+                    name: { S: this.name },
+                    userId: { S: this.userId },
+                },
+            }));
             console.log(`Account ${this.id} saved successfully`);
         } catch (error) {
             throw new AccountSaveError(`Error saving account ${this.id}`, this.id);
@@ -42,16 +39,14 @@ export class Account {
     }
 
     async getAccountById(id: string, userId: string): Promise<Account> {
-        const params = {
-            TableName: Table.accounts.tableName,
-            Key: {
-                id: { S: id },
-                userId: { S: userId },
-            },
-        };
-
         try {
-            const result = await Account.client.send(new GetItemCommand(params));
+            const result = await Account.client.send(new GetItemCommand({
+                TableName: Table.accounts.tableName,
+                Key: {
+                    id: { S: id },
+                    userId: { S: userId },
+                },
+            }));
             if (!result.Item) {
                 throw new AccountGetError(`Account with ID ${id} not found!`, id)
             }
@@ -68,22 +63,19 @@ export class Account {
     }
 
     async updateAmount(balance: number) {
-        const params: UpdateItemCommandInput = {
-            TableName: Table.accounts.tableName,
-            Key: {
-                id: { S: this.id },
-                userId: { S: this.userId },
-            },
-            UpdateExpression: "SET #balance = :balance",
-            ExpressionAttributeValues: {
-                ":balance": { N: balance.toString() },
-            },
-            ReturnValues: "ALL_NEW",
-        };
-
         try {
-            const command = new UpdateItemCommand(params);
-            await Account.client.send(command);
+            await Account.client.send(new UpdateItemCommand({
+                TableName: Table.accounts.tableName,
+                Key: {
+                    id: { S: this.id },
+                    userId: { S: this.userId },
+                },
+                UpdateExpression: "SET #balance = :balance",
+                ExpressionAttributeValues: {
+                    ":balance": { N: balance.toString() },
+                },
+                ReturnValues: "ALL_NEW",
+            }));
             console.log(`Account ${this.id} updated successfully`);
         } catch (error) {
             throw new AccountUpdateError(`Error updating account ${this.id}`, this.id);
@@ -92,7 +84,7 @@ export class Account {
 
     async updateAccountBalance(transaction: Transaction) {
         const account = await this.getAccountById(transaction.accountId, transaction.userId);
-        if (transaction.type == "EXPENSE") {
+        if (transaction.type === "EXPENSE") {
             account.balance -= transaction.amount;
         } else {
             account.balance += transaction.amount;

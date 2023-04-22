@@ -19,6 +19,12 @@ export function Database({ stack }: StackContext) {
       balance: "number",
     },
     primaryIndex: { partitionKey: "id" , sortKey: "userId"},
+    globalIndexes: {
+      userIdIndex: {
+        partitionKey: "userId",
+        sortKey: "id",
+      }
+    }
   });
 
   const dbTransactions = new Table(stack, "transactions", {

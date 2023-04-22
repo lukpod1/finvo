@@ -34,7 +34,7 @@ export const handler = AuthHandler({
 
                 console.log("ENV: ", process.env.SITE_URL)
                 return Session.parameter({
-                    redirect: `${process.env.SITE_URL}/login`|| "http://localhost:3000/login",
+                    redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
                     type: "user",
                     properties: {
                         userID: user.sub,
