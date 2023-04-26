@@ -1,25 +1,20 @@
-import { useSessionStore } from "@/contexts/session";
+import { useSession } from "@/contexts/session";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Navbar() {
     const router = useRouter();
-    const { session, fetchSession } = useSessionStore();
+    const { session } = useSession();
 
     const handleSignOut = async () => {
         localStorage.removeItem('session');
         router.push('/login');
     }
 
-    useEffect(() => {
-        fetchSession();
-    }, [])
-
     return (
         <>
-            <div className="navbar bg-base-100">
+            <div className="navbar bg-base-300">
                 <div className="navbar-start">
                     <div className="dropdown">
                         <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -41,6 +36,14 @@ export default function Navbar() {
                     </ul>
                 </div>
                 <div className="navbar-end">
+                    <div className="dropdown dropdown-end">
+                        <label tabIndex={0} className="btn btn-ghost rounded-btn">+</label>
+                        <ul tabIndex={0} className="menu dropdown-content pt-2 pb-2 shadow bg-base-100 rounded-md w-52 mt-4 border-solid border">
+                            <li><a>Account</a></li>
+                            <li><a>Income</a></li>
+                            <li><a>Expense</a></li>
+                        </ul>
+                    </div>
                     <ul className="menu menu-horizontal px-1">
                         <li>{session.name}</li>
                     </ul>

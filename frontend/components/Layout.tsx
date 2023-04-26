@@ -2,7 +2,6 @@ import React, { use, useEffect, useMemo } from "react";
 import Header from "./Header";
 import Navbar from "./Navbar";
 import { useRouter } from "next/router";
-import { useSessionStore } from "@/contexts/session";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const router = useRouter();

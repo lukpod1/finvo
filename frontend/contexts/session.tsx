@@ -1,26 +1,39 @@
 import { User } from "@/domain/User";
-import { create } from "zustand";
+import { createContext, useContext, useEffect, useState } from "react";
 
-type SessionState = {
+type SessionContextType ={
     session: User;
-    fetchSession: () => Promise<User | null>;
-}
+};
 
-export const useSessionStore = create<SessionState>((set) => ({
-    session: {} as User,
-    fetchSession: async () => {
+export const SessionContext = createContext<SessionContextType>({} as SessionContextType);
+
+export const useSession = () => useContext(SessionContext);
+
+type SessionProviderProps = {
+    children: React.ReactNode;
+};
+
+export const SessionProvider = ({ children}: SessionProviderProps) => {
+    const [ session, setSession ] = useState<User>({} as User);
+
+    useEffect(() => {
         const token = localStorage.getItem('session');
         if (token) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-            })
-            const data = await response.json();
-            set({ session: data });
-            return data;
+            }).then(response => response.json().then(data => {
+                setSession(data);
+            }));
         }
-        return null;
-    }
-}))
+    }, [])
+
+    return (
+        <SessionContext.Provider value={{session}}>
+            {children}
+        </SessionContext.Provider>
+    )
+}
+
