@@ -2,10 +2,17 @@ import { useSession } from "@/contexts/session";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import Modal from "./Modal";
 
 export default function Navbar() {
     const router = useRouter();
     const { session } = useSession();
+    const [type, setType] = useState('');
+
+    const handleModalOpen = (type: string) => {
+        setType(type);
+    }
 
     const handleSignOut = async () => {
         localStorage.removeItem('session');
@@ -39,11 +46,12 @@ export default function Navbar() {
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost rounded-btn">+</label>
                         <ul tabIndex={0} className="menu dropdown-content pt-2 pb-2 shadow bg-base-100 rounded-md w-52 mt-4 border-solid border">
-                            <li><a>Account</a></li>
-                            <li><a>Income</a></li>
-                            <li><a>Expense</a></li>
+                            <li><a onClick={() => handleModalOpen("account")}>Account</a></li>
+                            <li><a onClick={() => handleModalOpen("income")}>Income</a></li>
+                            <li><a onClick={() => handleModalOpen("expense")}>Expense</a></li>
                         </ul>
                     </div>
+                    {type && <Modal type={type} onClose={() => setType('')} />}
                     <ul className="menu menu-horizontal px-1">
                         <li>{session.name}</li>
                     </ul>
