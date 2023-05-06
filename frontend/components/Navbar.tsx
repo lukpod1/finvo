@@ -44,11 +44,11 @@ export default function Navbar() {
                 </div>
                 <div className="navbar-end">
                     <div className="dropdown dropdown-end">
-                        <label tabIndex={0} className="btn btn-ghost rounded-btn">+</label>
+                        <label tabIndex={0} className="btn btn-ghost rounded-lg">+</label>
                         <ul tabIndex={0} className="menu dropdown-content pt-2 pb-2 shadow bg-base-100 rounded-md w-52 mt-4 border-solid border">
-                            <li><a onClick={() => handleModalOpen("account")}>Account</a></li>
-                            <li><a onClick={() => handleModalOpen("income")}>Income</a></li>
-                            <li><a onClick={() => handleModalOpen("expense")}>Expense</a></li>
+                            <label htmlFor="my-modal"><li><a onClick={() => handleModalOpen("account")}>Account</a></li></label>
+                            <label htmlFor="my-modal"><li><a onClick={() => handleModalOpen("income")}>Income</a></li></label>
+                            <label htmlFor="my-modal"><li><a onClick={() => handleModalOpen("expense")}>Expense</a></li></label>
                         </ul>
                     </div>
                     {type && <Modal type={type} onClose={() => setType('')} />}

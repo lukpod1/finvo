@@ -9,9 +9,9 @@ interface ModalProps {
   onClose: () => void;
 }
 
-export default function Modal({ onClose }: ModalProps) {
+export default function Modal({ type, onClose }: ModalProps) {
   const { register, handleSubmit, reset } = useForm();
-  const [type, setType] = useState('account');
+  //const [type, setType] = useState('account');
   const mutation = useMutation(
     type === 'account' ? createAccount : createTransaction,
     {
@@ -77,7 +77,7 @@ export default function Modal({ onClose }: ModalProps) {
           </div>
         </div>
       </div>
-      <label htmlFor="my-modal" className="btn">{type === "account" ? "Create account" : "Add transaction"}</label>
+      {/* <label htmlFor="my-modal" className="btn">{type === "account" ? "Create account" : "Add transaction"}</label> */}
     </>
   )
 }

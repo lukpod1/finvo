@@ -3,6 +3,5 @@ export const createTransaction = async (transaction: any) => {
         method: 'POST',
         body: JSON.stringify(transaction),
     });
-    const data = await response.json();
-    return data;
+    return await response.json();
 }

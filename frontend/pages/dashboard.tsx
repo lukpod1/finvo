@@ -21,7 +21,7 @@ export default function DashBoard() {
 
   useEffect(() => {
     console.log(session);
-    if (session && session !== undefined && session.id && session !== {} as User) {
+    if (session && session.id && session !== {} as User) {
       getBalance(session.id).then((newBalance) => {
         if (!isEqual(newBalance, prevBalanceRef.current)) {
           prevBalanceRef.current = newBalance;

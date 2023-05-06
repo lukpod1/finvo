@@ -1,5 +1,6 @@
 import { User } from "@/domain/User";
-import { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {fetchSession} from "@/services/session";
 
 type SessionContextType ={
     session: User;
@@ -17,17 +18,7 @@ export const SessionProvider = ({ children}: SessionProviderProps) => {
     const [ session, setSession ] = useState<User>({} as User);
 
     useEffect(() => {
-        const token = localStorage.getItem('session');
-        if (token) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            }).then(response => response.json().then(data => {
-                setSession(data);
-            }));
-        }
+        fetchSession().then(response => setSession(response));
     }, [])
 
     return (

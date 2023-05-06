@@ -1,10 +1,7 @@
-import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { parseCookies, setCookie } from "nookies";
 import { useEffect } from "react";
-
 
 export default function Login() {
     const router = useRouter();

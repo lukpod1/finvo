@@ -1,4 +1,4 @@
-import { DynamoDB, DynamoDBClient, GetItemCommand, PutItemCommand, PutItemCommandInput, UpdateItemCommand, UpdateItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
 
@@ -21,7 +21,7 @@ export class Account {
         this.userId = userId;
     }
 
-    async save() {
+    async save(): Promise<void> {
         try {
             await Account.client.send(new PutItemCommand({
                 TableName: Table.accounts.tableName,
@@ -62,7 +62,7 @@ export class Account {
         }
     }
 
-    async updateAmount(balance: number) {
+    async updateAmount(balance: number): Promise<void> {
         try {
             await Account.client.send(new UpdateItemCommand({
                 TableName: Table.accounts.tableName,
@@ -82,7 +82,7 @@ export class Account {
         }
     }
 
-    async updateAccountBalance(transaction: Transaction) {
+    async updateAccountBalance(transaction: Transaction): Promise<void> {
         const account = await this.getAccountById(transaction.accountId, transaction.userId);
         if (transaction.type === "EXPENSE") {
             account.balance -= transaction.amount;

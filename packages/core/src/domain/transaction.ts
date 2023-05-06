@@ -1,5 +1,4 @@
 import { DynamoDBClient, PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
-import { type } from "os";
 import { Table } from "sst/node/table";
 
 export class Transaction {
@@ -23,7 +22,7 @@ export class Transaction {
         this.userId = userId;
     }
 
-    static async save(transaction: Transaction) {
+    static async save(transaction: Transaction): Promise<void> {
         const params: PutItemCommandInput = {
             TableName: Table.accounts.tableName,
             Item: {
