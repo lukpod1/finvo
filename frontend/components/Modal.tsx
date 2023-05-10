@@ -1,7 +1,9 @@
-import { createAccount } from "@/services/accounts";
+import { SessionContext, useSession } from "@/contexts/session";
+import { createAccount, getBalance } from "@/services/accounts";
 import { createTransaction } from "@/services/transactions";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ModalProps {
@@ -10,20 +12,26 @@ interface ModalProps {
 }
 
 export default function Modal({ type, onClose }: ModalProps) {
+  const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
-  //const [type, setType] = useState('account');
+  const { session, updateBalance } = useSession();
   const mutation = useMutation(
     type === 'account' ? createAccount : createTransaction,
     {
       onSuccess: () => {
         reset();
         onClose();
+        if (type === 'account') {
+          updateBalance(session.id); // atualiza o saldo da conta na interface
+        }
       },
     }
   );
 
   const onSubmit = (data: any): void => {
-    mutation.mutate(data);
+    console.log("entrou o onSubmit")
+    const dataWithUserId = { ...data, userId: session.id };
+    mutation.mutate(dataWithUserId);
   }
 
   return (
@@ -35,11 +43,12 @@ export default function Modal({ type, onClose }: ModalProps) {
           <h3 className="text-lg font-bold">Create {type}</h3>
           <div className="p-4">
             <form onSubmit={handleSubmit(onSubmit)}>
+              <input type="hidden" name="userId" value={session.id} />
               {type === "account" && (
                 <>
                   <div className="mb-4">
                     <label className="text-gray-700">Name</label>
-                    <input type="text" className="form-input mt-1 block w-full" {...register("name", {required: true})} />
+                    <input type="text" className="form-input mt-1 block w-full" {...register("name", { required: true })} />
                   </div>
                   <div className="mb-4">
                     <label className="text-gray-700">Balance</label>

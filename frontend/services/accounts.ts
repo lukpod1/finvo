@@ -9,6 +9,7 @@ export const getBalance = async (accountId: string) => {
 }
 
 export const createAccount: MutationFunction<Account, Account> = async (account) => {
+    console.log('account', account);
     const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts`, {
         method: 'POST',
         body: JSON.stringify(account),

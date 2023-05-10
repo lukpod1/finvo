@@ -1,16 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Balance } from '@/domain/Balance';
 import Layout from '@/components/Layout';
 import { useSession } from '@/contexts/session';
-import { getBalance } from '@/services/accounts';
 import { User } from '@/domain/User';
 
 export default function DashBoard() {
   const router = useRouter();
-  const { session } = useSession();
-  const [balance, setBalance] = useState<Balance>();
-  const prevBalanceRef = useRef<Balance>();
+  const { session, balance, updateBalance } = useSession();
 
   useEffect(() => {
     const token = localStorage.getItem('session');
@@ -22,18 +18,9 @@ export default function DashBoard() {
   useEffect(() => {
     console.log(session);
     if (session && session.id && session !== {} as User) {
-      getBalance(session.id).then((newBalance) => {
-        if (!isEqual(newBalance, prevBalanceRef.current)) {
-          prevBalanceRef.current = newBalance;
-          setBalance(newBalance);
-        }
-      });
+      updateBalance(session.id);
     }
-  }, [session]);
-
-  function isEqual(a: any, b: any): boolean {
-    return JSON.stringify(a) === JSON.stringify(b);
-  }
+  }, [session, updateBalance]);
 
   return (
     <Layout>
