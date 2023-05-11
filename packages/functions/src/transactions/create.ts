@@ -8,7 +8,7 @@ const schema = yup.object().shape({
     amount: yup.number().required(),
     date: yup.string().required(),
     description: yup.string().required(),
-    type: yup.string().oneOf<TransactionType>(['INCOME', 'EXPENSE']).required(),
+    type: yup.string().oneOf<TransactionType>(['income', 'expense']).required(),
     accountId: yup.string().required(),
     userId: yup.string().required(),
 });
@@ -18,8 +18,7 @@ export const handler = ApiHandler(async () => {
         const { amount, date, description, type, accountId, userId }: TransactionDTO = await schema.validate(useJsonBody());
         const transaction = new Transaction(randomUUID(), amount, date, description, type as TransactionType , accountId, userId);
         
-        const account = new Account(accountId, 0, '', userId);
-        await account.updateAccountBalance(transaction);
+        await Account.updateAccountBalance(transaction);
 
         await Transaction.save(transaction);
 

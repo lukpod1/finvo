@@ -38,6 +38,12 @@ export function Database({ stack }: StackContext) {
       userId: "string",
     },
     primaryIndex: { partitionKey: "id", sortKey: "accountId" },
+    globalIndexes: {
+      userIdIndex: {
+        partitionKey: "userId",
+        sortKey: "id",
+      }
+    }
   });
 
   return {

@@ -14,24 +14,23 @@ interface ModalProps {
 export default function Modal({ type, onClose }: ModalProps) {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
-  const { session, updateBalance } = useSession();
+  const { session, accounts, updateBalance, getAccountsByUserId } = useSession();
   const mutation = useMutation(
     type === 'account' ? createAccount : createTransaction,
     {
       onSuccess: () => {
         reset();
         onClose();
-        if (type === 'account') {
-          updateBalance(session.id); // atualiza o saldo da conta na interface
+        if (type === 'account' || type === 'income' || type === 'expense') {
+          updateBalance(session.id);
+          getAccountsByUserId(session.id);
         }
       },
     }
   );
 
   const onSubmit = (data: any): void => {
-    console.log("entrou o onSubmit")
-    const dataWithUserId = { ...data, userId: session.id };
-    mutation.mutate(dataWithUserId);
+    mutation.mutate(data);
   }
 
   return (
@@ -43,7 +42,7 @@ export default function Modal({ type, onClose }: ModalProps) {
           <h3 className="text-lg font-bold">Create {type}</h3>
           <div className="p-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <input type="hidden" name="userId" value={session.id} />
+              <input type="hidden" value={session.id} {...register("userId", { required: true })} />
               {type === "account" && (
                 <>
                   <div className="mb-4">
@@ -56,8 +55,9 @@ export default function Modal({ type, onClose }: ModalProps) {
                   </div>
                 </>
               )}
-              {(type === "expense" || type === "income") && (
+              {type !== "account" && (
                 <>
+                  <input type="hidden" value={type} {...register("type", { required: true })} />
                   <div className="mb-4">
                     <label className="text-gray-700">Amount</label>
                     <input type="number" className="form-input mt-1 block w-full" {...register("amount", { required: true })} />
@@ -66,17 +66,20 @@ export default function Modal({ type, onClose }: ModalProps) {
                     <label className="text-gray-700">Description</label>
                     <input type="text" className="form-input mt-1 block w-full" {...register("description", { required: true })} />
                   </div>
+                  <div className="mb-4">
+                    <label className="text-gray-700">Date</label>
+                    <input type="date" className="form-input mt-1 block w-full" {...register("date", { required: true })} />
+                  </div>
+                  <div className="mb-4">
+                    <label className="text-gray-700">Account</label>
+                    <select name="accountId" className="form-select mt-1 block w-full">
+                      <option value="">Select account</option>
+                      {accounts.map((account) => (
+                        <option key={account.id} value={account.id} {...register("accountId", { required: true })}>{account.name}</option>
+                      ))}
+                    </select>
+                  </div>
                 </>
-              )}
-              {type !== "account" && (
-                <div className="mb-4">
-                  <label className="text-gray-700">Account</label>
-                  <select name="accountId" className="form-select mt-1 block w-full" onChange={(e) => console.log(e.target.value)}>
-                    <option value="">Select account</option>
-                    <option value="account-1">Account 1</option>
-                    <option value="account-2">Account 2</option>
-                  </select>
-                </div>
               )}
               <div className="flex justify-end">
                 <button type="submit" className="btn btn-primary mr-2">Create {type}</button>

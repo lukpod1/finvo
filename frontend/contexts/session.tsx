@@ -1,12 +1,16 @@
 import { User } from "@/domain/User";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { fetchSession } from "@/services/session";
-import { getBalance } from "@/services/accounts";
+import { getBalance, getAccounts } from "@/services/accounts";
 import { Balance } from "@/domain/Balance";
+import { Account } from "@/domain/Account";
+import { promises } from "dns";
 
 type SessionContextType = {
     session: User;
     balance: Balance;
+    accounts: Account[];
+    getAccountsByUserId: (userId: string) => void;
     updateBalance: (userId: string) => void;
 };
 
@@ -20,6 +24,7 @@ type SessionProviderProps = {
 
 export const SessionProvider = ({ children }: SessionProviderProps) => {
     const [session, setSession] = useState<User>({} as User);
+    const [accounts, setAccounts] = useState<Account[]>([]);
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [balance, setBalance] = useState<Balance>({} as Balance);
     const prevBalanceRef = useRef<Balance>();
@@ -27,16 +32,17 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     useEffect(() => {
         fetchSession().then(response => {
             setSession(response);
-            updateBalance(response.id);
+            if (response.id) {
+                updateBalance(response.id);
+                getAccountsByUserId(response.id);
+            }
         });
     }, [])
 
     function updateBalance(userId: string) {
-        console.log("entrou o updateBalance")
         getBalance(userId).then((newBalance) => {
             if (!isEqual(newBalance, prevBalanceRef.current)) {
                 prevBalanceRef.current = newBalance;
-                console.log("mudou o balance")
                 setBalance(newBalance);
             }
         });
@@ -46,8 +52,14 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         }
     }
 
+    function getAccountsByUserId(userId: string) {
+        getAccounts(userId).then(accounts => {
+            setAccounts(accounts);
+        })
+    }
+
     return (
-        <SessionContext.Provider value={{ session, balance, updateBalance }}>
+        <SessionContext.Provider value={{ session, balance, accounts, updateBalance, getAccountsByUserId }}>
             {children}
         </SessionContext.Provider>
     )

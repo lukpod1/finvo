@@ -5,7 +5,7 @@ import { Account } from "@finance-service/core/domain/account";
 
 const ddb = new DynamoDB({});
 
-async function getAccounts(userId: string | undefined) {
+export async function getAccounts(userId: string | undefined) {
     const result = await ddb.query({
         TableName: Table.accounts.tableName,
         IndexName: "userIdIndex",
@@ -22,40 +22,48 @@ async function getAccounts(userId: string | undefined) {
     return result.Items?.map((item) => {
         return new Account(
             item.id.S ?? "",
-            Number(item.balance.N),
+            Number(item.balance.N) ?? 0,
             item.name.S ?? "",
             item.userId.S ?? "",
         );
     });
 }
 
-async function getTransactions(accountIds: string[] | undefined) {
-    const result = await ddb.scan({
+async function getTransactions(userId: string | undefined) {
+    const result = await ddb.query({
         TableName: Table.transactions.tableName,
-        FilterExpression: "#accountId IN (:accountIds)",
+        IndexName: 'userIdIndex',
+        KeyConditionExpression: '#userId = :userId',
         ExpressionAttributeNames: {
-            "#accountId": "accountId",
+            "#userId": "userId",
         },
-        ExpressionAttributeValues: {
-            ":accountIds": { SS: accountIds ?? [] },
-        },
+        ExpressionAttributeValues: userId ? {
+            ":userId": { S: userId },
+        } : undefined,
         ReturnConsumedCapacity: "TOTAL",
-    })
+    });
 
-    const totalInvoices = result.Items?.reduce((total, item) => {
-        return total + Number(item.invoice.N);
+    console.log("result", result);
+
+    const totalIncomes = result.Items?.reduce((total, item) => {
+        if (item.type.S === "income" && !Number.isNaN(Number(item.amount.N))) {
+            return total + Number(item.amount.N);
+        }
+        return total;
     }, 0) ?? 0;
 
     const totalExpenses = result.Items?.reduce((total, item) => {
-        return total + Number(item.expense.N);
+        if (item.type.S === "expense" && !Number.isNaN(Number(item.amount.N))) {
+            return total + Number(item.amount.N);
+        }
+        return total;
     }, 0) ?? 0;
-    
-    return { totalInvoices, totalExpenses };
+
+    return { totalIncomes, totalExpenses };
 }
 
 export const handler = ApiHandler(async (event) => {
     const userId = useQueryParam("userId");
-    console.log("userId", userId);
 
     try {
         const accounts = await getAccounts(userId);
@@ -64,15 +72,13 @@ export const handler = ApiHandler(async (event) => {
             return total + account.balance;
         }, 0) ?? 0;
 
-        const accountIds = accounts?.map((account) => account.id);
-
-        const { totalInvoices, totalExpenses } = await getTransactions(accountIds);
+        const { totalIncomes, totalExpenses } = await getTransactions(userId);
 
         return {
             statusCode: 200,
             body: JSON.stringify({
                 totalBalance,
-                totalInvoices,
+                totalIncomes,
                 totalExpenses,
             }),
         };

@@ -16,3 +16,10 @@ export const createAccount: MutationFunction<Account, Account> = async (account)
     });
     return await response.json();
 }
+
+export const getAccounts = async (userId: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts?userId=${userId}`, {
+        method: 'GET',
+    });
+    return await response.json();
+}

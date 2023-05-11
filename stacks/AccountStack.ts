@@ -11,6 +11,7 @@ export function Accounts({ stack }: StackContext) {
             }
         },
         routes: {
+            "GET /accounts": "packages/functions/src/accounts/findAll.handler",
             "POST /accounts": "packages/functions/src/accounts/create.handler",
             "GET /accounts/balance": "packages/functions/src/accounts/find.handler"
         },

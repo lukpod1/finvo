@@ -36,7 +36,7 @@ export default function DashBoard() {
           </div>
           <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2 my-2">
             <div className="font-medium text-slate-400">Invoices</div>
-            <div className="font-medium text-green-600 text-4xl">R$ {balance?.totalInvoices}</div>
+            <div className="font-medium text-green-600 text-4xl">R$ {balance?.totalIncomes}</div>
           </div>
         </div>
       </main>

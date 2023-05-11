@@ -38,7 +38,7 @@ export class Account {
         }
     }
 
-    async getAccountById(id: string, userId: string): Promise<Account> {
+    static async getAccountById(id: string, userId: string): Promise<Account> {
         try {
             const result = await Account.client.send(new GetItemCommand({
                 TableName: Table.accounts.tableName,
@@ -82,9 +82,9 @@ export class Account {
         }
     }
 
-    async updateAccountBalance(transaction: Transaction): Promise<void> {
+    static async updateAccountBalance(transaction: Transaction): Promise<void> {
         const account = await this.getAccountById(transaction.accountId, transaction.userId);
-        if (transaction.type === "EXPENSE") {
+        if (transaction.type === "expense") {
             account.balance -= transaction.amount;
         } else {
             account.balance += transaction.amount;

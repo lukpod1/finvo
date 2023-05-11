@@ -24,7 +24,7 @@ export class Transaction {
 
     static async save(transaction: Transaction): Promise<void> {
         const params: PutItemCommandInput = {
-            TableName: Table.accounts.tableName,
+            TableName: Table.transactions.tableName,
             Item: {
                 id: { S: transaction.id },
                 amount: { N: transaction.amount.toString() },
@@ -39,7 +39,7 @@ export class Transaction {
         try {
             const command = new PutItemCommand(params);
             await this.client.send(command);
-            console.log(`Account ${transaction.id} saved successfully`);
+            console.log(`Transaction ${transaction.id} saved successfully`);
         } catch (error) {
             throw new TransactionSaveError(`Error saving account ${transaction.id}`, transaction.id);
         }
@@ -56,7 +56,7 @@ export type TransactionDTO = {
     userId: string;
 }
 
-export type TransactionType = "INCOME" | "EXPENSE";
+export type TransactionType = "income" | "expense";
 
 class TransactionSaveError extends Error {
     constructor(message: string, public accountId: string) {
