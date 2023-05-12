@@ -42,7 +42,7 @@ export default function Modal({ type, onClose }: ModalProps) {
           <h3 className="text-lg font-bold">Create {type}</h3>
           <div className="p-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <input type="hidden" value={session?.id} {...register("userId", { required: true })} />
+              <input type="hidden" value={session.id} {...register("userId", { required: true })} />
               {type === "account" && (
                 <>
                   <div className="mb-4">

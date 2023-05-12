@@ -6,11 +6,11 @@ import { Balance } from "@/domain/Balance";
 import { Account } from "@/domain/Account";
 
 type SessionContextType = {
-    session: User | undefined;
+    session: User;
     balance: Balance;
     accounts: Account[];
-    getAccountsByUserId: (userId: string | undefined) => void;
-    updateBalance: (userId: string | undefined) => void;
+    getAccountsByUserId: (userId: string) => void;
+    updateBalance: (userId: string) => void;
 };
 
 export const SessionContext = createContext<SessionContextType>({} as SessionContextType);
@@ -22,7 +22,7 @@ type SessionProviderProps = {
 };
 
 export const SessionProvider = ({ children }: SessionProviderProps) => {
-    const [session, setSession] = useState<User | undefined>({} as User);
+    const [session, setSession] = useState<User>({} as User);
     const [accounts, setAccounts] = useState<Account[]>([]);
     //const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [balance, setBalance] = useState<Balance>({} as Balance);
@@ -38,7 +38,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         });
     }, [])
 
-    function updateBalance(userId: string | undefined) {
+    function updateBalance(userId: string) {
         getBalance(userId).then((newBalance) => {
             if (!isEqual(newBalance, prevBalanceRef.current)) {
                 prevBalanceRef.current = newBalance;
@@ -51,7 +51,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         }
     }
 
-    function getAccountsByUserId(userId: string | undefined) {
+    function getAccountsByUserId(userId: string) {
         getAccounts(userId).then(accounts => {
             setAccounts(accounts);
         })

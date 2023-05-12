@@ -1,7 +1,7 @@
 import {Account} from "@/domain/Account";
 import {MutationFunction} from "@tanstack/react-query";
 
-export const getBalance = async (accountId: string | undefined) => {
+export const getBalance = async (accountId: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts/balance?userId=${accountId}`, {
         method: 'GET',
     });
@@ -17,7 +17,7 @@ export const createAccount: MutationFunction<Account, Account> = async (account)
     return await response.json();
 }
 
-export const getAccounts = async (userId: string | undefined) => {
+export const getAccounts = async (userId: string) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts?userId=${userId}`, {
         method: 'GET',
     });

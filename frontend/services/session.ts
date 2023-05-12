@@ -1,6 +1,6 @@
 import { User } from "@/domain/User";
 
-export async function fetchSession(): Promise<User | undefined> {
+export async function fetchSession(): Promise<any> {
     try {
         const token = localStorage.getItem('session');
         if (token) {
