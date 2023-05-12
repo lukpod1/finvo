@@ -9,8 +9,8 @@ type SessionContextType = {
     session: User | undefined;
     balance: Balance;
     accounts: Account[];
-    getAccountsByUserId: (userId: string) => void;
-    updateBalance: (userId: string) => void;
+    getAccountsByUserId: (userId: string | undefined) => void;
+    updateBalance: (userId: string | undefined) => void;
 };
 
 export const SessionContext = createContext<SessionContextType>({} as SessionContextType);
@@ -38,7 +38,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         });
     }, [])
 
-    function updateBalance(userId: string) {
+    function updateBalance(userId: string | undefined) {
         getBalance(userId).then((newBalance) => {
             if (!isEqual(newBalance, prevBalanceRef.current)) {
                 prevBalanceRef.current = newBalance;
@@ -51,7 +51,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
         }
     }
 
-    function getAccountsByUserId(userId: string) {
+    function getAccountsByUserId(userId: string | undefined) {
         getAccounts(userId).then(accounts => {
             setAccounts(accounts);
         })
