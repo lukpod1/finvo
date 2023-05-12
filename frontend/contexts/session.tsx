@@ -4,10 +4,9 @@ import { fetchSession } from "@/services/session";
 import { getBalance, getAccounts } from "@/services/accounts";
 import { Balance } from "@/domain/Balance";
 import { Account } from "@/domain/Account";
-import { promises } from "dns";
 
 type SessionContextType = {
-    session: User;
+    session: User | undefined;
     balance: Balance;
     accounts: Account[];
     getAccountsByUserId: (userId: string) => void;
@@ -23,16 +22,16 @@ type SessionProviderProps = {
 };
 
 export const SessionProvider = ({ children }: SessionProviderProps) => {
-    const [session, setSession] = useState<User>({} as User);
+    const [session, setSession] = useState<User | undefined>({} as User);
     const [accounts, setAccounts] = useState<Account[]>([]);
-    const [currentBalance, setCurrentBalance] = useState<number>(0);
+    //const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [balance, setBalance] = useState<Balance>({} as Balance);
     const prevBalanceRef = useRef<Balance>();
 
     useEffect(() => {
         fetchSession().then(response => {
             setSession(response);
-            if (response.id) {
+            if (response?.id) {
                 updateBalance(response.id);
                 getAccountsByUserId(response.id);
             }
