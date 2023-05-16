@@ -62,23 +62,23 @@ export class Account {
         }
     }
 
-    async updateAmount(balance: number): Promise<void> {
+    static async updateBalance(amountDifference: number, id: string, userId: string): Promise<void> {
         try {
             await Account.client.send(new UpdateItemCommand({
                 TableName: Table.accounts.tableName,
                 Key: {
-                    id: { S: this.id },
-                    userId: { S: this.userId },
+                    id: { S: id },
+                    userId: { S: userId },
                 },
-                UpdateExpression: "SET #balance = :balance",
+                UpdateExpression: "SET balance = balance + :amountDifference",
                 ExpressionAttributeValues: {
-                    ":balance": { N: balance.toString() },
+                    ":amountDifference": { N: amountDifference.toString() },
                 },
                 ReturnValues: "ALL_NEW",
             }));
-            console.log(`Account ${this.id} updated successfully`);
+            console.log(`Account ${id} updated successfully`);
         } catch (error) {
-            throw new AccountUpdateError(`Error updating account ${this.id}`, this.id);
+            throw new AccountUpdateError(`Error updating account ${id}`, id);
         }
     }
 

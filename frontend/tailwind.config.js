@@ -11,4 +11,11 @@ module.exports = {
   daisyui: {
     themes: ["black"],
   },
+  theme: {
+    extend: {
+      flex: {
+        2: "1 1 100%",
+      }
+    }
+  }
 }

@@ -6,7 +6,7 @@ export default function Accounts(props: any) {
 
     return (
         <Layout>
-            <div className="flex flex-row flex-wrap justify-between container mx-auto px-4 py-8">
+            <div className="flex flex-row flex-wrap justify-between container mx-auto py-4">
                 <div className="flex flex-wrap w-3/4">
                     <div className="font-sans text-center text-white transition-shadow bg-gray-900 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4 pointer-events-auto opacity-100">
                         <div className="font-sans text-center text-white pointer-events-auto py-4 pb-6">

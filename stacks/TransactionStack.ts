@@ -11,7 +11,9 @@ export function Transaction({ stack }: StackContext) {
             }
         },
         routes: {
+            "GET /transactions": "packages/functions/src/transactions/findAll.handler",
             "POST /transactions": "packages/functions/src/transactions/create.handler",
+            "PUT /transactions/{id}": "packages/functions/src/transactions/update.handler",
         },
     });
 
