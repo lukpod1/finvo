@@ -12,7 +12,7 @@ interface ModalProps {
   data?: any;
 }
 
-type ModalType = 'account' | 'income' | 'expense' | 'edit';
+export type ModalType = 'account' | 'income' | 'expense' | 'edit' | '';
 
 export default function Modal({ type, onClose, data }: ModalProps) {
   const router = useRouter();
