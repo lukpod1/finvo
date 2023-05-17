@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import Modal from "@/components/Modal";
+import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
 import { useState } from "react";
@@ -10,9 +10,9 @@ export default function Transactions(props: any) {
     const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [modalData, setModalData] = useState<any>(null);
     const [modalDeleteData, setModalDeleteData] = useState<any>(null);
-    const [type, setType] = useState('');
+    const [type, setType] = useState<ModalType>('');
 
-    const handleModalOpen = (type: string, data: any) => {
+    const handleModalOpen = (type: ModalType, data: any) => {
         setModalData(data);
         setType(type);
         setModalOpen(true);
