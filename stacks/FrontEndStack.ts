@@ -17,7 +17,7 @@ export function FrontEnd({ stack }: StackContext) {
             NEXT_PUBLIC_ACCOUNTS_API_URL: accountStack.accountsApi.url,
             NEXT_PUBLIC_TRANSACTIONS_API_URL: transactionStack.transactionApi.url,
         },
-        //buildCommand: "npx open-next@0.7.0 build",
+        buildCommand: "npx open-next@1.2.1 build",
     });
 
     site.attachPermissions([
