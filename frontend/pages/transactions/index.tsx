@@ -1,22 +1,26 @@
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
 import { useState } from "react";
 
 export default function Transactions(props: any) {
     const { balance, transactions } = useSession();
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [modalData, setModalData] = useState<any>(null);
+    const [modalDeleteData, setModalDeleteData] = useState<any>(null);
     const [type, setType] = useState('');
 
     const handleModalOpen = (type: string, data: any) => {
-        console.log('openning modal...')
         setModalData(data);
         setType(type);
         setModalOpen(true);
-        console.log('modalData', modalData)
-        console.log('type', type)
-        console.log('isModalOpen', isModalOpen)
+    }
+
+    const handleOpenModalDelete = (transaction: any) => {
+        setModalDeleteOpen(true);
+        setModalDeleteData(transaction);
     }
 
     const formatDate = (date: string) => {
@@ -58,10 +62,11 @@ export default function Transactions(props: any) {
                                                     Edit
                                                 </label>
 
-                                                <button className="btn btn-secondary"
-                                                    onClick={() => { }}>
+                                                <label htmlFor="modal-delete"
+                                                    className="btn btn-secondary"
+                                                    onClick={() => handleOpenModalDelete(transaction)}>
                                                     Delete
-                                                </button>
+                                                </label>
                                             </td>
                                         </tr>
                                     ))}
@@ -110,6 +115,13 @@ export default function Transactions(props: any) {
                     type={type}
                     onClose={() => setModalOpen(false)}
                     data={modalData}
+                />
+            )}
+
+            {isModalDeleteOpen && (
+                <ModalDelete
+                    data={modalDeleteData}
+                    onClose={() => setModalDeleteOpen(false)}
                 />
             )}
         </Layout>

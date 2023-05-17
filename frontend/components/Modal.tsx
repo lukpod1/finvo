@@ -7,10 +7,12 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ModalProps {
-  type: string;
+  type: ModalType;
   onClose: () => void;
   data?: any;
 }
+
+type ModalType = 'account' | 'income' | 'expense' | 'edit';
 
 export default function Modal({ type, onClose, data }: ModalProps) {
   const router = useRouter();
@@ -38,7 +40,22 @@ export default function Modal({ type, onClose, data }: ModalProps) {
   }, [data]);
 
   const onSubmit = (): void => {
-    mutation.mutate(formData);
+    if (type === 'account') {
+      const accountData = {
+        ...formData,
+        userId: session.id,
+      }
+
+      mutation.mutate(accountData);
+    } else {
+      const transactionData = {
+        ...formData,
+        type: type,
+        userId: session.id,
+      }
+
+      mutation.mutate(transactionData);
+    }
   }
 
   return (
@@ -69,7 +86,7 @@ export default function Modal({ type, onClose, data }: ModalProps) {
                       type="number" 
                       className="form-input mt-1 block w-full" 
                       {...register("balance", { required: true })} 
-                      value={formData.balance || 0}
+                      value={formData.balance}
                       onChange={(e) => setFormData({ ...formData, balance: e.target.value })}
                     />
                   </div>
@@ -84,7 +101,7 @@ export default function Modal({ type, onClose, data }: ModalProps) {
                       type="number" 
                       className="form-input mt-1 block w-full" 
                       {...register("amount", { required: true })}
-                      value={formData.amount || 0}
+                      value={formData.amount}
                       onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     />
                   </div>

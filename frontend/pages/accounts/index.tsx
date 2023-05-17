@@ -30,7 +30,7 @@ export default function Accounts(props: any) {
                                             <label tabIndex={0} className="btn btn-ghost m-1 rounded-lg">:</label>
                                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-xl w-52">
                                                 <label htmlFor="my-modal"><li><a >Edit</a></li></label>
-                                                <label htmlFor="my-modal"><li><a >Delete</a></li></label>
+                                                <label htmlFor="modal-delete"><li><a >Delete</a></li></label>
                                             </ul>
                                         </div>
                                     </div>

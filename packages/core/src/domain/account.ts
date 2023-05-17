@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
+import { DeleteItemCommand, DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
 
@@ -10,13 +10,14 @@ export class Account {
 
     static client = new DynamoDBClient({});
 
-    constructor(id: string, balance: number, name: string, userId: string) {
-        if (!id || !balance || !name || !userId) {
+    constructor(id: string, name: string, userId: string, balance?: number) {
+        console.log(id, balance, name, userId)
+        if (!id || !name || !userId) {
             throw new Error('Missing required parameter');
         }
 
         this.id = id;
-        this.balance = balance;
+        this.balance = balance || 0;
         this.name = name;
         this.userId = userId;
     }
@@ -53,9 +54,9 @@ export class Account {
 
             return new Account(
                 result.Item.id.S ?? "",
-                Number(result.Item.balance.N),
                 result.Item.name.S ?? "",
                 result.Item.userId.S ?? "",
+                Number(result.Item.balance.N),
             );
         } catch (error) {
             throw new AccountGetError(`Error getting account ${id} for user ${userId}: ${error}`, id)
@@ -92,10 +93,57 @@ export class Account {
 
         await account.save();
     }
+
+    async updateName(name: string): Promise<void> {
+        try {
+            await Account.client.send(new UpdateItemCommand({
+                TableName: Table.accounts.tableName,
+                Key: {
+                    id: { S: this.id },
+                    userId: { S: this.userId },
+                },
+                UpdateExpression: "SET #name = :name",
+                ExpressionAttributeNames: {
+                    "#name": "name",
+                },
+                ExpressionAttributeValues: {
+                    ":name": { S: name },
+                },
+            }));
+            console.log(`Account ${this.id} updated successfully`);
+        } catch (error) {
+            throw new AccountUpdateError(`Error updating account ${this.id}`, this.id);
+        }
+    }
+
+    async delete(): Promise<void> {
+        try {
+
+            const transactions = await Transaction.getTransactionsByAccountId(this.id);
+
+            await Promise.all(
+                transactions.map(async (transaction) => {
+                    await transaction.delete();
+                })
+            );
+
+            await Account.client.send(new DeleteItemCommand({
+                TableName: Table.accounts.tableName,
+                Key: {
+                    id: { S: this.id },
+                    userId: { S: this.userId },
+                },
+            }));
+            
+            console.log(`Account ${this.id} deleted successfully`);
+        } catch (error) {
+            throw new AccountUpdateError(`Error deleting account ${this.id}`, this.id);
+        }
+    }
 }
 
 export type AccountDTO = {
-    balance: number;
+    balance?: number;
     name: string;
     userId: string;
 }

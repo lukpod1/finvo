@@ -43,8 +43,6 @@ async function getTransactions(userId: string | undefined) {
         ReturnConsumedCapacity: "TOTAL",
     });
 
-    console.log("result", result);
-
     const totalIncomes = result.Items?.reduce((total, item) => {
         if (item.type.S === "income" && !Number.isNaN(Number(item.amount.N))) {
             return total + Number(item.amount.N);

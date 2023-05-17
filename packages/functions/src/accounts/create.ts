@@ -4,7 +4,7 @@ import { ApiHandler, useJsonBody } from "sst/node/api";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-    balance: yup.number().required(),
+    balance: yup.number(),
     name: yup.string().required(),
     userId: yup.string().required(),
 });
@@ -12,7 +12,8 @@ const schema = yup.object().shape({
 export const handler = ApiHandler(async () => {
     try {
         const { userId, balance, name }: AccountDTO = await schema.validate(useJsonBody());
-        const account = new Account(randomUUID(), balance, name, userId);
+        const account = new Account(randomUUID(), name, userId,  balance!);
+        console.log(account);
 
         await account.save();
 

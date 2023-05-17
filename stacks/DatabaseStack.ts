@@ -42,6 +42,10 @@ export function Database({ stack }: StackContext) {
       userIdIndex: {
         partitionKey: "userId",
         sortKey: "id",
+      },
+      AccountIdIndex: {
+        partitionKey: "accountId",
+        sortKey: "id",
       }
     }
   });

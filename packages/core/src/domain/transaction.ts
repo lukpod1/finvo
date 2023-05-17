@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, PutItemCommandInput } from "@aws-sdk/client-dynamodb";
+import { DeleteItemCommand, DeleteItemCommandInput, DynamoDBClient, GetItemCommand, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 
 export class Transaction {
@@ -94,6 +94,58 @@ export class Transaction {
             throw new TransactionSaveError(`Error updating account ${this.id}`, this.id);
         }
     }
+
+    async delete(): Promise<void> {
+        // implement this method
+        const params: DeleteItemCommandInput = {
+            TableName: Table.transactions.tableName,
+            Key: {
+                id: { S: this.id },
+                accountId: { S: this.accountId },
+            },
+            ReturnValues: "ALL_OLD",
+        };
+
+        try {
+            const command = new DeleteItemCommand(params);
+            await Transaction.client.send(command);
+            console.log(`Transaction ${this.id} deleted successfully`);
+        }   catch (error) {
+            throw new TransactionSaveError(`Error deleting account ${this.id}`, this.id);
+        }
+    }
+
+    static async getTransactionsByAccountId(accountId: string): Promise<Transaction[]> {
+        const params = {
+            TableName: Table.transactions.tableName,
+            IndexName: "accountIdIndex",
+            KeyConditionExpression: "accountId = :accountId",
+            ExpressionAttributeValues: {
+                ":accountId": { S: accountId },
+            },
+        };
+
+        try {
+            const data = await Transaction.client.send(new QueryCommand(params));
+            const transactions: Transaction[] = [];
+            data.Items?.forEach((item) => {
+                transactions.push(new Transaction(
+                    item.id.S ?? "",
+                    Number(item.amount.N) ?? 0,
+                    item.date.S ?? "",
+                    item.description.S ?? "",
+                    item.type?.S as TransactionType ?? "",
+                    item.accountId.S ?? "",
+                    item.userId.S ?? "",
+                ));
+            }
+            );
+            return transactions;
+        } catch (error) {
+            throw new TransactionSaveError(`Error getting transactions for account ${accountId}`, accountId);
+        }
+    }
+
 }
 
 export type TransactionDTO = {
