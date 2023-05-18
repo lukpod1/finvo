@@ -2,12 +2,12 @@ import { Api, StackContext, use } from "sst/constructs";
 import { Database } from "./DatabaseStack";
 
 export function Accounts({ stack }: StackContext) {
-    const { dbAccounts } = use(Database)
+    const { dbAccounts, dbTransactions } = use(Database)
 
     const accountsApi = new Api(stack, "accountsApi", {
         defaults: {
             function: {
-                bind: [dbAccounts ]
+                bind: [dbAccounts, dbTransactions]
             }
         },
         routes: {

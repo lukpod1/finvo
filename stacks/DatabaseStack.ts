@@ -27,30 +27,30 @@ export function Database({ stack }: StackContext) {
     }
   });
 
-  // const dbTransactions = new Table(stack, "transactions", {
-  //   fields: {
-  //     id: "string",
-  //     amount: "number",
-  //     date: "string",
-  //     description: "string",
-  //     type: "string",
-  //     accountId: "string",
-  //     userId: "string",
-  //   },
-  //   primaryIndex: { partitionKey: "id", sortKey: "accountId" },
-  //   globalIndexes: {
-  //     userIdIndex: {
-  //       partitionKey: "userId",
-  //       sortKey: "id",
-  //     },
-  //     accountIdIndex: {
-  //       partitionKey: "accountId",
-  //       sortKey: "id",
-  //     }
-  //   }
-  // });
+  const dbTransactions = new Table(stack, "transactions", {
+    fields: {
+      id: "string",
+      amount: "number",
+      date: "string",
+      description: "string",
+      type: "string",
+      accountId: "string",
+      userId: "string",
+    },
+    primaryIndex: { partitionKey: "id", sortKey: "accountId" },
+    globalIndexes: {
+      userIdIndex: {
+        partitionKey: "userId",
+        sortKey: "id",
+      },
+      accountIdIndex: {
+        partitionKey: "accountId",
+        sortKey: "id",
+      }
+    }
+  });
 
   return {
-    dbUsers, dbAccounts
+    dbUsers, dbAccounts, dbTransactions
   }
 }
