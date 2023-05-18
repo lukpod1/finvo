@@ -90,7 +90,7 @@ export class Transaction {
             const command = new PutItemCommand(params);
             await Transaction.client.send(command);
             console.log(`Transaction ${this.id} updated successfully`);
-        }   catch (error) {
+        } catch (error) {
             throw new TransactionSaveError(`Error updating account ${this.id}`, this.id);
         }
     }
@@ -110,12 +110,13 @@ export class Transaction {
             const command = new DeleteItemCommand(params);
             await Transaction.client.send(command);
             console.log(`Transaction ${this.id} deleted successfully`);
-        }   catch (error) {
+        } catch (error) {
             throw new TransactionSaveError(`Error deleting account ${this.id}`, this.id);
         }
     }
 
     static async getTransactionsByAccountId(accountId: string): Promise<Transaction[]> {
+        console.log(`Getting transactions for account ${accountId}`);
         const params = {
             TableName: Table.transactions.tableName,
             IndexName: "accountIdIndex",
@@ -124,6 +125,8 @@ export class Transaction {
                 ":accountId": { S: accountId },
             },
         };
+
+        console.log(`Params: ${JSON.stringify(params)}`);
 
         try {
             const data = await Transaction.client.send(new QueryCommand(params));
@@ -140,6 +143,8 @@ export class Transaction {
                 ));
             }
             );
+
+            console.log(`Found ${transactions.length} transactions for account ${accountId}`);
             return transactions;
         } catch (error) {
             throw new TransactionSaveError(`Error getting transactions for account ${accountId}`, accountId);

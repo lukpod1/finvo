@@ -15,7 +15,7 @@ export function Accounts({ stack }: StackContext) {
             "POST /accounts": "packages/functions/src/accounts/create.handler",
             "GET /accounts/balance": "packages/functions/src/accounts/find.handler",
             "PUT /accounts/{id}": "packages/functions/src/accounts/update.handler",
-            "DELETE /accounts/{id}": "packages/functions/src/accounts/delete.handler",
+            "DELETE /accounts/{id}/{userId}": "packages/functions/src/accounts/delete.handler",
         },
     });
 

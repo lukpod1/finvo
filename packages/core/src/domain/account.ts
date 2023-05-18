@@ -1,6 +1,7 @@
 import { DeleteItemCommand, DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
+import { Console } from "console";
 
 export class Account {
     id: string;
@@ -121,11 +122,17 @@ export class Account {
 
             const transactions = await Transaction.getTransactionsByAccountId(this.id);
 
-            await Promise.all(
-                transactions.map(async (transaction) => {
-                    await transaction.delete();
-                })
-            );
+            if (transactions.length > 0) {
+                console.log(`Deleting ${transactions.length} transactions for account ${this.id}`);
+                await Promise.all(
+                    transactions.map(async (transaction) => {
+                        await transaction.delete();
+                    })
+                );
+            } else {
+                console.log(`No transactions to delete for account ${this.id}`);
+            }
+
 
             await Account.client.send(new DeleteItemCommand({
                 TableName: Table.accounts.tableName,

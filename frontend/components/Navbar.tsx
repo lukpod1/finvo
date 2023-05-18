@@ -51,7 +51,7 @@ export default function Navbar() {
                             <label htmlFor="my-modal"><li><a onClick={() => handleModalOpen("expense")}>Expense</a></li></label>
                         </ul>
                     </div>
-                    {type && <Modal type={type} onClose={() => setType('')} />}
+                    {type && <Modal action="create" type={type} onClose={() => setType('')} />}
                     <ul className="menu menu-horizontal px-1">
                         <li>{session?.name}</li>
                     </ul>

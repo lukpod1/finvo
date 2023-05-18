@@ -22,7 +22,11 @@ export const handler = ApiHandler(async () => {
 
         await transaction.delete();
 
-        await Account.updateAccountBalance(transaction);
+        if (transaction.type === "income") {
+            await Account.updateBalance(-transaction.amount, accountId!, transaction.userId);
+        } else {
+            await Account.updateBalance(transaction.amount, accountId!, transaction.userId);
+        }
 
         return {
             statusCode: 200,

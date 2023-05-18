@@ -1,5 +1,5 @@
 import { SessionContext, useSession } from "@/contexts/session";
-import { createAccount, getBalance } from "@/services/accounts";
+import { createAccount, getBalance, updateAccount } from "@/services/accounts";
 import { createTransaction, updateTransaction } from "@/services/transactions";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -8,25 +8,33 @@ import { useForm } from "react-hook-form";
 
 interface ModalProps {
   type: ModalType;
+  action: ModalAction;
   onClose: () => void;
   data?: any;
 }
 
-export type ModalType = 'account' | 'income' | 'expense' | 'edit' | '';
+export type ModalType = 'account' | 'income' | 'expense' | '';
+export type ModalAction = 'create' | 'edit' ;
 
-export default function Modal({ type, onClose, data }: ModalProps) {
+export default function Modal({ type, action, onClose, data }: ModalProps) {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
   const { session, accounts, updateBalance, getAccountsByUserId, getTransactionsByUserId } = useSession();
   const [formData, setFormData] = useState<any>(data || {});
   
   const mutation = useMutation(
-    type === 'account' ? createAccount : type === 'edit' ? updateTransaction : createTransaction,
+    (formData) => {
+      if (type === "account") {
+        return action === "create" ? createAccount(formData) : updateAccount(formData);
+      } else {
+        return action === "create" ? createTransaction(formData) : updateTransaction(formData);
+      }
+    },
     {
       onSuccess: () => {
         reset();
         onClose();
-        if (type === 'account' || type === 'income' || type === 'expense' || type === 'edit') {
+        if (type === 'account' || type === 'income' || type === 'expense' || action === 'edit') {
           updateBalance(session?.id);
           getAccountsByUserId(session?.id);
           getTransactionsByUserId(session?.id);
@@ -40,22 +48,33 @@ export default function Modal({ type, onClose, data }: ModalProps) {
   }, [data]);
 
   const onSubmit = (): void => {
-    if (type === 'account') {
-      const accountData = {
-        ...formData,
-        userId: session.id,
-      }
+    const inputData = {
+      ...formData,
+      userId: session.id,
+    };
 
-      mutation.mutate(accountData);
-    } else {
-      const transactionData = {
-        ...formData,
-        type: type,
-        userId: session.id,
-      }
+    mutation.mutate(inputData);
+    // if (type === 'account') {
+    //   const accountData = {
+    //     ...formData,
+    //     userId: session.id,
+    //   }
 
-      mutation.mutate(transactionData);
-    }
+    //   mutation.mutate(accountData);
+    // } else {
+    //   const transactionData = {
+    //     ...formData,
+    //     type: type,
+    //     userId: session.id,
+    //   }
+
+    //   mutation.mutate(transactionData);
+    // }
+  }
+
+  const handleCancel = (): void => {
+    onClose();
+    setFormData({});
   }
 
   return (
@@ -63,8 +82,8 @@ export default function Modal({ type, onClose, data }: ModalProps) {
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box relative">
-          <label htmlFor="my-modal" className="btn btn-sm btn-circle absolute right-2 top-2">X</label>
-          <h3 className="text-lg font-bold">{type === 'edit' ? 'Edit' : 'Create'} {type}</h3>
+          <label htmlFor="my-modal" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleCancel}>X</label>
+          <h3 className="text-lg font-bold">{action === 'edit' ? 'Edit' : 'Create'} {type}</h3>
           <div className="p-4">
             <form onSubmit={handleSubmit(onSubmit)}>
               <input type="hidden" value={session.id} {...register("userId", { required: true })} />
@@ -83,6 +102,7 @@ export default function Modal({ type, onClose, data }: ModalProps) {
                   <div className="mb-4">
                     <label className="text-gray-700">Balance</label>
                     <input 
+                      disabled={action === 'edit'}
                       type="number" 
                       className="form-input mt-1 block w-full" 
                       {...register("balance", { required: true })} 
@@ -142,8 +162,8 @@ export default function Modal({ type, onClose, data }: ModalProps) {
                 </>
               )}
               <div className="flex justify-end">
-                <button type="submit" className="btn btn-primary mr-2">{type === 'edit' ? 'Edit' : 'Create'} {type}</button>
-                <label htmlFor="my-modal" className="btn btn-secondary">Cancel</label>
+                <button type="submit" className="btn btn-primary mr-2">{action === 'edit' ? 'Edit' : 'Create'} {type}</button>
+                <label htmlFor="my-modal" className="btn btn-secondary" onClick={handleCancel}>Cancel</label>
               </div>
             </form>
           </div>

@@ -41,7 +41,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
                 getTransactionsByUserId(response.id);
             }
         });
-    }, [])
+    }, []);
 
     function updateBalance(userId: string) {
         getBalance(userId).then((newBalance) => {

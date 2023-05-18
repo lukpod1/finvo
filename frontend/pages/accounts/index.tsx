@@ -1,26 +1,65 @@
 import Layout from "@/components/Layout";
+import Modal, { ModalType } from "@/components/Modal";
+import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
+import { useState } from "react";
 
 export default function Accounts(props: any) {
     const { balance, accounts } = useSession();
+    const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
+    const [isModalEditOpen, setModalEditOpen] = useState(false);
+    const [isModalCreateOpen, setModalCreateOpen] = useState(false);
+    const [modalDeleteData, setModalDeleteData] = useState<any>(null);
+    const [modalData, setModalData] = useState<any>(null);
+    const [type, setType] = useState<ModalType>('');
+
+    const handleModalOpen = (type: ModalType) => {
+        setType(type);
+        setModalCreateOpen(true);
+    }
+
+    const handleModalEditOpen = (type: ModalType, data: any) => {
+        setModalData(data);
+        setType(type);
+        setModalEditOpen(true);
+
+        console.log(data)
+    }
+
+    const handleOpenModalDelete = (account: any) => {
+        setModalDeleteOpen(true);
+        setModalDeleteData(account);
+    }
+
+    const handleOpenModalExpense = (accountId: string) => {
+        setModalData({ accountId });
+        setType('expense');
+        setModalEditOpen(true);
+
+        console.log(modalData);
+    }
 
     return (
         <Layout>
             <div className="flex flex-row flex-wrap justify-between container mx-auto py-4">
                 <div className="flex flex-wrap w-3/4">
-                    <div className="font-sans text-center text-white transition-shadow bg-gray-900 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4 pointer-events-auto opacity-100">
-                        <div className="font-sans text-center text-white pointer-events-auto py-4 pb-6">
-                            <div className="h-52 flex flex-col items-center justify-center cursor-pointer text-white font-sans text-center">
-                                <div className="flex items-center justify-center w-16 h-16 rounded-full border-2 border-purple-600 cursor-pointer">
-                                    +
+                    <label htmlFor="my-modal" onClick={() => handleModalOpen('account')}>
+                        <div className="font-sans text-center bg-base-300 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4">
+                            <div className="font-sans text-center py-4 pb-6">
+                                <div className="h-52 flex flex-col items-center justify-center cursor-pointer group">
+                                    <div className="flex items-center justify-center w-16 h-16 rounded-full border-2 border-purple-600 cursor-pointer group-hover:bg-purple-600 group-hover:text-white">
+                                        +
+                                    </div>
+                                    <h6 className="text-center cursor-pointer m-0 font-sans font-medium leading-relaxed text-lg text-indigo-500 mt-4 group-hover:text-white">
+                                        New Account
+                                    </h6>
                                 </div>
-                                <h6 className="text-center pointer-events-auto cursor-pointer m-0 font-sans font-medium leading-relaxed text-lg text-indigo-500 mt-4">New Account</h6>
                             </div>
                         </div>
-                    </div>
-                    {accounts?.map((account) => (
+                    </label>
+                    {accounts?.map((account: any) => (
                         <>
-                            <div className="font-sans text-center text-white transition-shadow bg-gray-900 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4 pointer-events-auto opacity-100">
+                            <div className="font-sans text-center text-white transition-shadow bg-base-300 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4 pointer-events-auto opacity-100">
                                 <div className="h-4/5 text-center text-white pointer-events-auto p-4">
                                     <div className="font-sans text-center text-white pointer-events-auto flex flex-row justify-between items-center">
                                         <div className="font-sans text-center text-white pointer-events-auto flex flex-row items-center cursor-pointer flex-1">
@@ -29,8 +68,8 @@ export default function Accounts(props: any) {
                                         <div className="dropdown dropdown-end">
                                             <label tabIndex={0} className="btn btn-ghost m-1 rounded-lg">:</label>
                                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-xl w-52">
-                                                <label htmlFor="my-modal"><li><a >Edit</a></li></label>
-                                                <label htmlFor="modal-delete"><li><a >Delete</a></li></label>
+                                                <label htmlFor="my-modal"><li><a onClick={() => handleModalEditOpen('account', account)}>Edit</a></li></label>
+                                                <label htmlFor="modal-delete"><li><a onClick={() => handleOpenModalDelete(account)}>Delete</a></li></label>
                                             </ul>
                                         </div>
                                     </div>
@@ -42,16 +81,16 @@ export default function Accounts(props: any) {
                                     </div>
                                 </div>
                                 <div className="h-1/5 flex font-sans text-center items-center justify-end px-4 text-white pointer-events-auto border-t border-solid border-opacity-5 border-white">
-                                    <button>
+                                    <label htmlFor="my-modal" onClick={() => handleOpenModalExpense(account.id)}>
                                         <span className="cursor-pointer select-none leading-tight uppercase text-lg text-purple-600 w-full inline-flex items-center font-sans">Add Expense</span>
-                                    </button>
+                                    </label>
                                 </div>
                             </div>
                         </>
                     ))}
                 </div>
                 <div className="block w-1/4">
-                    <div className="w-full bg-gray-900 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg p-2 cursor-default">
+                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg p-2 cursor-default">
                         <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
                             <div className="max-w-md mr-5">
                                 <div className="flex flex-row items-center">
@@ -63,6 +102,32 @@ export default function Accounts(props: any) {
                     </div>
                 </div>
             </div>
+
+            {isModalCreateOpen && (
+                <Modal
+                    action="create"
+                    type={type}
+                    onClose={() => setModalCreateOpen(false)}
+                />
+            )}
+
+            {isModalEditOpen && (
+                <Modal
+                    action="edit"
+                    type={type}
+                    onClose={() => setModalEditOpen(false)}
+                    data={modalData}
+                />
+            )}
+
+            {isModalDeleteOpen && (
+                <ModalDelete
+                    type="account"
+                    data={modalDeleteData}
+                    onClose={() => setModalDeleteOpen(false)}
+                />
+            )}
+
         </Layout>
     )
 }

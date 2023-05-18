@@ -16,6 +16,8 @@ export default function Transactions(props: any) {
         setModalData(data);
         setType(type);
         setModalOpen(true);
+
+        console.log(data);
     }
 
     const handleOpenModalDelete = (transaction: any) => {
@@ -57,7 +59,7 @@ export default function Transactions(props: any) {
 
                                                 <label htmlFor="my-modal"
                                                     className="btn btn-primary mr-2"
-                                                    onClick={() => handleModalOpen('edit', transaction)}
+                                                    onClick={() => handleModalOpen('expense', transaction)}
                                                 >
                                                     Edit
                                                 </label>
@@ -76,7 +78,7 @@ export default function Transactions(props: any) {
                     </div>
                 </div>
                 <div className="block w-1/5">
-                    <div className="w-full bg-gray-900 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
+                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
                         <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
                             <div className="max-w-md mr-5">
                                 <div className="flex flex-row items-center">
@@ -87,7 +89,7 @@ export default function Transactions(props: any) {
                         </div>
                     </div>
 
-                    <div className="w-full bg-gray-900 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
+                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
                         <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
                             <div className="max-w-md mr-5">
                                 <div className="flex flex-row items-center">
@@ -98,7 +100,7 @@ export default function Transactions(props: any) {
                         </div>
                     </div>
 
-                    <div className="w-full bg-gray-900 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg cursor-default">
+                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg cursor-default">
                         <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
                             <div className="max-w-md mr-5">
                                 <div className="flex flex-row items-center">
@@ -112,6 +114,7 @@ export default function Transactions(props: any) {
             </div>
             {isModalOpen && (
                 <Modal
+                    action="edit"
                     type={type}
                     onClose={() => setModalOpen(false)}
                     data={modalData}
@@ -120,6 +123,7 @@ export default function Transactions(props: any) {
 
             {isModalDeleteOpen && (
                 <ModalDelete
+                    type="transaction"
                     data={modalDeleteData}
                     onClose={() => setModalDeleteOpen(false)}
                 />

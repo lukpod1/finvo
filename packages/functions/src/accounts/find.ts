@@ -22,9 +22,9 @@ export async function getAccounts(userId: string | undefined) {
     return result.Items?.map((item) => {
         return new Account(
             item.id.S ?? "",
-            Number(item.balance.N) ?? 0,
             item.name.S ?? "",
             item.userId.S ?? "",
+            Number(item.balance.N) ?? 0,
         );
     });
 }

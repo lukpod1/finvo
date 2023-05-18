@@ -43,7 +43,7 @@ export function Database({ stack }: StackContext) {
         partitionKey: "userId",
         sortKey: "id",
       },
-      AccountIdIndex: {
+      accountIdIndex: {
         partitionKey: "accountId",
         sortKey: "id",
       }
