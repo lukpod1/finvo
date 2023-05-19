@@ -6,15 +6,17 @@ import { Balance } from "@/domain/Balance";
 import { Account } from "@/domain/Account";
 import { Transaction, TransactionDTO } from "@/domain/Transaction";
 import { getTransactions } from "@/services/transactions";
+import Loading from "@/components/Loading";
 
 type SessionContextType = {
     session: User;
     balance: Balance;
     accounts: Account[];
-    transactions: TransactionDTO[];
+    transactions: Transaction[];
     getAccountsByUserId: (userId: string) => void;
     getTransactionsByUserId: (userId: string) => void;
     updateBalance: (userId: string) => void;
+    fetchSessionData: () => void;
 };
 
 export const SessionContext = createContext<SessionContextType>({} as SessionContextType);
@@ -28,11 +30,15 @@ type SessionProviderProps = {
 export const SessionProvider = ({ children }: SessionProviderProps) => {
     const [session, setSession] = useState<User>({} as User);
     const [accounts, setAccounts] = useState<Account[]>([]);
-    const [transactions, setTransactions] = useState<TransactionDTO[]>([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [balance, setBalance] = useState<Balance>({} as Balance);
     const prevBalanceRef = useRef<Balance>();
 
     useEffect(() => {
+        fetchSessionData();
+    }, []);
+
+    function fetchSessionData() {
         fetchSession().then(response => {
             setSession(response);
             if (response?.id) {
@@ -41,7 +47,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
                 getTransactionsByUserId(response.id);
             }
         });
-    }, []);
+    }
 
     function updateBalance(userId: string) {
         getBalance(userId).then((newBalance) => {
@@ -63,19 +69,11 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
     }
 
     function getTransactionsByUserId(userId: string) {
-        getTransactions(userId).then(transactions => {
-            const transactionsWithAccountNames = transactions.map(transaction => {
-                const account = accounts.find(account => account.id === transaction.accountId);
-                const accountName = account ? account.name : "";
-                return { ...transaction, accountName };
-            });
-            setTransactions(transactionsWithAccountNames);
-        })
+        getTransactions(userId).then(transactions => setTransactions(transactions));
     }
 
-
     return (
-        <SessionContext.Provider value={{ session, balance, accounts, transactions, updateBalance, getAccountsByUserId, getTransactionsByUserId }}>
+        <SessionContext.Provider value={{ session, balance, accounts, transactions, updateBalance, getAccountsByUserId, getTransactionsByUserId, fetchSessionData }}>
             {children}
         </SessionContext.Provider>
     )

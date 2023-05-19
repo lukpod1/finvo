@@ -2,15 +2,17 @@ import Layout from "@/components/Layout";
 import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
-import { useState } from "react";
+import { TransactionDTO } from "@/domain/Transaction";
+import { use, useEffect, useState } from "react";
 
 export default function Transactions(props: any) {
-    const { balance, transactions } = useSession();
+    const { balance, transactions, accounts } = useSession();
     const [isModalOpen, setModalOpen] = useState(false);
     const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [modalData, setModalData] = useState<any>(null);
     const [modalDeleteData, setModalDeleteData] = useState<any>(null);
     const [type, setType] = useState<ModalType>('');
+    const [transactionsData, setTransactionsData] = useState<TransactionDTO[]>([]);
 
     const handleModalOpen = (type: ModalType, data: any) => {
         setModalData(data);
@@ -29,6 +31,16 @@ export default function Transactions(props: any) {
         const formattedDate = new Date(date).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
         return formattedDate;
     }
+
+    useEffect(() => {
+        const transactionsWithAccountNames = transactions.map(transaction => {
+            const account = accounts.find(account => account.id === transaction.accountId);
+            const accountName = account ? account.name : "";
+            return { ...transaction, accountName };
+        });
+        setTransactionsData(transactionsWithAccountNames);
+    }, []);
+    
     return (
         <Layout>
             <div className="flex flex-row flex-wrap justify-between container mx-auto py-4">
@@ -47,7 +59,7 @@ export default function Transactions(props: any) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {transactions?.map((transaction: any) => (
+                                    {transactionsData?.map((transaction: any) => (
                                         <tr key={transaction.id}>
                                             <td>{formatDate(transaction.date)}</td>
                                             <td>{transaction.description}</td>
