@@ -48,28 +48,22 @@ export default function Modal({ type, action, onClose, data }: ModalProps) {
   }, [data]);
 
   const onSubmit = (): void => {
-    const inputData = {
-      ...formData,
-      userId: session.id,
-    };
+    if (type === 'account') {
+      const accountData = {
+        ...formData,
+        userId: session.id,
+      }
 
-    mutation.mutate(inputData);
-    // if (type === 'account') {
-    //   const accountData = {
-    //     ...formData,
-    //     userId: session.id,
-    //   }
+      mutation.mutate(accountData);
+    } else {
+      const transactionData = {
+        ...formData,
+        type: type,
+        userId: session.id,
+      }
 
-    //   mutation.mutate(accountData);
-    // } else {
-    //   const transactionData = {
-    //     ...formData,
-    //     type: type,
-    //     userId: session.id,
-    //   }
-
-    //   mutation.mutate(transactionData);
-    // }
+      mutation.mutate(transactionData);
+    }
   }
 
   const handleCancel = (): void => {
