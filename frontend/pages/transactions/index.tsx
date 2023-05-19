@@ -39,7 +39,7 @@ export default function Transactions(props: any) {
             return { ...transaction, accountName };
         });
         setTransactionsData(transactionsWithAccountNames);
-    }, []);
+    }, [accounts, transactions]);
     
     return (
         <Layout>
