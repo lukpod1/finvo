@@ -16,7 +16,6 @@ export default function DashBoard() {
   }, [router]);
 
   useEffect(() => {
-    console.log(session);
     if (session && session.id && session !== {} as User) {
       updateBalance(session.id);
     }
