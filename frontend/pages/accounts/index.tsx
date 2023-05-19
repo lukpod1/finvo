@@ -32,19 +32,17 @@ export default function Accounts(props: any) {
     }
 
     const handleOpenModalExpense = (accountId: string) => {
-        setModalData({ accountId });
+        setModalData({ accountId, accounts });
         setType('expense');
-        setModalEditOpen(true);
-
-        console.log(modalData);
+        setModalCreateOpen(true);
     }
 
     return (
         <Layout>
-            <div className="flex flex-row flex-wrap justify-between container mx-auto py-4">
-                <div className="flex flex-wrap w-3/4">
-                    <label htmlFor="my-modal" onClick={() => handleModalOpen('account')}>
-                        <div className="font-sans text-center bg-base-300 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4">
+            <div className="flex flex-wrap justify-between container mx-auto py-4">
+                <div className="flex flex-wrap w-full md:w-4/5">
+                    <div className="font-sans text-center bg-base-300 rounded-lg shadow-md overflow-hidden w-full md:w-96 h-60 m-2">
+                        <label htmlFor="my-modal" onClick={() => handleModalOpen('account')}>
                             <div className="font-sans text-center py-4 pb-6">
                                 <div className="h-52 flex flex-col items-center justify-center cursor-pointer group">
                                     <div className="flex items-center justify-center w-16 h-16 rounded-full border-2 border-purple-600 cursor-pointer group-hover:bg-purple-600 group-hover:text-white">
@@ -55,42 +53,42 @@ export default function Accounts(props: any) {
                                     </h6>
                                 </div>
                             </div>
-                        </div>
-                    </label>
+                        </label>
+                    </div>
                     {accounts?.map((account: any) => (
-                        <>
-                            <div className="font-sans text-center text-white transition-shadow bg-base-300 rounded-lg shadow-md overflow-hidden w-96 h-60 mr-4 mb-4 pointer-events-auto opacity-100">
-                                <div className="h-4/5 text-center text-white pointer-events-auto p-4">
-                                    <div className="font-sans text-center text-white pointer-events-auto flex flex-row justify-between items-center">
-                                        <div className="font-sans text-center text-white pointer-events-auto flex flex-row items-center cursor-pointer flex-1">
-                                            <h6 className="text-center pointer-events-auto cursor-pointer m-0 font-sans font-bold text-xl text-white opacity-70">{account.name}</h6>
-                                        </div>
-                                        <div className="dropdown dropdown-end">
-                                            <label tabIndex={0} className="btn btn-ghost m-1 rounded-lg">:</label>
-                                            <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-xl w-52">
-                                                <label htmlFor="my-modal"><li><a onClick={() => handleModalEditOpen('account', account)}>Edit</a></li></label>
-                                                <label htmlFor="modal-delete"><li><a onClick={() => handleOpenModalDelete(account)}>Delete</a></li></label>
-                                            </ul>
-                                        </div>
+                        <div
+                            key={account.id}
+                            className="font-sans text-center text-white transition-shadow bg-base-300 rounded-lg shadow-md overflow-hidden w-full md:w-96 h-60 m-2 pointer-events-auto opacity-100">
+                            <div className="h-4/5 text-center text-white pointer-events-auto p-4">
+                                <div className="font-sans text-center text-white pointer-events-auto flex flex-row justify-between items-center">
+                                    <div className="font-sans text-center text-white pointer-events-auto flex flex-row items-center cursor-pointer flex-1">
+                                        <h6 className="text-center pointer-events-auto cursor-pointer m-0 font-sans font-bold text-xl text-white opacity-70">{account.name}</h6>
                                     </div>
-                                    <div className="text-center pointer-events-auto cursor-pointer">
-                                        <div className="flex flex-row justify-between items-center mt-4">
-                                            <p className="text-white m-0 text-base font-medium leading-6">Current Balance</p>
-                                            <p className="m-0 text-base font-medium font-sans leading-1.5 text-green-500">R$ {account.balance}</p>
-                                        </div>
+                                    <div className="dropdown dropdown-end">
+                                        <label tabIndex={0} className="btn btn-ghost m-1 rounded-lg">:</label>
+                                        <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-xl w-52">
+                                            <label htmlFor="my-modal"><li><a onClick={() => handleModalEditOpen('account', account)}>Edit</a></li></label>
+                                            <label htmlFor="modal-delete"><li><a onClick={() => handleOpenModalDelete(account)}>Delete</a></li></label>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div className="h-1/5 flex font-sans text-center items-center justify-end px-4 text-white pointer-events-auto border-t border-solid border-opacity-5 border-white">
-                                    <label htmlFor="my-modal" onClick={() => handleOpenModalExpense(account.id)}>
-                                        <span className="cursor-pointer select-none leading-tight uppercase text-lg text-purple-600 w-full inline-flex items-center font-sans">Add Expense</span>
-                                    </label>
+                                <div className="text-center pointer-events-auto cursor-pointer">
+                                    <div className="flex flex-row justify-between items-center mt-4">
+                                        <p className="text-white m-0 text-base font-medium leading-6">Current Balance</p>
+                                        <p className="m-0 text-base font-medium font-sans leading-1.5 text-green-500">R$ {account.balance}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </>
+                            <div className="h-1/5 flex font-sans text-center items-center justify-end px-4 text-white pointer-events-auto border-t border-solid border-opacity-5 border-white">
+                                <label htmlFor="my-modal" onClick={() => handleOpenModalExpense(account.id)}>
+                                    <span className="cursor-pointer select-none leading-tight uppercase text-lg text-purple-600 w-full inline-flex items-center font-sans">Add Expense</span>
+                                </label>
+                            </div>
+                        </div>
                     ))}
                 </div>
-                <div className="block w-1/4">
-                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg p-2 cursor-default">
+                <div className="w-full md:w-1/5">
+                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg cursor-default m-2">
                         <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
                             <div className="max-w-md mr-5">
                                 <div className="flex flex-row items-center">
