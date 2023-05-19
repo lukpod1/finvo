@@ -22,8 +22,6 @@ export default function Accounts(props: any) {
         setModalData(data);
         setType(type);
         setModalEditOpen(true);
-
-        console.log(data)
     }
 
     const handleOpenModalDelete = (account: any) => {

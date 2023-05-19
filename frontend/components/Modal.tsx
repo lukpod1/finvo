@@ -99,7 +99,7 @@ export default function Modal({ type, action, onClose, data }: ModalProps) {
                       disabled={action === 'edit'}
                       type="number" 
                       className="form-input mt-1 block w-full" 
-                      {...register("balance", { required: true })} 
+                      {...register("balance")} 
                       value={formData.balance}
                       onChange={(e) => setFormData({ ...formData, balance: e.target.value })}
                     />
