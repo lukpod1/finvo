@@ -10,6 +10,7 @@ export function FrontEnd({ stack }: StackContext) {
     const transactionStack = use(Transaction);
 
     const site = new NextjsSite(stack, "site", {
+        customDomain: stack.stage === "prod" ? "finvo.net" : undefined,
         path: "frontend",
         environment: {
             NEXT_PUBLIC_API_URL: sessionStack.sessionApi.url,
