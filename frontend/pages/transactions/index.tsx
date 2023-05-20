@@ -3,7 +3,7 @@ import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
 import { TransactionDTO } from "@/domain/Transaction";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Transactions(props: any) {
     const { balance, transactions, accounts } = useSession();
@@ -18,37 +18,38 @@ export default function Transactions(props: any) {
         setModalData(data);
         setType(type);
         setModalOpen(true);
-
-        console.log(data);
-    }
+    };
 
     const handleOpenModalDelete = (transaction: any) => {
         setModalDeleteOpen(true);
         setModalDeleteData(transaction);
-    }
+    };
 
     const formatDate = (date: string) => {
-        const formattedDate = new Date(date).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        });
         return formattedDate;
-    }
+    };
 
     useEffect(() => {
-        const transactionsWithAccountNames = transactions.map(transaction => {
-            const account = accounts.find(account => account.id === transaction.accountId);
+        const transactionsWithAccountNames = transactions.map((transaction) => {
+            const account = accounts.find((account) => account.id === transaction.accountId);
             const accountName = account ? account.name : "";
             return { ...transaction, accountName };
         });
         setTransactionsData(transactionsWithAccountNames);
     }, [accounts, transactions]);
-    
+
     return (
         <Layout>
-            <div className="flex flex-row flex-wrap justify-between container mx-auto py-4">
-                <div className="flex flex-wrap w-4/5">
-                    <div className="font-sans text-center text-white transition-shadow rounded-lg shadow-md overflow-hidden w-full mr-4 mb-4 pointer-events-auto opacity-100">
-                        <div className="overflow-x-auto">
+            <div className="container mx-auto px-4">
+                <div className="lg:flex max-md:grid lg:grid-cols-2 lg:gap-4 mb-4">
+                    <div className="lg:w-4/5 max-md:order-last overflow-x-auto">
+                        <div className="overflow-auto">
                             <table className="table table-zebra w-full border-spacing-0 border-collapse">
-                                {/* head */}
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -59,67 +60,57 @@ export default function Transactions(props: any) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {transactionsData?.map((transaction: any) => (
-                                        <tr key={transaction.id}>
-                                            <td>{formatDate(transaction.date)}</td>
-                                            <td>{transaction.description}</td>
-                                            <td>{transaction.accountName}</td>
-                                            <td className={
-                                                transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
-                                            }>R$ {transaction.amount}</td>
-                                            <td>
-
-                                                <label htmlFor="my-modal"
-                                                    className="btn btn-primary mr-2"
-                                                    onClick={() => handleModalOpen('expense', transaction)}
-                                                >
-                                                    Edit
-                                                </label>
-
-                                                <label htmlFor="modal-delete"
-                                                    className="btn btn-secondary"
-                                                    onClick={() => handleOpenModalDelete(transaction)}>
-                                                    Delete
-                                                </label>
-                                            </td>
+                                    {transactionsData?.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={5} className="text-center">No transactions found</td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        <>
+                                            {transactionsData?.map((transaction: any) => (
+                                                <tr key={transaction.id}>
+                                                    <td>{formatDate(transaction.date)}</td>
+                                                    <td>{transaction.description}</td>
+                                                    <td>{transaction.accountName}</td>
+                                                    <td className={
+                                                        transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
+                                                    }>R$ {transaction.amount}</td>
+                                                    <td>
+                                                        <label
+                                                            htmlFor="my-modal"
+                                                            className="btn btn-primary mr-2"
+                                                            onClick={() => handleModalOpen(transaction.type, transaction)}
+                                                        >
+                                                            Edit
+                                                        </label>
+                                                        <label
+                                                            htmlFor="modal-delete"
+                                                            className="btn btn-secondary"
+                                                            onClick={() => handleOpenModalDelete(transaction)}
+                                                        >
+                                                            Delete
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-                <div className="block w-1/5">
-                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
-                        <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
-                            <div className="max-w-md mr-5">
-                                <div className="flex flex-row items-center">
-                                    <p className="m-0 mr-2 text-base font-sans font-normal leading-6 text-opacity-70 text-white overflow-hidden whitespace-nowrap overflow-ellipsis">Current Balance</p>
-                                </div>
-                                <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-white text-3xl">R$ {balance.totalBalance}</h5>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg mb-4 cursor-default">
-                        <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
-                            <div className="max-w-md mr-5">
-                                <div className="flex flex-row items-center">
-                                    <p className="m-0 mr-2 text-base font-sans font-normal leading-6 text-opacity-70 text-white overflow-hidden whitespace-nowrap overflow-ellipsis">Incomes</p>
-                                </div>
-                                <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-green-600 text-3xl">R$ {balance.totalIncomes}</h5>
-                            </div>
-                        </div>
                     </div>
-
-                    <div className="w-full bg-base-300 text-white transition-shadow duration-300 ease-in-out overflow-hidden shadow-md rounded-lg cursor-default">
-                        <div className="p-4 flex flex-row items-center justify-between overflow-hidden ">
-                            <div className="max-w-md mr-5">
-                                <div className="flex flex-row items-center">
-                                    <p className="m-0 mr-2 text-base font-sans font-normal leading-6 text-opacity-70 text-white overflow-hidden whitespace-nowrap overflow-ellipsis">Expenses</p>
-                                </div>
-                                <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-red-600 text-3xl">R$ {balance.totalExpenses}</h5>
-                            </div>
+                    <div className="lg:w-1/5 w-full max-md:order-first">
+                        <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2">
+                            <div className="font-medium text-slate-400">Balance</div>
+                            <div className="font-medium text-neutral-600 text-4xl">R$ {balance?.totalBalance}</div>
+                        </div>
+                        <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2 my-2">
+                            <div className="font-medium text-slate-400">Expenses</div>
+                            <div className="font-medium text-red-600 text-4xl">R$ {balance?.totalExpenses}</div>
+                        </div>
+                        <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2 my-2">
+                            <div className="font-medium text-slate-400">Incomes</div>
+                            <div className="font-medium text-green-600 text-4xl">R$ {balance?.totalIncomes}</div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +123,6 @@ export default function Transactions(props: any) {
                     data={modalData}
                 />
             )}
-
             {isModalDeleteOpen && (
                 <ModalDelete
                     type="transaction"
@@ -141,5 +131,5 @@ export default function Transactions(props: any) {
                 />
             )}
         </Layout>
-    )
+    );
 }

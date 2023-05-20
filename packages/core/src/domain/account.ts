@@ -1,7 +1,6 @@
 import { DeleteItemCommand, DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
-import { Console } from "console";
 
 export class Account {
     id: string;
@@ -64,32 +63,33 @@ export class Account {
         }
     }
 
-    static async updateBalance(amountDifference: number, id: string, userId: string): Promise<void> {
-        try {
-            await Account.client.send(new UpdateItemCommand({
-                TableName: Table.accounts.tableName,
-                Key: {
-                    id: { S: id },
-                    userId: { S: userId },
-                },
-                UpdateExpression: "SET balance = balance + :amountDifference",
-                ExpressionAttributeValues: {
-                    ":amountDifference": { N: amountDifference.toString() },
-                },
-                ReturnValues: "ALL_NEW",
-            }));
-            console.log(`Account ${id} updated successfully`);
-        } catch (error) {
-            throw new AccountUpdateError(`Error updating account ${id}`, id);
-        }
-    }
-
-    static async updateAccountBalance(transaction: Transaction): Promise<void> {
+    static async updateBalance(transaction: Transaction): Promise<void> {
         const account = await this.getAccountById(transaction.accountId, transaction.userId);
+
         if (transaction.type === "expense") {
             account.balance -= transaction.amount;
         } else {
             account.balance += transaction.amount;
+        }
+
+        await account.save();
+    }
+
+    static async updateAccountBalance(transaction: Transaction): Promise<void> {
+        const account = await this.getAccountById(transaction.accountId, transaction.userId);
+
+        const transactionResult = await Transaction.retrieve(transaction.id, transaction.accountId);
+
+        if (!transactionResult) {
+            throw new Error(`Transaction with ID ${transaction.id} not found`);
+        }
+
+        const amountDifference = transaction.amount - transactionResult.amount;
+
+        if (transaction.type === "expense") {
+            account.balance -= amountDifference;
+        } else if (transaction.type === "income") {
+            account.balance += amountDifference;
         }
 
         await account.save();
@@ -141,7 +141,7 @@ export class Account {
                     userId: { S: this.userId },
                 },
             }));
-            
+
             console.log(`Account ${this.id} deleted successfully`);
         } catch (error) {
             throw new AccountUpdateError(`Error deleting account ${this.id}`, this.id);
