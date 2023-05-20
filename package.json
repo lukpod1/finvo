@@ -1,61 +1,26 @@
 {
   "name": "finance-service",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
-  "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "sst test",
-    "start": "sst start",
+    "dev": "sst dev",
     "build": "sst build",
     "deploy": "sst deploy",
     "remove": "sst remove",
-    "commit": "git add . && cz"
-  },
-  "keywords": [],
-  "author": "José Lucas <lukasalvespod1@gmail.com>",
-  "license": "ISC",
-  "eslintConfig": {
-    "extends": [
-      "serverless-stack"
-    ]
+    "console": "sst console",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "3.3.0",
-    "jest": "^27.3.1"
+    "@aws-sdk/client-dynamodb": "^3.272.0",
+    "@aws-sdk/util-dynamodb": "^3.272.0",
+    "@tsconfig/node16": "^1.0.3",
+    "aws-cdk-lib": "2.62.2",
+    "constructs": "10.1.156",
+    "sst": "2.3.0",
+    "typescript": "^5.0.2"
   },
-  "dependencies": {
-    "@aws-cdk/aws-apigatewayv2-alpha": "2.50.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "2.50.0-alpha.0",
-    "@middy/core": "^2.5.2",
-    "@middy/http-error-handler": "^2.5.2",
-    "@middy/http-event-normalizer": "^2.5.2",
-    "@middy/http-json-body-parser": "^2.5.2",
-    "@middy/validator": "^2.5.2",
-    "@serverless-stack/cli": "1.18.2",
-    "@serverless-stack/resources": "1.18.2",
-    "@sls-next/lambda-at-edge": "^3.7.0",
-    "aws-cdk-lib": "2.50.0",
-    "aws-sdk": "^2.1019.0",
-    "bcrypt": "^5.0.1",
-    "chalk": "^4.1.2",
-    "chance": "^1.1.8",
-    "dotenv": "^10.0.0",
-    "http-errors": "^1.8.0",
-    "jshint": "^2.13.1",
-    "mock-aws-s3": "^4.0.2",
-    "nock": "^13.2.1",
-    "source-map-support": "^0.5.21",
-    "uuid": "^8.3.2"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
-  "repository": "git@github.com:lukpod1/finance-service.git",
   "workspaces": [
-    "backend",
-    "frontend"
+    "packages/*"
   ]
 }

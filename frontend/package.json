@@ -1,34 +1,35 @@
 {
   "name": "frontend",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "sst-env -- vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "sst bind next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.6.6",
-    "@heroicons/react": "v1",
-    "aws-amplify": "^4.3.32",
-    "axios": "^0.27.2",
-    "formik": "^2.2.9",
-    "jwt-decode": "^3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "6",
-    "yup": "^0.32.11"
+    "@headlessui/react": "^1.7.13",
+    "@next/font": "13.1.6",
+    "@tanstack/react-query": "^4.29.5",
+    "@types/node": "18.15.3",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "18.0.11",
+    "daisyui": "^2.51.5",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "js-cookie": "^3.0.4",
+    "next": "13.2.4",
+    "nookies": "^2.5.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "typescript": "5.0.2",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@serverless-stack/static-site-env": "^1.8.1",
-    "@tailwindcss/forms": "^0.5.2",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.0.1",
-    "autoprefixer": "^10.4.8",
-    "postcss": "^8.4.16",
-    "tailwindcss": "^3.1.8",
-    "vite": "^3.0.7"
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7"
   }
 }

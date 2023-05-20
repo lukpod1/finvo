@@ -8,7 +8,8 @@
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/sst",
       "runtimeArgs": ["start", "--increase-timeout"],
       "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**"]
+      "skipFiles": ["<node_internals>/**"],
+      "env": {}
     }
   ]
 }
