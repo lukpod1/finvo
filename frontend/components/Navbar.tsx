@@ -33,7 +33,7 @@ export default function Navbar() {
                             <li><Link href={"/transactions"}>Transactions</Link></li>
                         </ul>
                     </div>
-                    <a className="btn btn-ghost normal-case text-xl">Finance App</a>
+                    <a className="btn btn-ghost normal-case text-xl">Finvo</a>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
