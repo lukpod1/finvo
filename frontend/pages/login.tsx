@@ -31,13 +31,13 @@ export default function Login() {
         return (
             <>
                 <Head>
-                    <title>Finance Service</title>
+                    <title>Finvo</title>
                 </Head>
                 <div className="bg-black h-screen flex flex-col justify-center items-center">
                     <div className="bg-white h-3/4 w-4/5 rounded-lg shadow-lg flex flex-col justify-center items-center animate-fade-in">
                         <div className="w-full">
                             <h1 className="text-black text-center text-2xl md:text-4xl font-bold mb-6">
-                                Finance Service
+                                Finvo
                             </h1>
                         </div>
                         <div className="w-full self-center flex flex-col justify-center items-center">
