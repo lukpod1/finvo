@@ -7,3 +7,4 @@ before_compile:
   - echo "Install YARN"
   - npm install --global yarn
   - yarn --version
+  - npm install --force
