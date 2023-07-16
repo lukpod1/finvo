@@ -74,11 +74,16 @@ export default function Transactions(props: any) {
                                                     <td className={
                                                         transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
                                                     }>
-                                                        {Number.isInteger(transaction.amount) ? (
-                                                            `R$ ${transaction.amount.toFixed(0)}`
+                                                        {transaction.amount !== undefined ? (
+                                                            Number.isInteger(transaction.amount) ? (
+                                                                `R$ ${transaction.amount.toFixed(0)}`
+                                                            ) : (
+                                                                `R$ ${transaction.amount.toFixed(2)}`
+                                                            )
                                                         ) : (
-                                                            `R$ ${transaction.amount.toFixed(2)}`
-                                                        )}
+                                                            'R$ 0.00'
+                                                        )
+                                                        }
                                                     </td>
                                                     <td>
                                                         <label
@@ -109,31 +114,47 @@ export default function Transactions(props: any) {
                         <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2">
                             <div className="font-medium text-slate-400">Balance</div>
                             <div className="font-medium text-neutral-600 text-4xl">
-                                {Number.isInteger(balance?.totalBalance) ? (
-                                    `R$ ${balance?.totalBalance.toFixed(0)}`
+                                {balance?.totalBalance !== undefined ? (
+                                    Number.isInteger(balance?.totalBalance) ? (
+                                        `R$ ${balance?.totalBalance.toFixed(0)}`
+                                    ) : (
+                                        `R$ ${balance?.totalBalance.toFixed(2)}`
+                                    )
                                 ) : (
-                                    `R$ ${balance?.totalBalance.toFixed(2)}`
-                                )}
+                                    'R$ 0.00'
+                                )
+                                }
                             </div>
                         </div>
                         <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2 my-2">
                             <div className="font-medium text-slate-400">Expenses</div>
                             <div className="font-medium text-red-600 text-4xl">
-                                {Number.isInteger(balance?.totalExpenses) ? (
-                                    `R$ ${balance?.totalExpenses.toFixed(0)}`
+                                {balance?.totalExpenses !== undefined ? (
+                                    Number.isInteger(balance?.totalExpenses) ? (
+                                        `R$ ${balance?.totalExpenses.toFixed(0)}`
+                                    ) : (
+                                        `R$ ${balance?.totalExpenses.toFixed(2)}`
+                                    )
                                 ) : (
-                                    `R$ ${balance?.totalExpenses.toFixed(2)}`
-                                )}
+                                    'R$ 0.00'
+                                )
+                                }
                             </div>
                         </div>
                         <div className="grid flex-grow h-32 card bg-base-300 rounded-lg place-items-center mx-2 my-2">
                             <div className="font-medium text-slate-400">Incomes</div>
                             <div className="font-medium text-green-600 text-4xl">
-                                {Number.isInteger(balance?.totalIncomes) ? (
-                                    `R$ ${balance?.totalIncomes.toFixed(0)}`
+                                {balance?.totalIncomes !== undefined ? (
+                                    Number.isInteger(balance?.totalIncomes) ? (
+                                        `R$ ${balance?.totalIncomes.toFixed(0)}`
+                                    ) : (
+                                        `R$ ${balance?.totalIncomes.toFixed(2)}`
+                                    )
                                 ) : (
-                                    `R$ ${balance?.totalIncomes.toFixed(2)}`
-                                )}
+                                    'R$ 0.00'
+                                )
+
+                                }
                             </div>
                         </div>
                     </div>

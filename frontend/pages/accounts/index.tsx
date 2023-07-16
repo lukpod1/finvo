@@ -75,10 +75,14 @@ export default function Accounts(props: any) {
                                     <div className="flex flex-row justify-between items-center mt-4">
                                         <p className="text-white m-0 text-base font-medium leading-6">Current Balance</p>
                                         <p className="m-0 text-base font-medium font-sans leading-1.5 text-green-500">
-                                            {Number.isInteger(account.balance) ? (
-                                                `R$ ${account.balance.toFixed(0)}`
+                                            {account.balance !== undefined ? (
+                                                Number.isInteger(account.balance) ? (
+                                                    `R$ ${account.balance.toFixed(0)}`
+                                                ) : (
+                                                    `R$ ${account.balance.toFixed(2)}`
+                                                )
                                             ) : (
-                                                `R$ ${account.balance.toFixed(2)}`
+                                                'R$ 0,00'
                                             )}
                                         </p>
                                     </div>
@@ -100,11 +104,16 @@ export default function Accounts(props: any) {
                                     <p className="m-0 mr-2 text-base font-sans font-normal leading-6 text-opacity-70 text-white overflow-hidden whitespace-nowrap overflow-ellipsis">Current Balance</p>
                                 </div>
                                 <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-white text-3xl">
-                                    {Number.isInteger(balance.totalBalance) ? (
-                                        `R$ ${balance.totalBalance.toFixed(0)}`
+                                    {balance.totalBalance !== undefined ? (
+                                        Number.isInteger(balance.totalBalance) ? (
+                                            `R$ ${balance.totalBalance.toFixed(0)}`
+                                        ) : (
+                                            `R$ ${balance.totalBalance.toFixed(2)}`
+                                        )
                                     ) : (
-                                        `R$ ${balance.totalBalance.toFixed(2)}`
-                                    )}
+                                        'R$ 0,00'
+                                    )
+                                    }
                                 </h5>
                             </div>
                         </div>
