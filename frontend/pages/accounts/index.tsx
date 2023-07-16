@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
 import { useSession } from "@/contexts/session";
+import { Account } from "@/domain/Account";
 import { useState } from "react";
 
 export default function Accounts(props: any) {
@@ -53,7 +54,7 @@ export default function Accounts(props: any) {
                             </div>
                         </label>
                     </div>
-                    {accounts?.map((account: any) => (
+                    {accounts?.map((account: Account) => (
                         <div
                             key={account.id}
                             className="font-sans text-center text-white transition-shadow bg-base-300 rounded-lg shadow-md overflow-hidden w-full md:w-96 h-60 m-2 pointer-events-auto opacity-100">
@@ -73,7 +74,13 @@ export default function Accounts(props: any) {
                                 <div className="text-center pointer-events-auto cursor-pointer">
                                     <div className="flex flex-row justify-between items-center mt-4">
                                         <p className="text-white m-0 text-base font-medium leading-6">Current Balance</p>
-                                        <p className="m-0 text-base font-medium font-sans leading-1.5 text-green-500">R$ {account.balance}</p>
+                                        <p className="m-0 text-base font-medium font-sans leading-1.5 text-green-500">
+                                            {Number.isInteger(account.balance) ? (
+                                                `R$ ${account.balance.toFixed(0)}`
+                                            ) : (
+                                                `R$ ${account.balance.toFixed(2)}`
+                                            )}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +99,13 @@ export default function Accounts(props: any) {
                                 <div className="flex flex-row items-center">
                                     <p className="m-0 mr-2 text-base font-sans font-normal leading-6 text-opacity-70 text-white overflow-hidden whitespace-nowrap overflow-ellipsis">Current Balance</p>
                                 </div>
-                                <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-white text-3xl">R$ {balance.totalBalance}</h5>
+                                <h5 className="cursor-default overflow-hidden whitespace-nowrap text-ellipsis text-left mt-3 font-sans font-semibold text-white text-3xl">
+                                    {Number.isInteger(balance.totalBalance) ? (
+                                        `R$ ${balance.totalBalance.toFixed(0)}`
+                                    ) : (
+                                        `R$ ${balance.totalBalance.toFixed(2)}`
+                                    )}
+                                </h5>
                             </div>
                         </div>
                     </div>

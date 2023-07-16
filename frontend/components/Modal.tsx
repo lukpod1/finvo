@@ -1,9 +1,8 @@
-import { SessionContext, useSession } from "@/contexts/session";
-import { createAccount, getBalance, updateAccount } from "@/services/accounts";
+import { useSession } from "@/contexts/session";
+import { createAccount, updateAccount } from "@/services/accounts";
 import { createTransaction, updateTransaction } from "@/services/transactions";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ModalProps {
@@ -17,10 +16,9 @@ export type ModalType = 'account' | 'income' | 'expense' | '';
 export type ModalAction = 'create' | 'edit' ;
 
 export default function Modal({ type, action, onClose, data }: ModalProps) {
-  const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
   const { session, accounts, updateBalance, getAccountsByUserId, getTransactionsByUserId } = useSession();
-  const [formData, setFormData] = useState<any>(data || {});
+  const [formData, setFormData] = useState<any>(data || {balance: ''});
   
   const mutation = useMutation(
     (formData) => {
@@ -71,6 +69,16 @@ export default function Modal({ type, action, onClose, data }: ModalProps) {
     setFormData({});
   }
 
+  const validateValue = (value: string) => {
+    const isValidNumber = /^-?\d+(\.\d+)?$/.test(value);
+
+    if (!isValidNumber) {
+      return "Please enter a valid number";
+    }
+  
+    return true;
+  };
+
   return (
     <>
       <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -97,10 +105,10 @@ export default function Modal({ type, action, onClose, data }: ModalProps) {
                     <label className="text-gray-700">Balance</label>
                     <input 
                       disabled={action === 'edit'}
-                      type="number" 
+                      type="text" 
                       className="form-input mt-1 block w-full" 
-                      {...register("balance")} 
-                      value={formData.balance}
+                      {...register("balance", { validate: validateValue })} 
+                      value={formData.balance !== undefined ? String(formData.balance) : ''}
                       onChange={(e) => setFormData({ ...formData, balance: e.target.value })}
                     />
                   </div>
@@ -112,9 +120,9 @@ export default function Modal({ type, action, onClose, data }: ModalProps) {
                   <div className="mb-4">
                     <label className="text-gray-700">Amount</label>
                     <input 
-                      type="number" 
+                      type="text" 
                       className="form-input mt-1 block w-full" 
-                      {...register("amount", { required: true })}
+                      {...register("amount", { validate: validateValue })}
                       value={formData.amount}
                       onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                     />
