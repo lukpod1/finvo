@@ -23,7 +23,7 @@ export const updateTransaction = async (transaction: any) => {
     return await response.json();
 }
 
-export const deleteTransaction = async (transaction: any) => {
+export const deleteTransaction = async (transaction: Transaction) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_TRANSACTIONS_API_URL}/transactions/${transaction.id}/${transaction.accountId}`, {
         method: 'DELETE',
     });

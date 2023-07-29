@@ -1,7 +1,5 @@
-import { ApiHandler, useJsonBody, usePathParam, usePathParams } from "sst/node/api";
-import { Transaction, TransactionDTO, TransactionType } from "@finance-service/core/domain/transaction";
-import { randomUUID } from "crypto";
-import * as yup from "yup";
+import { ApiHandler, usePathParams } from "sst/node/api";
+import { Transaction } from "@finance-service/core/domain/transaction";
 import { Account } from "@finance-service/core/domain/account";
 
 
@@ -22,11 +20,8 @@ export const handler = ApiHandler(async () => {
 
         await transaction.delete();
 
-        if (transaction.type === "income") {
-            await Account.updateBalance(-transaction.amount, accountId!, transaction.userId);
-        } else {
-            await Account.updateBalance(transaction.amount, accountId!, transaction.userId);
-        }
+        transaction.amount *= -1
+        await Account.updateBalance(transaction);
 
         return {
             statusCode: 200,

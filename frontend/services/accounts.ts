@@ -1,5 +1,5 @@
-export const getBalance = async (accountId: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts/balance?userId=${accountId}`, {
+export const getBalance = async (userId: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts/balance?userId=${userId}`, {
         method: 'GET',
     });
     return await response.json();

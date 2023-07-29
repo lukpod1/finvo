@@ -23,7 +23,7 @@ export default function Login() {
                 router.push('/dashboard');
             }, 2000);
         }
-    }, [router])
+    }, [])
 
     if (loading) {
         return <Loading />

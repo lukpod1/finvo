@@ -15,7 +15,7 @@ export default function Home() {
                 router.push('/login');
             }, 1000);
         }
-    }, [router]);
+    }, []);
 
     return <Loading />
 }

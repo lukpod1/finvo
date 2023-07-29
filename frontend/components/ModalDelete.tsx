@@ -1,4 +1,5 @@
 import { useSession } from "@/contexts/session";
+import { Account, AccountDTO } from "@/domain/Account";
 import { deleteAccount } from "@/services/accounts";
 import { deleteTransaction } from "@/services/transactions";
 
@@ -15,9 +16,9 @@ export default function ModalDelete({ onClose, data, type }: ModalDeleteProps) {
     const handleDelete = async () => {
         type === "transaction" ? await deleteTransaction(data) : await deleteAccount(data);
         onClose();
-        updateBalance(data.userId);
-        getAccountsByUserId(data.userId);
-        getTransactionsByUserId(data.userId);
+        await updateBalance(data.userId);
+        await getAccountsByUserId(data.userId);
+        await getTransactionsByUserId(data.userId);
     }
 
     return (

@@ -10,7 +10,7 @@ export default function Transactions(props: any) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [modalData, setModalData] = useState<any>(null);
-    const [modalDeleteData, setModalDeleteData] = useState<any>(null);
+    const [modalDeleteData, setModalDeleteData] = useState<TransactionDTO>();
     const [type, setType] = useState<ModalType>('');
     const [transactionsData, setTransactionsData] = useState<TransactionDTO[]>([]);
 
@@ -20,7 +20,7 @@ export default function Transactions(props: any) {
         setModalOpen(true);
     };
 
-    const handleOpenModalDelete = (transaction: any) => {
+    const handleOpenModalDelete = (transaction: TransactionDTO) => {
         setModalDeleteOpen(true);
         setModalDeleteData(transaction);
     };
