@@ -1,10 +1,9 @@
 import Loading from "@/components/Loading";
 import { useSession } from "@/contexts/session";
-import { fetchSession } from "@/services/session";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Login() {
     const router = useRouter();
@@ -23,7 +22,7 @@ export default function Login() {
                 router.push('/dashboard');
             }, 2000);
         }
-    }, [])
+    }, [router])
 
     if (loading) {
         return <Loading />

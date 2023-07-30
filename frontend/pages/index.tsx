@@ -11,11 +11,9 @@ export default function Home() {
         if (token) {
             router.push('/dashboard');
         } else {
-            setTimeout(() => {
-                router.push('/login');
-            }, 1000);
+            router.push('/login');
         }
-    }, []);
+    }, [router]);
 
     return <Loading />
 }
