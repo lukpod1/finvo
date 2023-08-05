@@ -26,11 +26,8 @@ export default function Transactions(props: any) {
     };
 
     const formatDate = (date: string) => {
-        const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-        });
+        const [year, month, day] = date.split("-");
+        const formattedDate = `${day}/${month}/${year}`;
         return formattedDate;
     };
 
