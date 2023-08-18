@@ -37,6 +37,12 @@ export default function Transactions(props: any) {
             const accountName = account ? account.name : "";
             return { ...transaction, accountName };
         });
+
+        transactionsWithAccountNames
+            .sort((a, b) => {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+
         setTransactionsData(transactionsWithAccountNames);
     }, [accounts, transactions]);
 
