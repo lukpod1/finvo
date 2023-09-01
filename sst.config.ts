@@ -9,7 +9,7 @@ import { Transaction } from "./stacks/TransactionStack";
 export default {
   config(_input) {
     return {
-      name: "finance-service",
+      name: "finvo",
       region: "us-east-1",
     };
   },

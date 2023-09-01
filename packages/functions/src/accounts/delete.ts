@@ -1,4 +1,4 @@
-import { Account } from "@finance-service/core/domain/account";
+import { Account } from "@finvo/core/domain/account";
 import { ApiHandler, usePathParams } from "sst/node/api";
 
 export const handler = ApiHandler(async () => {

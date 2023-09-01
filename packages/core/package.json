@@ -1,5 +1,5 @@
 {
-  "name": "@finance-service/core",
+  "name": "@finvo/core",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
