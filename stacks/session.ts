@@ -1,14 +1,14 @@
 import { Api, StackContext, use } from "sst/constructs";
-import { Database } from "./DatabaseStack";
+import { Database } from "./database";
 
 export function Session({ stack }: StackContext) {
 
-    const dbUsers = use(Database)
+    const { dbUsers } = use(Database)
 
     const sessionApi = new Api(stack, "sessionApi", {
         defaults: {
             function: {
-                bind: [dbUsers.dbUsers]
+                bind: [dbUsers]
             }
         },
         routes: {

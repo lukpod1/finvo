@@ -1,5 +1,5 @@
-import { Account } from "@finance-service/core/domain/account";
-import { Transaction, TransactionDTO, TransactionType } from "@finance-service/core/domain/transaction";
+import { Account } from "@finvo/core/domain/account";
+import { Transaction, TransactionDTO, TransactionType } from "@finvo/core/domain/transaction";
 import { ApiHandler, useJsonBody, usePathParam } from "sst/node/api";
 
 export const handler = ApiHandler(async () => {

@@ -1,7 +1,6 @@
 import Loading from "@/components/Loading";
 import { useRouter } from "next/router";
-import { use, useEffect } from "react";
-import { setTimeout } from "timers";
+import { useEffect } from "react";
 
 export default function Home() {
     const router = useRouter();

@@ -1,4 +1,4 @@
-import { Account, AccountDTO } from "@finance-service/core/domain/account";
+import { Account, AccountDTO } from "@finvo/core/domain/account";
 import { randomUUID } from "crypto";
 import { ApiHandler, useJsonBody } from "sst/node/api";
 import * as yup from "yup";
