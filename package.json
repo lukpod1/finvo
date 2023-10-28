@@ -18,7 +18,7 @@
     "aws-cdk-lib": "2.84.0",
     "constructs": "10.1.156",
     "datadog-cdk-constructs-v2": "^1.7.1",
-    "sst": "2.16.1",
+    "sst": "2.19.2",
     "typescript": "^5.0.2"
   },
   "workspaces": [
