@@ -5,4 +5,4 @@ before_compile:
   - echo "Install NPM"
   - npm i -g npm@9.6.3
   - npm install --force
-  - cd frontend && npm i open-next@0.8.0
+  - cd frontend && npm i open-next@1.0.0
