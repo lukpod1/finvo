@@ -1,7 +1,7 @@
 import { Api, StackContext, use } from "sst/constructs";
-import { Database } from "./DatabaseStack";
+import { Database } from "./database";
 
-export function Accounts({ stack }: StackContext) {
+export function Account({ stack }: StackContext) {
     const { dbAccounts, dbTransactions } = use(Database)
 
     const accountsApi = new Api(stack, "accountsApi", {
