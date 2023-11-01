@@ -18,7 +18,7 @@ export function Web({ stack }: StackContext) {
             NEXT_PUBLIC_ACCOUNTS_API_URL: account.accountsApi.url,
             NEXT_PUBLIC_TRANSACTIONS_API_URL: transaction.transactionApi.url,
         },
-        buildCommand: "npx open-next@0.7.0 build",
+        buildCommand: "npx open-next@0.8.0 build",
     });
 
     site.attachPermissions([
