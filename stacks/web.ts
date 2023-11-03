@@ -11,6 +11,7 @@ export function Web({ stack }: StackContext) {
 
     const site = new NextjsSite(stack, "site", {
         customDomain: {
+            hostedZone: "finvo.net",
             domainName:
                 stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
             domainAlias: stack.stage === "prod" ? "www.finvo.net" : `www.${stack.stage}.finvo.net`,
