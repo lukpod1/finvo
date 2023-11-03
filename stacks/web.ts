@@ -10,7 +10,11 @@ export function Web({ stack }: StackContext) {
     const transaction = use(Transaction);
 
     const site = new NextjsSite(stack, "site", {
-        customDomain: stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
+        customDomain: {
+            domainName:
+                stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
+            domainAlias: stack.stage === "prod" ? "www.finvo.net" : `www.${stack.stage}.finvo.net`,
+        },
         path: "frontend",
         environment: {
             NEXT_PUBLIC_API_URL: session.sessionApi.url,
@@ -22,7 +26,7 @@ export function Web({ stack }: StackContext) {
     });
 
     site.attachPermissions([
-        session.sessionApi, 
+        session.sessionApi,
         account.accountsApi,
         transaction.transactionApi
     ]);
