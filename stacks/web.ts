@@ -11,7 +11,7 @@ export function Web({ stack }: StackContext) {
 
     const site = new NextjsSite(stack, "site", {
         customDomain:
-            stack.stage === "prod" ? "finvo.net" : undefined,
+            stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
         path: "frontend",
         environment: {
             NEXT_PUBLIC_API_URL: session.sessionApi.url,
