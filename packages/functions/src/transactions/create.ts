@@ -1,8 +1,8 @@
 import { ApiHandler, useJsonBody } from "sst/node/api";
-import { Transaction, TransactionDTO, TransactionType } from "@finance-service/core/domain/transaction";
+import { Transaction, TransactionDTO, TransactionType } from "@finvo/core/domain/transaction";
 import { randomUUID } from "crypto";
 import * as yup from "yup";
-import { Account } from "@finance-service/core/domain/account";
+import { Account } from "@finvo/core/domain/account";
 
 const schema = yup.object().shape({
     amount: yup.number().required(),

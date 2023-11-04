@@ -1,5 +1,5 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
-import { Transaction, TransactionType } from "@finance-service/core/domain/transaction";
+import { Transaction, TransactionType } from "@finvo/core/domain/transaction";
 import { Table } from "sst/node/table";
 
 const ddb = new DynamoDB({});

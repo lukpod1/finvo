@@ -1,7 +1,7 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { ApiHandler, useQueryParam } from "sst/node/api";
 import { Table } from "sst/node/table";
-import { Account } from "@finance-service/core/domain/account";
+import { Account } from "@finvo/core/domain/account";
 
 const ddb = new DynamoDB({});
 

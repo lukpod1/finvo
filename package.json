@@ -1,5 +1,5 @@
 {
-  "name": "finance-service",
+  "name": "finvo",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,14 +12,13 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "^3.272.0",
-    "@aws-sdk/util-dynamodb": "^3.272.0",
-    "@tsconfig/node16": "^1.0.3",
-    "aws-cdk-lib": "2.79.1",
-    "constructs": "10.1.156",
-    "datadog-cdk-constructs-v2": "^1.7.1",
-    "sst": "2.11.1",
-    "typescript": "^5.0.2"
+    "@aws-sdk/client-dynamodb": "^3.405.0",
+    "@aws-sdk/util-dynamodb": "^3.405.0",
+    "@tsconfig/node16": "^16.1.1",
+    "aws-cdk-lib": "2.101.1",
+    "sst": "2.19.2",
+    "constructs": "10.2.69",
+    "typescript": "^5.2.2"
   },
   "workspaces": [
     "packages/*"

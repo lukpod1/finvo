@@ -4,7 +4,7 @@
     "module": "esnext",
     "baseUrl": ".",
     "paths": {
-      "@finance-service/core/*": ["../core/src/*"]
+      "@finvo/core/*": ["../core/src/*"]
     }
   }
 }

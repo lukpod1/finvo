@@ -1,6 +1,6 @@
 import { ApiHandler, usePathParams } from "sst/node/api";
-import { Transaction } from "@finance-service/core/domain/transaction";
-import { Account } from "@finance-service/core/domain/account";
+import { Transaction } from "@finvo/core/domain/transaction";
+import { Account } from "@finvo/core/domain/account";
 
 
 export const handler = ApiHandler(async () => {
