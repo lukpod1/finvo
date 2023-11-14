@@ -1,10 +1,14 @@
-import './assets/main.css'
+import './styles.css'
 
+import { createRouter, createWebHistory } from 'vue-router/auto'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
-import router from './router'
+
+export const router = createRouter({
+    history: createWebHistory(),
+})
 
 const app = createApp(App)
 
