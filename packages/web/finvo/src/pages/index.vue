@@ -1,20 +1,17 @@
 <template>
-  <div className="flex items-center justify-center h-screen">
-    <div className="animate-spin rounded-full h-80 w-80 border-t-2 border-b-2 border-white"></div>
-  </div>
+  <Loading />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Loading from "@/components/Loading.vue";
+import { router } from "@/main";
 
-export default {
-  // mounted() {
-  //   const token = localStorage.getItem("session");
-  //   if (token) {
-  //     this.$router.push("/dashboard");
-  //   } else {
-  //     this.$router.push("/login");
-  //   }
-  // }
-}
+const token = localStorage.getItem('session');
+setInterval(() => {
+  if (token) {
+    router.push('/dashboard');
+  } else {
+    router.push('/login')
+  }
+}, 1000);
 </script>
