@@ -1,4 +1,4 @@
-import { NextjsSite, StackContext, use } from "sst/constructs";
+import { NextjsSite, StackContext, StaticSite, use } from "sst/constructs";
 import { Account } from "./account";
 import { Session } from "./session";
 import { Transaction } from "./transaction";
@@ -22,6 +22,15 @@ export function Web({ stack }: StackContext) {
         buildCommand: "npx open-next@0.7.0 build",
     });
 
+    const finvoVue = new StaticSite(stack, "finvo-vue", {
+        path: "packages/web/finvo",
+        environment: {
+            VITE_SESSION_API_URL: session.sessionApi.url,
+            VITE_ACCOUNTS_API_URL: account.accountsApi.url,
+            VITE_TRANSACTIONS_API_URL: transaction.transactionApi.url,
+        }
+    });
+
     site.attachPermissions([
         session.sessionApi,
         account.accountsApi,
@@ -29,11 +38,13 @@ export function Web({ stack }: StackContext) {
     ]);
 
     stack.addOutputs({
+        VUE_URL: finvoVue.url || "http://localhost:5173",
         URL: site.url || "http://localhost:3000",
         BaseUrl: session.sessionApi.url
     })
 
     return {
+        finvoVue,
         site
     }
 }
