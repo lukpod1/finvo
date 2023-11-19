@@ -12,6 +12,32 @@ declare module "sst/node/auth" {
     }
 }
 
+function getDefaultRedirectURL(): string {
+    if (isValidURL(process.env.SITE_URL)) {
+        return process.env.SITE_URL;
+    }
+
+    if (isValidURL(process.env.FRONTEND_URL)) {
+        return process.env.FRONTEND_URL;
+    }
+
+    return getDefaultLocalhostURL();
+}
+
+function getDefaultLocalhostURL() {
+    return "http://localhost:" + (process.env.SITE_URL ? "3000" : "5173") + "/login";
+}
+
+// Função para verificar se uma string é uma URL válida
+function isValidURL(str: any) {
+    try {
+        new URL(str);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 export const handler = AuthHandler({
     providers: {
         google: GoogleAdapter({
@@ -32,9 +58,12 @@ export const handler = AuthHandler({
                     })
                 }))
 
-                console.log("ENV: ", process.env.SITE_URL)
+                let redirectURL = getDefaultRedirectURL();
+
+                console.log("ENV: ", redirectURL);
+
                 return Session.parameter({
-                    redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
+                    redirect: redirectURL,
                     type: "user",
                     properties: {
                         userID: user.sub,
