@@ -38,7 +38,7 @@ export function Web({ stack }: StackContext) {
     ]);
 
     stack.addOutputs({
-        VUE_URL: finvoVue.url || "http://localhost:5173",
+        VUE_URL: finvoVue.url || "http://localhost:3000",
         URL: site.url || "http://localhost:3000",
         BaseUrl: session.sessionApi.url
     })

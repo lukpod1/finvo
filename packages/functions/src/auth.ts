@@ -12,30 +12,17 @@ declare module "sst/node/auth" {
     }
 }
 
-function getDefaultRedirectURL(): string {
-    if (isValidURL(process.env.SITE_URL)) {
-        return process.env.SITE_URL;
-    }
-
-    if (isValidURL(process.env.FRONTEND_URL)) {
-        return process.env.FRONTEND_URL;
-    }
-
-    return getDefaultLocalhostURL();
-}
-
-function getDefaultLocalhostURL() {
-    return "http://localhost:" + (process.env.SITE_URL ? "3000" : "5173") + "/login";
-}
-
-// Função para verificar se uma string é uma URL válida
-function isValidURL(str: any) {
-    try {
-        new URL(str);
-        return true;
-    } catch (error) {
-        return false;
-    }
+const saveUserToDynamoDB = async (user: any): Promise<void> => {
+    const ddb = new DynamoDBClient({});
+    await ddb.send(new PutItemCommand({
+        TableName: Table.users.tableName,
+        Item: marshall({
+            id: user.sub,
+            email: user.email,
+            picture: user.picture,
+            name: user.given_name,
+        })
+    }))
 }
 
 export const handler = AuthHandler({
@@ -44,26 +31,15 @@ export const handler = AuthHandler({
             mode: "oidc",
             clientID: Config.GOOGLE_CLIENT_ID,
             onSuccess: async (tokenset) => {
+
                 console.log("TOKENSET:", tokenset)
                 const user = tokenset.claims();
 
-                const ddb = new DynamoDBClient({});
-                await ddb.send(new PutItemCommand({
-                    TableName: Table.users.tableName,
-                    Item: marshall({
-                        id: user.sub,
-                        email: user.email,
-                        picture: user.picture,
-                        name: user.given_name,
-                    })
-                }))
-
-                let redirectURL = getDefaultRedirectURL();
-
-                console.log("ENV: ", redirectURL);
-
+                await saveUserToDynamoDB(user);
+                
+                console.log("ENV: ", process.env.SITE_URL)
                 return Session.parameter({
-                    redirect: redirectURL,
+                    redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
                     type: "user",
                     properties: {
                         userID: user.sub,

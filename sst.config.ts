@@ -1,9 +1,10 @@
 import { SSTConfig } from "sst";
-import { Auth} from "./stacks/auth";
-import { Database } from "./stacks/database";
 import { Web } from "./stacks/web";
-import { Account } from "./stacks/account";
+import { Auth} from "./stacks/auth";
+import { Secrets } from "./stacks/secrets";
 import { Session } from "./stacks/session";
+import { Account } from "./stacks/account";
+import { Database } from "./stacks/database";
 import { Transaction } from "./stacks/transaction";
 
 export default {
@@ -15,6 +16,7 @@ export default {
   },
   stacks(app) {
     app.stack(Database)
+    app.stack(Secrets)
     app.stack(Session)
     app.stack(Account)
     app.stack(Transaction)
