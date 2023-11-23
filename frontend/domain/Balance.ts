@@ -1,5 +1,5 @@
 export interface Balance {
-    totalBalance: number;
-    totalIncomes: number;
-    totalExpenses: number;
+	totalBalance: number;
+	totalIncomes: number;
+	totalExpenses: number;
 }
