@@ -1,4 +1,3 @@
-import { useSession } from "@/contexts/session";
 import { createAccount, updateAccount } from "@/services/accounts";
 import { createTransaction, updateTransaction } from "@/services/transactions";
 import { useSessionStore } from "@/store/session";
