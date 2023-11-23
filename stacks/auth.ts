@@ -14,8 +14,7 @@ export function Auth({ stack }: StackContext) {
             handler: "packages/functions/src/auth.handler",
             bind: [session.sessionApi, google.GOOGLE_CLIENT_ID],
             environment: {
-                //SITE_URL: web.site.url || "http://localhost:3000",
-                FRONTEND_URL: web.finvoVue.url || "http://localhost:5173"
+                SITE_URL: web.site.url || "http://localhost:3000",
             },
         }
     });
