@@ -2,16 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["lh3.googleusercontent.com"]
+    remotePatterns: [
+      {
+        hostname: "lh3.googleusercontent.com"
+      }
+    ]
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/",
-  //       destination: "/login"
-  //     }
-  //   ]
-  // }
 }
 
 module.exports = nextConfig

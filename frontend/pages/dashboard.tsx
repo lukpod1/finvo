@@ -1,25 +1,9 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import Layout from '@/components/Layout';
-import { useSession } from '@/contexts/session';
-import { User } from '@/domain/User';
+import { useSessionStore } from '@/store/session';
 
 export default function DashBoard() {
-  const router = useRouter();
-  const { session, balance, updateBalance } = useSession();
-
-  useEffect(() => {
-    const token = localStorage.getItem('session');
-    if (!token) {
-      router.push('/login');
-    }
-  }, [router]);
-
-  useEffect(() => {
-    if (session && session.id && session !== {} as User) {
-      updateBalance(session.id);
-    }
-  }, [session, updateBalance]);
+  const { balance } = useSessionStore();
 
   return (
     <Layout>

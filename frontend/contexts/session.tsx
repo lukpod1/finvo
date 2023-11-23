@@ -4,9 +4,8 @@ import { fetchSession } from "@/services/session";
 import { getBalance, getAccounts } from "@/services/accounts";
 import { Balance } from "@/domain/Balance";
 import { Account } from "@/domain/Account";
-import { Transaction, TransactionDTO } from "@/domain/Transaction";
+import { Transaction } from "@/domain/Transaction";
 import { getTransactions } from "@/services/transactions";
-import Loading from "@/components/Loading";
 
 type SessionContextType = {
     session: User;

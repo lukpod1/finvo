@@ -1,4 +1,7 @@
-export const getBalance = async (userId: string) => {
+import { Account } from "@/domain/Account";
+import { Balance } from "@/domain/Balance";
+
+export const getBalance = async (userId: string): Promise<Balance> => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts/balance?userId=${userId}`, {
         method: 'GET',
     });
@@ -14,7 +17,7 @@ export const createAccount = async (account: any) => {
     return await response.json();
 }
 
-export const getAccounts = async (userId: string) => {
+export const getAccounts = async (userId: string): Promise<Account[]> => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_ACCOUNTS_API_URL}/accounts?userId=${userId}`, {
         method: 'GET',
     });

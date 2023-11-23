@@ -2,6 +2,7 @@ import { useSession } from "@/contexts/session";
 import { Account, AccountDTO } from "@/domain/Account";
 import { deleteAccount } from "@/services/accounts";
 import { deleteTransaction } from "@/services/transactions";
+import { useSessionStore } from "@/store/session";
 
 interface ModalDeleteProps {
     type: "account" | "transaction";
@@ -11,7 +12,7 @@ interface ModalDeleteProps {
 
 export default function ModalDelete({ onClose, data, type }: ModalDeleteProps) {
 
-    const { updateBalance, getAccountsByUserId, getTransactionsByUserId } = useSession();
+    const { updateBalance, getAccountsByUserId, getTransactionsByUserId } = useSessionStore();
 
     const handleDelete = async () => {
         type === "transaction" ? await deleteTransaction(data) : await deleteAccount(data);

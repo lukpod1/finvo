@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Modal, { ModalType } from "./Modal";
+import { useSessionStore } from "@/store/session";
 
 export default function Navbar() {
     const router = useRouter();
-    const { session } = useSession();
+    const { session } = useSessionStore();
     const [type, setType] = useState<ModalType>('');
 
     const handleModalOpen = (type: ModalType) => {

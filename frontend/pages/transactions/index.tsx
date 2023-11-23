@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
 import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
-import { useSession } from "@/contexts/session";
 import { TransactionDTO } from "@/domain/Transaction";
+import { useSessionStore } from "@/store/session";
 import { useEffect, useState } from "react";
 
 export default function Transactions(props: any) {
-    const { balance, transactions, accounts } = useSession();
+    const { balance, transactions, accounts } = useSessionStore();
     const [isModalOpen, setModalOpen] = useState(false);
     const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [modalData, setModalData] = useState<any>(null);

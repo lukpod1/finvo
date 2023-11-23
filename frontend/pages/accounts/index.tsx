@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout";
 import Modal, { ModalType } from "@/components/Modal";
 import ModalDelete from "@/components/ModalDelete";
-import { useSession } from "@/contexts/session";
 import { Account } from "@/domain/Account";
+import { useSessionStore } from "@/store/session";
 import { useState } from "react";
 
 export default function Accounts(props: any) {
-    const { balance, accounts } = useSession();
+    const { balance, accounts } = useSessionStore();
     const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [isModalEditOpen, setModalEditOpen] = useState(false);
     const [isModalCreateOpen, setModalCreateOpen] = useState(false);

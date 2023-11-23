@@ -7,11 +7,7 @@ export default function Home() {
 
     useEffect(() => {
         const token = localStorage.getItem('session');
-        if (token) {
-            router.push('/dashboard');
-        } else {
-            router.push('/login');
-        }
+        router.push(token ? '/dashboard' : '/login');
     }, [router]);
 
     return <Loading />
