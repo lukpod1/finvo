@@ -16,7 +16,7 @@ export function Auth({ stack }: StackContext) {
 			environment: {
 				SITE_URL: web.site.url || "http://localhost:3000",
 			},
-		}
+		},
 	});
 
 	auth.attach(stack, {

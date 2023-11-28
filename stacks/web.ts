@@ -1,4 +1,4 @@
-import { NextjsSite, StackContext, use } from "sst/constructs";
+import { ApiCorsProps, NextjsSite, StackContext, use } from "sst/constructs";
 import { Account } from "./account";
 import { Session } from "./session";
 import { Transaction } from "./transaction";
@@ -21,6 +21,18 @@ export function Web({ stack }: StackContext) {
 		},
 		buildCommand: "npx open-next@0.7.0 build",
 	});
+
+	const siteUrl = site.url?.toString();
+	const corsConfig: ApiCorsProps = {
+		allowCredentials: true,
+		allowHeaders: ["content-type"],
+		allowMethods: ["ANY"],
+		allowOrigins: ["http://localhost:3000", `${siteUrl}`],
+	}
+
+	session.sessionApi.setCors(corsConfig);
+	account.accountsApi.setCors(corsConfig);
+	transaction.transactionApi.setCors(corsConfig);
 
 	site.attachPermissions([
 		session.sessionApi,

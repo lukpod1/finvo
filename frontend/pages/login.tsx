@@ -3,17 +3,18 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { setCookie } from "nookies";
 
-export default function Login() {
+export default function Login(props: any) {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const token = router.query.token;
 		setLoading(false);
 		if (token) {
 			setLoading(true);
-			localStorage.setItem('session', token.toString());
+			setCookie(null, 'session', token.toString())
 			setTimeout(() => {
 				setLoading(false);
 				router.push('/dashboard');
