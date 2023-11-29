@@ -38,7 +38,7 @@ export const handler = AuthHandler({
 				await saveUserToDynamoDB(user);
 
 				console.log("ENV: ", process.env.SITE_URL)
-				return Session.parameter({
+				return Session.cookie({
 					redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
 					type: "user",
 					properties: {

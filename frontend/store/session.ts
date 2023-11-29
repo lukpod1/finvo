@@ -8,18 +8,18 @@ import { Balance } from "@/domain/Balance";
 import { User } from "@/domain/User";
 
 type SessionStore = {
-  session: User;
+  session: User | null;
   balance: Balance;
   accounts: Account[];
   transactions: Transaction[];
   getAccountsByUserId: (userId: string) => void;
   getTransactionsByUserId: (userId: string) => void;
-  updateBalance: (userId: string) => any;
+  updateBalance: (userId: string) => void;
   fetchSessionData: () => void;
 };
 
 export const useSessionStore = create<SessionStore>((set) => ({
-  session: {} as User,
+  session: null,
   accounts: [],
   transactions: [],
   balance: {} as Balance,
@@ -31,28 +31,23 @@ export const useSessionStore = create<SessionStore>((set) => ({
   },
   updateBalance: async (userId: string) => {
     const newBalance = await getBalance(userId);
-    set((state) => {
-      if (JSON.stringify(newBalance) !== JSON.stringify(state.balance)) {
-        return { ...state, balance: newBalance };
-      }
-      return state;
-    });
+    set({ balance: newBalance });
   },
   fetchSessionData: async () => {
     const response = await fetchSession();
-    console.log('Session data', response);
-    set((state) => {
-      if (JSON.stringify(response) !== JSON.stringify(state.session)) {
-        return { ...state, session: response };
-      }
 
-      if (response?.id) {
-        state.updateBalance(response.id);
-        state.getAccountsByUserId(response.id);
-        state.getTransactionsByUserId(response.id);
-      }
-      return state;
-    });
+    if (response) {
+      set({ session: response });
+      const { id } = response;
+      set((state) => {
+        if (id && id !== state.session?.id) {
+          state.updateBalance(id);
+          state.getAccountsByUserId(id);
+          state.getTransactionsByUserId(id);
+        }
+        return state;
+      });
+    }
   },
 }));
 

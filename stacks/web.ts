@@ -1,48 +1,25 @@
-import { ApiCorsProps, NextjsSite, StackContext, use } from "sst/constructs";
-import { Account } from "./account";
-import { Session } from "./session";
-import { Transaction } from "./transaction";
+import { NextjsSite, StackContext, use } from "sst/constructs";
+import { API } from "./api";
 
 export function Web({ stack }: StackContext) {
 
-	const session = use(Session);
-	const account = use(Account);
-	const transaction = use(Transaction);
+	const api = use(API);
 
 	const site = new NextjsSite(stack, "site", {
 		customDomain:
 			stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
 		path: "frontend",
 		environment: {
-			NEXT_PUBLIC_SESSION_API_URL: session.sessionApi.url,
-			BASE_URL: session.sessionApi.url,
-			NEXT_PUBLIC_ACCOUNTS_API_URL: account.accountsApi.url,
-			NEXT_PUBLIC_TRANSACTIONS_API_URL: transaction.transactionApi.url,
+			NEXT_PUBLIC_API_URL: api.url,
 		},
 		buildCommand: "npx open-next@0.7.0 build",
 	});
 
-	const siteUrl = site.url?.toString();
-	const corsConfig: ApiCorsProps = {
-		allowCredentials: true,
-		allowHeaders: ["content-type"],
-		allowMethods: ["ANY"],
-		allowOrigins: ["http://localhost:3000", `${siteUrl}`],
-	}
+	site.attachPermissions([api]);
 
-	session.sessionApi.setCors(corsConfig);
-	account.accountsApi.setCors(corsConfig);
-	transaction.transactionApi.setCors(corsConfig);
-
-	site.attachPermissions([
-		session.sessionApi,
-		account.accountsApi,
-		transaction.transactionApi
-	]);
 
 	stack.addOutputs({
 		URL: site.url || "http://localhost:3000",
-		BaseUrl: session.sessionApi.url
 	})
 
 	return {

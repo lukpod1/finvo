@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     fetchSessionData();
-  }, []);
+  }, [fetchSessionData]);
 
   return (
     <Component {...pageProps} />
