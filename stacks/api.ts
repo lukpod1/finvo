@@ -14,12 +14,15 @@ export function API({ stack }: StackContext) {
 			}
 		},
 		routes: {
+			// SESSION
 			"GET /session": "packages/functions/src/session.handler",
+			// ACCOUNTS
 			"GET /accounts": "packages/functions/src/accounts/findAll.handler",
 			"POST /accounts": "packages/functions/src/accounts/create.handler",
 			"GET /accounts/balance": "packages/functions/src/accounts/find.handler",
 			"PUT /accounts/{id}": "packages/functions/src/accounts/update.handler",
 			"DELETE /accounts/{id}/{userId}": "packages/functions/src/accounts/delete.handler",
+			// TRANSACTIONS
 			"GET /transactions": "packages/functions/src/transactions/findAll.handler",
 			"POST /transactions": "packages/functions/src/transactions/create.handler",
 			"PUT /transactions/{id}": "packages/functions/src/transactions/update.handler",
