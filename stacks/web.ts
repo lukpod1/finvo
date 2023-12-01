@@ -17,6 +17,13 @@ export function Web({ stack }: StackContext) {
 
 	site.attachPermissions([api]);
 
+	api.setCors({
+		allowCredentials: true,
+		allowHeaders: ["content-type"],
+		allowMethods: ["ANY"],
+		allowOrigins: ["http://localhost:3000", site.url?.toString()]
+	});
+
 
 	stack.addOutputs({
 		URL: site.url || "http://localhost:3000",
