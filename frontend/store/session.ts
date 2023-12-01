@@ -31,23 +31,28 @@ export const useSessionStore = create<SessionStore>((set) => ({
   },
   updateBalance: async (userId: string) => {
     const newBalance = await getBalance(userId);
-    set({ balance: newBalance });
+    set((state) => {
+      if (JSON.stringify(newBalance) !== JSON.stringify(state.balance)) {
+        return { ...state, balance: newBalance };
+      }
+      return state;
+    });
   },
   fetchSessionData: async () => {
     const response = await fetchSession();
+    console.log('Session data', response);
+    set((state) => {
+      if (JSON.stringify(response) !== JSON.stringify(state.session)) {
+        return { ...state, session: response };
+      }
 
-    if (response) {
-      set({ session: response });
-      const { id } = response;
-      set((state) => {
-        if (id && id !== state.session?.id) {
-          state.updateBalance(id);
-          state.getAccountsByUserId(id);
-          state.getTransactionsByUserId(id);
-        }
-        return state;
-      });
-    }
+      if (response?.id) {
+        state.updateBalance(response.id);
+        state.getAccountsByUserId(response.id);
+        state.getTransactionsByUserId(response.id);
+      }
+      return state;
+    });
   },
 }));
 
