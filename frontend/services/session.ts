@@ -1,7 +1,6 @@
-import { User } from "@/domain/User";
 import { parseCookies } from "nookies";
 
-export async function fetchSession(): Promise<User | null> {
+export async function fetchSession(): Promise<any> {
 	const { session } = parseCookies();
 
 	if (!session) return null;
