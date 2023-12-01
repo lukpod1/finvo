@@ -1,26 +1,29 @@
 import { Auth as STTAuth, StackContext, use } from "sst/constructs";
 import { Web } from "./web";
-import { Session } from "./session";
+import { API } from "./api";
 import { Secrets } from "./secrets";
 
-export function Auth({ stack }: StackContext) {
+export function Auth({ stack, app }: StackContext) {
 
 	const { google } = use(Secrets);
-	const session = use(Session);
-	const web = use(Web);
+	const api = use(API);
+	const { site } = use(Web);
 
 	const auth = new STTAuth(stack, "auth", {
 		authenticator: {
 			handler: "packages/functions/src/auth.handler",
-			bind: [session.sessionApi, google.GOOGLE_CLIENT_ID],
+			bind: [site, google.GOOGLE_CLIENT_ID],
 			environment: {
-				SITE_URL: web.site.url || "http://localhost:3000",
+				SITE_URL:
+					app.mode === "dev"
+						? "http://localhost:3000"
+						: `${site.url}`,
 			},
-		}
+		},
 	});
 
 	auth.attach(stack, {
-		api: session.sessionApi,
+		api,
 		prefix: "/auth"
 	})
 }

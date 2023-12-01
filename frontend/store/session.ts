@@ -8,18 +8,18 @@ import { Balance } from "@/domain/Balance";
 import { User } from "@/domain/User";
 
 type SessionStore = {
-  session: User;
+  session: User | null;
   balance: Balance;
   accounts: Account[];
   transactions: Transaction[];
   getAccountsByUserId: (userId: string) => void;
   getTransactionsByUserId: (userId: string) => void;
-  updateBalance: (userId: string) => any;
+  updateBalance: (userId: string) => void;
   fetchSessionData: () => void;
 };
 
 export const useSessionStore = create<SessionStore>((set) => ({
-  session: {} as User,
+  session: null,
   accounts: [],
   transactions: [],
   balance: {} as Balance,

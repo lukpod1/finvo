@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Modal, { ModalType } from "./Modal";
 import { useSessionStore } from "@/store/session";
+import { destroyCookie } from "nookies";
 
 export default function Navbar() {
 	const router = useRouter();
@@ -15,7 +16,7 @@ export default function Navbar() {
 	}
 
 	const handleSignOut = async () => {
-		localStorage.removeItem('session');
+		destroyCookie(null, "session");
 		router.push('/login');
 	}
 
