@@ -21,7 +21,7 @@ export function Web({ stack }: StackContext) {
 		allowCredentials: true,
 		allowHeaders: ["content-type"],
 		allowMethods: ["ANY"],
-		allowOrigins: ["http://localhost:3000", site.url?.toString()]
+		allowOrigins: ["http://localhost:3000"]
 	});
 
 
