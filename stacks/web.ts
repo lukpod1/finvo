@@ -12,17 +12,17 @@ export function Web({ stack }: StackContext) {
 		environment: {
 			NEXT_PUBLIC_API_URL: api.url,
 		},
-		buildCommand: "npx open-next@2.3.3 build",
+		// buildCommand: "npx open-next@2.3.3 build",
 	});
 
 	site.attachPermissions([api]);
 
-	// api.setCors({
-	// 	allowCredentials: true,
-	// 	allowHeaders: ["content-type"],
-	// 	allowMethods: ["ANY"],
-	// 	allowOrigins: ["http://localhost:3000"]
-	// });
+	api.setCors({
+		allowCredentials: true,
+		allowHeaders: ["content-type"],
+		allowMethods: ["ANY"],
+		allowOrigins: ["http://localhost:3000"]
+	});
 
 
 	stack.addOutputs({
