@@ -21,6 +21,7 @@
     "typescript": "^5.0.2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/frontend/*"
   ]
 }
