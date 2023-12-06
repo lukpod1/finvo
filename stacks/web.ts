@@ -8,7 +8,7 @@ export function Web({ stack }: StackContext) {
 	const site = new NextjsSite(stack, "site", {
 		customDomain:
 			stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
-		path: "package/frontend",
+		path: "packages/frontend",
 		environment: {
 			NEXT_PUBLIC_API_URL: api.url,
 		},
@@ -21,7 +21,7 @@ export function Web({ stack }: StackContext) {
 		allowCredentials: true,
 		allowHeaders: ["content-type"],
 		allowMethods: ["ANY"],
-		allowOrigins: ["http://localhost:3000"]
+		allowOrigins: ["http://localhost:3000", site.url]
 	});
 
 
