@@ -1,9 +1,9 @@
+import { SSTConfig } from "sst";
 import { Database } from "./stacks/database";
 import { Secrets } from "./stacks/secrets";
-import { Auth} from "./stacks/auth";
 import { API } from "./stacks/api";
 import { Web } from "./stacks/web";
-import { SSTConfig } from "sst";
+import { Auth } from "./stacks/auth";
 
 export default {
   config(_input) {
@@ -13,10 +13,11 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(Database)
-    app.stack(Secrets)
-    app.stack(API)
-    app.stack(Web)
-    app.stack(Auth)
+    app
+      .stack(Database)
+      .stack(Secrets)
+      .stack(API)
+      .stack(Web)
+      .stack(Auth)
   },
 } satisfies SSTConfig;

@@ -8,11 +8,11 @@ export function Web({ stack }: StackContext) {
 	const site = new NextjsSite(stack, "site", {
 		customDomain:
 			stack.stage === "prod" ? "finvo.net" : `${stack.stage}.finvo.net`,
-		path: "frontend",
+		path: "package/frontend",
 		environment: {
 			NEXT_PUBLIC_API_URL: api.url,
 		},
-		// buildCommand: "npx open-next@2.3.3 build",
+		buildCommand: "npx open-next@0.7.0 build",
 	});
 
 	site.attachPermissions([api]);
