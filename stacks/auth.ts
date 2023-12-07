@@ -16,7 +16,7 @@ export function Auth({ stack, app }: StackContext) {
 			environment: {
 				SITE_URL:
 					app.mode === "dev"
-						? "http://localhost:3000"
+						? "http://localhost:5173"
 						: `${site.url}`,
 			},
 		},
