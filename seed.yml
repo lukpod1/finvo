@@ -1,7 +1,7 @@
 before_compile:
   - echo "Before compile"
-  - echo "Set Node version 18x"
-  - n 18.17.0
+  - echo "Set Node version 21x"
+  - n 21.4.0
   - echo "Install NPM"
   - npm i -g npm@9.6.3
   - npm install --force
