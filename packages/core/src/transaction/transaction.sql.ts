@@ -1,15 +1,16 @@
-import { decimal, integer, pgEnum, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { char, decimal, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { users } from "../user/user.sql";
 import { accounts } from "../account/account.sql";
+import { id, timestamps} from "../util/sql";
 
 export const typeEnum = pgEnum('type', ['income', 'expense']);
 
 export const transactions = pgTable('transactions', {
-  id: serial('id').primaryKey(),
+  ...id,
   description: text('description'),
   amount: decimal('amount'),
-  timestamp: timestamp('timestamp').defaultNow(),
+  ...timestamps,
   type: typeEnum('type'),
-  userId: integer('user_id').references(() => users.id).notNull(),
-  accountId: integer('account_id').references(() => accounts.id).notNull()
+  userId: char('user_id', { length: 24 }).references(() => users.id).notNull(),
+  accountId: char('account_id', { length: 24 }).references(() => accounts.id).notNull()
 });
