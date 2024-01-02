@@ -12,7 +12,7 @@ export function Web({ stack }: StackContext) {
 		environment: {
 			NEXT_PUBLIC_API_URL: api.url,
 		},
-		buildCommand: "npm run openbuild",
+		buildCommand: "npx open-next@2.1.0 build"
 	});
 
 	site.attachPermissions([api]);
