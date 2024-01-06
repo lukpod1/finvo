@@ -15,9 +15,9 @@
     "@aws-sdk/client-dynamodb": "^3.272.0",
     "@aws-sdk/util-dynamodb": "^3.272.0",
     "@tsconfig/node16": "^1.0.3",
-    "aws-cdk-lib": "2.110.1",
-    "constructs": "10.3.0",
-    "sst": "2.39.2",
+    "aws-cdk-lib": "2.62.2",
+    "constructs": "10.1.156",
+    "sst": "2.0.0",
     "typescript": "^5.0.2"
   }
 }
