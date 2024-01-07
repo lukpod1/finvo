@@ -14,14 +14,12 @@ export function Web({ stack }: StackContext) {
 		},
 	});
 
-	site.attachPermissions([api]);
-
-	// api.setCors({
-	// 	allowCredentials: true,
-	// 	allowHeaders: ["content-type"],
-	// 	allowMethods: ["ANY"],
-	// 	allowOrigins: ["http://localhost:3000", site.url!]
-	// });
+	api.setCors({
+		allowCredentials: true,
+		allowHeaders: ["content-type"],
+		allowMethods: ["ANY"],
+		allowOrigins: ["http://localhost:3000", site.url!]
+	});
 
 
 	stack.addOutputs({
