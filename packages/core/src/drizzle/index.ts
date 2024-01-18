@@ -1,13 +1,9 @@
-import { drizzle } from "drizzle-orm/planetscale-serverless"
-import { connect } from "@planetscale/database";
+import { neon, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import "dotenv/config";
 import { Config } from "sst/node/config";
 
-const connection = connect({
-  host: "aws.connect.psdb.cloud",
-  username: Config.PLANETSCALE_USERNAME,
-  password: Config.PLANETSCALE_PASSWORD
-});
+neonConfig.fetchConnectionCache = true;
 
-export const db = drizzle(connection, {
-  logger: true
-})
+const sql = neon(Config.NEON_DB_URL);
+export const db = drizzle(sql);
