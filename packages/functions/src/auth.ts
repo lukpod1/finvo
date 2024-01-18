@@ -1,8 +1,6 @@
 import { AuthHandler, GoogleAdapter, Session, SessionTypes } from "sst/node/auth";
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { Table } from "sst/node/table"
-import { marshall } from "@aws-sdk/util-dynamodb"
 import { Config } from "sst/node/config";
+import { create } from "@finvo/core/user";
 
 declare module "sst/node/auth" {
 	export interface SessionTypes {
@@ -12,17 +10,15 @@ declare module "sst/node/auth" {
 	}
 }
 
-const saveUserToDynamoDB = async (user: any): Promise<void> => {
-	const ddb = new DynamoDBClient({});
-	await ddb.send(new PutItemCommand({
-		TableName: Table.users.tableName,
-		Item: marshall({
-			id: user.sub,
-			email: user.email,
-			picture: user.picture,
-			name: user.given_name,
-		})
-	}))
+const saveUser = async (user: any): Promise<void> => {
+	console.log("chegou no saveUser...")
+	const newUser = await create({
+		id: user.sub,
+		email: user.email,
+		picture: user.picture,
+		name: user.given_name,
+	});
+	console.log(`User id: ${newUser}`);
 }
 
 export const handler = AuthHandler({
@@ -35,11 +31,11 @@ export const handler = AuthHandler({
 				console.log("TOKENSET:", tokenset)
 				const user = tokenset.claims();
 
-				await saveUserToDynamoDB(user);
+				await saveUser(user);
 
 				console.log("ENV: ", process.env.SITE_URL)
 				return Session.parameter({
-					redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
+					redirect: `${process.env.SITE_URL}/login` || "http://localhost:5173/login",
 					type: "user",
 					properties: {
 						userID: user.sub,
