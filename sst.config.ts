@@ -14,7 +14,6 @@ export default {
   },
   stacks(app) {
     app
-      // .stack(Database)
       .stack(Secrets)
       .stack(API)
       .stack(Web)
