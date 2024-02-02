@@ -12,7 +12,7 @@
   "devDependencies": {
     "@types/node": "^18.11.19",
     "drizzle-kit": "^0.20.6",
-    "sst": "2.37.0",
+    "sst": "2.40.1",
     "vitest": "^0.28.4"
   },
   "dependencies": {

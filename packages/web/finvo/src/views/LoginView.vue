@@ -27,11 +27,12 @@ const API_URL = ref(`${import.meta.env.VITE_APP_API_URL}/auth/google/authorize`)
 const route = useRoute()
 const router = useRouter()
 const { cookies } = useCookies()
+console.log(cookies);
 
-const token = ref(route.query.token)
+//const token = ref(route.query.token)
 
-if (token.value) {
-  cookies.set('session', token.value.toString())
-  router.push('/dashboard')
-}
+// if (token.value) {
+//   cookies.set('session', token.value.toString())
+//   router.push('/dashboard')
+// }
 </script>

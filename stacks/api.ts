@@ -28,6 +28,12 @@ export function API({ stack }: StackContext) {
 			"PUT /transactions/{id}": "packages/functions/src/transactions/update.handler",
 			"DELETE /transactions/{id}/{accountId}": "packages/functions/src/transactions/delete.handler",
 		},
+		// cors: {
+		// 	allowCredentials: true,
+		// 	allowHeaders: ["content-type"],
+		// 	allowMethods: ["ANY"],
+		// 	allowOrigins: ["http://localhost:5173", site.url!]
+		// }
 	});
 
 	stack.addOutputs({

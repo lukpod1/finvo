@@ -34,13 +34,16 @@ export const handler = AuthHandler({
 				await saveUser(user);
 
 				console.log("ENV: ", process.env.SITE_URL)
-				return Session.parameter({
-					redirect: `${process.env.SITE_URL}/login` || "http://localhost:5173/login",
+				const cookie = Session.cookie({
+					redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
 					type: "user",
 					properties: {
 						userID: user.sub,
 					},
 				})
+
+				console.log("set-cookie", cookie);
+				return cookie;
 			}
 		}),
 	}
