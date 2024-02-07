@@ -5,12 +5,11 @@ import { Secrets } from "./secrets";
 export function API({ stack }: StackContext) {
 
 	const { google } = use(Secrets);
-	const database = use(Database);
 
 	const api = new Api(stack, "api", {
 		defaults: {
 			function: {
-				bind: [...Object.values(database), google.GOOGLE_CLIENT_ID],
+				bind: [google.GOOGLE_CLIENT_ID],
 			}
 		},
 		routes: {
