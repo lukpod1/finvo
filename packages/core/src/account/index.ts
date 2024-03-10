@@ -55,9 +55,10 @@ export const remove = zod(
     id: true,
     userId: true
   }), async (input) => {
-  db.delete(accounts)
+  return db.delete(accounts)
     .where(and(
       eq(accounts.id, input.id),
       eq(accounts.userId, input.userId)
-    ));
+    ))
+    .returning({ deletedId: accounts.id });
 })

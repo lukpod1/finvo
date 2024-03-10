@@ -127,10 +127,9 @@ export class Account {
 				console.log(`No transactions to delete for account ${this.id}`);
 			}
 
+			const deleted = await remove({id: this.id, userId: this.userId});
 
-			await remove({id: this.id, userId: this.userId});
-
-			console.log(`Account ${this.id} deleted successfully`);
+			console.log(`Account, ${this.name} - ${deleted[0]?.deletedId} deleted successfully`);
 		} catch (error) {
 			throw new AccountUpdateError(`Error deleting account ${this.id}: ${error}`, this.id);
 		}
