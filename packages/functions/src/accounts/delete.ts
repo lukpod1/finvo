@@ -1,11 +1,12 @@
+import { fromID } from "@finvo/core/account";
 import { Account } from "@finvo/core/domain/account";
 import { ApiHandler, usePathParams } from "sst/node/api";
 
 export const handler = ApiHandler(async () => {
 	try {
-		const { id, userId } = usePathParams();
+		const { id } = usePathParams();
 
-		const account = await Account.getAccountById(id!, userId!);
+		const account = await Account.getAccountById(id!);
 
 		if (!account) {
 			return {

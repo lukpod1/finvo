@@ -1,10 +1,12 @@
 import { DeleteItemCommand, DeleteItemCommandInput, DynamoDBClient, GetItemCommand, PutItemCommand, PutItemCommandInput, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
+import { getTransactionsByAccountId, remove } from "../transaction";
 
 export class Transaction {
 	id: string;
 	amount: number;
-	date: string;
+	createdAt: string;
+	updatedAt: string;
 	description: string;
 	type: TransactionType;
 	accountId: string;
@@ -12,10 +14,11 @@ export class Transaction {
 
 	static client = new DynamoDBClient({});
 
-	constructor(id: string, amount: number, date: string, description: string, type: TransactionType, accountId: string, userId: string) {
+	constructor(id: string, amount: number, createdAt: string, updatedAt: string, description: string, type: TransactionType, accountId: string, userId: string) {
 		this.id = id;
 		this.amount = amount;
-		this.date = date;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.description = description;
 		this.type = type;
 		this.accountId = accountId;
@@ -96,19 +99,9 @@ export class Transaction {
 	}
 
 	async delete(): Promise<void> {
-		// implement this method
-		const params: DeleteItemCommandInput = {
-			TableName: Table.transactions.tableName,
-			Key: {
-				id: { S: this.id },
-				accountId: { S: this.accountId },
-			},
-			ReturnValues: "ALL_OLD",
-		};
 
 		try {
-			const command = new DeleteItemCommand(params);
-			await Transaction.client.send(command);
+			await remove(this.id);
 			console.log(`Transaction ${this.id} deleted successfully`);
 		} catch (error) {
 			throw new TransactionSaveError(`Error deleting account ${this.id}`, this.id);
@@ -117,29 +110,20 @@ export class Transaction {
 
 	static async getTransactionsByAccountId(accountId: string): Promise<Transaction[]> {
 		console.log(`Getting transactions for account ${accountId}`);
-		const params = {
-			TableName: Table.transactions.tableName,
-			IndexName: "accountIdIndex",
-			KeyConditionExpression: "accountId = :accountId",
-			ExpressionAttributeValues: {
-				":accountId": { S: accountId },
-			},
-		};
-
-		console.log(`Params: ${JSON.stringify(params)}`);
 
 		try {
-			const data = await Transaction.client.send(new QueryCommand(params));
+			const data = await getTransactionsByAccountId(accountId);
 			const transactions: Transaction[] = [];
-			data.Items?.forEach((item) => {
+			data?.forEach((item) => {
 				transactions.push(new Transaction(
-					item.id.S ?? "",
-					Number(item.amount.N) ?? 0,
-					item.date.S ?? "",
-					item.description.S ?? "",
-					item.type?.S as TransactionType ?? "",
-					item.accountId.S ?? "",
-					item.userId.S ?? "",
+					item.id ?? "",
+					Number(item.amount) ?? 0,
+					item.createdAt ?? "",
+					item.updatedAt ?? "",
+					item.description ?? "",
+					item.type as TransactionType ?? "",
+					item.accountId ?? "",
+					item.userId ?? "",
 				));
 			}
 			);
@@ -147,7 +131,7 @@ export class Transaction {
 			console.log(`Found ${transactions.length} transactions for account ${accountId}`);
 			return transactions;
 		} catch (error) {
-			throw new TransactionSaveError(`Error getting transactions for account ${accountId}`, accountId);
+			throw new TransactionSaveError(`Error getting transactions for account ${accountId} | ${error}`, accountId);
 		}
 	}
 

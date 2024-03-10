@@ -1,7 +1,6 @@
-import { char, timestamp } from "drizzle-orm/pg-core"
-import { sql } from "drizzle-orm";
+import { char, text, timestamp } from "drizzle-orm/pg-core"
 
-export const cuid = (name: string) => char(name, { length: 24 });
+export const cuid = (name: string) => text(name);
 
 export const id = {
   get id() {
@@ -10,18 +9,14 @@ export const id = {
 }
 
 export const timestamps = {
-  timeCreated: timestamp("time_created", {
-    mode: "string",
+  createdAt: timestamp("created_at", {
+    mode: "string"
   })
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-  timeUpdated: timestamp("time_updated", {
-    mode: "string",
-  })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`)
     .defaultNow(),
-  timeDeleted: timestamp("time_deleted", {
-    mode: "string",
-  }),
+  updatedAt: timestamp("updated_at", {
+    mode: "string"
+  })
+    .notNull()
+    .defaultNow(),
 };

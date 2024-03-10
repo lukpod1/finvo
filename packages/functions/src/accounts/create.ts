@@ -1,6 +1,7 @@
 import { Account, AccountDTO } from "@finvo/core/domain/account";
 import { randomUUID } from "crypto";
 import { ApiHandler, useJsonBody } from "sst/node/api";
+import { v4 } from "uuid";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -12,7 +13,7 @@ const schema = yup.object().shape({
 export const handler = ApiHandler(async () => {
 	try {
 		const { userId, balance, name }: AccountDTO = await schema.validate(useJsonBody());
-		const account = new Account(randomUUID(), name, userId, balance!);
+		const account = new Account(v4(), name, userId, balance!);
 		console.log(account);
 
 		await account.save();

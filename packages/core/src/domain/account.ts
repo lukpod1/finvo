@@ -1,6 +1,7 @@
 import { DeleteItemCommand, DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
+import { create, fromID, remove } from "../account";
 
 export class Account {
 	id: string;
@@ -24,42 +25,35 @@ export class Account {
 
 	async save(): Promise<void> {
 		try {
-			await Account.client.send(new PutItemCommand({
-				TableName: Table.accounts.tableName,
-				Item: {
-					id: { S: this.id },
-					balance: { N: this.balance.toString() },
-					name: { S: this.name },
-					userId: { S: this.userId },
-				},
-			}));
+			await create({ ...this })
 			console.log(`Account ${this.id} saved successfully`);
 		} catch (error) {
 			throw new AccountSaveError(`Error saving account ${this.id}`, this.id);
 		}
 	}
 
-	static async getAccountById(id: string, userId: string): Promise<Account> {
+	static async getAccountById(id: string): Promise<Account> {
 		try {
-			const result = await Account.client.send(new GetItemCommand({
-				TableName: Table.accounts.tableName,
-				Key: {
-					id: { S: id },
-					userId: { S: userId },
-				},
-			}));
-			if (!result.Item) {
+			const result = await fromID(id);
+			// const result = await Account.client.send(new GetItemCommand({
+			// 	TableName: Table.accounts.tableName,
+			// 	Key: {
+			// 		id: { S: id },
+			// 		userId: { S: userId },
+			// 	},
+			// }));
+			if (!result) {
 				throw new AccountGetError(`Account with ID ${id} not found!`, id)
 			}
 
 			return new Account(
-				result.Item.id.S ?? "",
-				result.Item.name.S ?? "",
-				result.Item.userId.S ?? "",
-				Number(result.Item.balance.N),
+				result.id,
+				result.name,
+				result.userId,
+				Number(result.balance),
 			);
 		} catch (error) {
-			throw new AccountGetError(`Error getting account ${id} for user ${userId}: ${error}`, id)
+			throw new AccountGetError(`Error getting account ${id}: ${error}`, id)
 		}
 	}
 
@@ -134,17 +128,11 @@ export class Account {
 			}
 
 
-			await Account.client.send(new DeleteItemCommand({
-				TableName: Table.accounts.tableName,
-				Key: {
-					id: { S: this.id },
-					userId: { S: this.userId },
-				},
-			}));
+			await remove({id: this.id, userId: this.userId});
 
 			console.log(`Account ${this.id} deleted successfully`);
 		} catch (error) {
-			throw new AccountUpdateError(`Error deleting account ${this.id}`, this.id);
+			throw new AccountUpdateError(`Error deleting account ${this.id}: ${error}`, this.id);
 		}
 	}
 }

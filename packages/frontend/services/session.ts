@@ -1,21 +1,20 @@
-import { parseCookies } from "nookies";
-
 export async function fetchSession(): Promise<any> {
-	const { session } = parseCookies();
-
-	if (!session) return null;
 
 	try {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
-			method: 'GET',
-			credentials: "include"
-		})
+		const session = localStorage.getItem("session");
+		if (session) {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/session`, {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${session}`
+			},
+			})
 
-		if (!response.ok)
-			throw new Error(`Failed to fetch session: ${response.status}`);
+			if (!response.ok)
+				throw new Error(`Failed to fetch session: ${response.status}`);
 
-		return response.json();
-
+			return response.json();
+		}
 	} catch (error) {
 		console.error('Error fetching session:', error);
 		return null;

@@ -7,6 +7,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const { fetchSessionData } = useSessionStore();
 
   useEffect(() => {
+    console.log("calling in fetchSessionData")
     fetchSessionData();
   }, [fetchSessionData]);
 

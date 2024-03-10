@@ -1,26 +1,23 @@
+import { useSessionStore } from "@/store/session";
 import Head from "next/head";
 import Link from "next/link";
-import { setCookie } from "nookies";
-
-export async function getServerSideProps(context: any) {
-	const { token } = context.query;
-
-	if (token) {
-		setCookie(context, 'session', token.toString());
-		return {
-			redirect: {
-				destination: '/dashboard',
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {},
-	};
-}
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Login() {
+	const router = useRouter();
+	const { fetchSessionData } = useSessionStore();
+
+	useEffect(() => {
+		const token = router.query.token;
+		if (token) {
+			localStorage.setItem('session', token.toString());
+			setTimeout(() => {
+				fetchSessionData()
+				router.push('/dashboard');
+			}, 1000);
+		}
+	})
 
 	return (
 		<div>

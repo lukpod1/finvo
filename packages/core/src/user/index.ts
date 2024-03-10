@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zod } from "../util/zod";
 import { db } from "../drizzle";
 import { id } from "../util/sql";
+import { eq } from "drizzle-orm";
 
 export const UserSchema = createSelectSchema(users, {
   id: (schema) => schema.id,
@@ -31,3 +32,11 @@ export const create = zod(
     return id;
   }
 );
+
+export const fromID = zod(UserSchema.shape.id, async (id) => {
+  return db.select()
+    .from(users)
+    .where(eq(users.id, id))
+    .execute()
+    .then((rows) => rows[0]);
+});

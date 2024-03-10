@@ -2,7 +2,7 @@ import { ApiHandler, useQueryParam } from "sst/node/api";
 import { getTransactions } from "./find";
 
 export const handler = ApiHandler(async (event) => {
-	const userId = useQueryParam("userId");
+	const userId = useQueryParam("userId") as string;
 
 	try {
 		const transactions = await getTransactions(userId);

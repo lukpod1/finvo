@@ -1,6 +1,6 @@
 import { ApiHandler, useJsonBody } from "sst/node/api";
 import { Transaction, TransactionDTO, TransactionType } from "@finvo/core/domain/transaction";
-import { randomUUID } from "crypto";
+import { v4 } from "uuid";
 import * as yup from "yup";
 import { Account } from "@finvo/core/domain/account";
 
@@ -16,7 +16,7 @@ const schema = yup.object().shape({
 export const handler = ApiHandler(async () => {
 	try {
 		const { amount, date, description, type, accountId, userId }: TransactionDTO = await schema.validate(useJsonBody());
-		const transaction = new Transaction(randomUUID(), amount, date, description, type as TransactionType, accountId, userId);
+		const transaction = new Transaction(v4(), amount, date, description, type as TransactionType, accountId, userId);
 
 		await Account.updateBalance(transaction);
 

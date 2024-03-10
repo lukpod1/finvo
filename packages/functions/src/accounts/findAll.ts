@@ -2,7 +2,7 @@ import { ApiHandler, useQueryParam } from "sst/node/api";
 import { getAccounts } from "./find";
 
 export const handler = ApiHandler(async (event) => {
-	const userId = useQueryParam("userId");
+	const userId = useQueryParam("userId") as string;
 	console.log("userId", userId);
 
 	try {

@@ -2,6 +2,8 @@ import "dotenv/config"
 
 import { Config } from "drizzle-kit";
 
+const NEON_URL = "";
+
 export default {
   schema: "./src/**/*.sql.ts",
   out: "./migrations/",
@@ -9,6 +11,6 @@ export default {
   strict: true,
   verbose: true,
   dbCredentials: {
-    connectionString: process.env.NEON_DB_URL!,
+    connectionString: NEON_URL,
   },
 } satisfies Config;

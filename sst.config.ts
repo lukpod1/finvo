@@ -1,5 +1,4 @@
 import { SSTConfig } from "sst";
-import { Database } from "./stacks/database";
 import { Secrets } from "./stacks/secrets";
 import { API } from "./stacks/api";
 import { Web } from "./stacks/web";

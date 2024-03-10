@@ -18,7 +18,7 @@ const saveUser = async (user: any): Promise<void> => {
 		picture: user.picture,
 		name: user.given_name,
 	});
-	console.log(`User id: ${newUser}`);
+	console.log(`User id: ${newUser.id}`);
 }
 
 export const handler = AuthHandler({
@@ -34,16 +34,13 @@ export const handler = AuthHandler({
 				await saveUser(user);
 
 				console.log("ENV: ", process.env.SITE_URL)
-				const cookie = Session.cookie({
+				return Session.parameter({
 					redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
 					type: "user",
 					properties: {
 						userID: user.sub,
 					},
 				})
-
-				console.log("set-cookie", cookie);
-				return cookie;
 			}
 		}),
 	}
