@@ -1,10 +1,9 @@
 import { Api, StackContext, use } from "sst/constructs";
 import { Secrets } from "./secrets";
-import { DNS, ZONE } from "./dns";
+import { ZONE } from "./dns";
 
 export function API({ stack }: StackContext) {
 
-	const dns = use(DNS);
 	const { google, neonDB } = use(Secrets);
 
 	const api = new Api(stack, "api", {
@@ -32,7 +31,7 @@ export function API({ stack }: StackContext) {
 			allowCredentials: true,
 			allowHeaders: ["content-type"],
 			allowMethods: ["ANY"],
-			allowOrigins: ["http://localhost:3000", dns.zone],
+			allowOrigins: ["http://localhost:3000", `http://${ZONE.dev}`, `http://${ZONE.prod}`],
 		},
 	});
 
