@@ -1,9 +1,10 @@
 import { Api, StackContext, use } from "sst/constructs";
-import { Database } from "./database";
 import { Secrets } from "./secrets";
+import { DNS, ZONE } from "./dns";
 
 export function API({ stack }: StackContext) {
 
+	const dns = use(DNS);
 	const { google, neonDB } = use(Secrets);
 
 	const api = new Api(stack, "api", {
@@ -26,6 +27,12 @@ export function API({ stack }: StackContext) {
 			"POST /transactions": "packages/functions/src/transactions/create.handler",
 			"PUT /transactions/{id}": "packages/functions/src/transactions/update.handler",
 			"DELETE /transactions/{id}/{accountId}": "packages/functions/src/transactions/delete.handler",
+		},
+		cors: {
+			allowCredentials: true,
+			allowHeaders: ["content-type"],
+			allowMethods: ["ANY"],
+			allowOrigins: ["http://localhost:3000", dns.zone],
 		},
 	});
 

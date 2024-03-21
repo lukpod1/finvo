@@ -3,6 +3,7 @@ import { Secrets } from "./stacks/secrets";
 import { API } from "./stacks/api";
 import { Web } from "./stacks/web";
 import { Auth } from "./stacks/auth";
+import { DNS } from "./stacks/dns";
 
 export default {
   config(_input) {
@@ -13,6 +14,7 @@ export default {
   },
   stacks(app) {
     app
+      .stack(DNS)
       .stack(Secrets)
       .stack(API)
       .stack(Web)
