@@ -1,5 +1,9 @@
 import Layout from '@/components/Layout';
+import { fetchSession } from '@/services/session';
 import { useSessionStore } from '@/store/session';
+import { GetServerSidePropsContext } from 'next';
+import { parseCookies } from "nookies";
+import { useEffect } from 'react';
 
 export default function DashBoard() {
   const { balance } = useSessionStore();

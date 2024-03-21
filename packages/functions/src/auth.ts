@@ -34,8 +34,8 @@ export const handler = AuthHandler({
 				await saveUser(user);
 
 				console.log("ENV: ", process.env.SITE_URL)
-				return Session.parameter({
-					redirect: `${process.env.SITE_URL}/login` || "http://localhost:3000/login",
+				return Session.cookie({
+					redirect: `${process.env.SITE_URL}/dashboard` || "http://localhost:3000/dashboard",
 					type: "user",
 					properties: {
 						userID: user.sub,
