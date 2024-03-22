@@ -32,7 +32,7 @@ export function API({ stack }: StackContext) {
 		cors: {
 			allowCredentials: true,
 			allowHeaders: ["content-type"],
-			allowMethods: ["ANY"],
+			allowMethods: ["GET", "POST", "PUT","DELETE"],
 			allowOrigins: ["http://localhost:3000", DEV, PROD],
 		},
 	});

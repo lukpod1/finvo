@@ -35,13 +35,7 @@ export class Account {
 	static async getAccountById(id: string): Promise<Account> {
 		try {
 			const result = await fromID(id);
-			// const result = await Account.client.send(new GetItemCommand({
-			// 	TableName: Table.accounts.tableName,
-			// 	Key: {
-			// 		id: { S: id },
-			// 		userId: { S: userId },
-			// 	},
-			// }));
+
 			if (!result) {
 				throw new AccountGetError(`Account with ID ${id} not found!`, id)
 			}
@@ -50,7 +44,7 @@ export class Account {
 				result.id,
 				result.name,
 				result.userId,
-				Number(result.balance),
+				result.balance
 			);
 		} catch (error) {
 			throw new AccountGetError(`Error getting account ${id}: ${error}`, id)
