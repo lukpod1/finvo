@@ -1,8 +1,8 @@
 import { Api, StackContext, use } from "sst/constructs";
 import { Secrets } from "./secrets";
 
-const DEV = "dev.finvo.net";
-const PROD = "finvo.net";
+const DEV = "http://dev.finvo.net";
+const PROD = "http://finvo.net";
 
 export function API({ stack }: StackContext) {
 
