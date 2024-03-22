@@ -1,6 +1,8 @@
 import { Api, StackContext, use } from "sst/constructs";
 import { Secrets } from "./secrets";
-import { ZONE } from "./dns";
+
+const DEV = "dev.finvo.net";
+const PROD = "finvo.net";
 
 export function API({ stack }: StackContext) {
 
@@ -31,7 +33,7 @@ export function API({ stack }: StackContext) {
 			allowCredentials: true,
 			allowHeaders: ["content-type"],
 			allowMethods: ["ANY"],
-			allowOrigins: ["http://localhost:3000", `http://${ZONE.dev}`, `http://${ZONE.prod}`],
+			allowOrigins: ["http://localhost:3000", DEV, PROD],
 		},
 	});
 

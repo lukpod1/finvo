@@ -1,6 +1,5 @@
 import { NextjsSite, StackContext, use } from "sst/constructs";
 import { API } from "./api";
-import { DNS } from "./dns";
 
 export function Web({ stack }: StackContext) {
 	const api = use(API);
