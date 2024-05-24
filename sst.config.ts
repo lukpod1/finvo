@@ -1,10 +1,8 @@
 import { SSTConfig } from "sst";
-import { Auth} from "./stacks/auth";
-import { Database } from "./stacks/database";
+import { Secrets } from "./stacks/secrets";
+import { API } from "./stacks/api";
 import { Web } from "./stacks/web";
-import { Account } from "./stacks/account";
-import { Session } from "./stacks/session";
-import { Transaction } from "./stacks/transaction";
+import { Auth } from "./stacks/auth";
 
 export default {
   config(_input) {
@@ -14,11 +12,10 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(Database)
-    app.stack(Session)
-    app.stack(Account)
-    app.stack(Transaction)
-    app.stack(Web)
-    app.stack(Auth)
+    app
+      .stack(Secrets)
+      .stack(API)
+      .stack(Web)
+      .stack(Auth)
   },
 } satisfies SSTConfig;

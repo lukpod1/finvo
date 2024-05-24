@@ -1,29 +1,29 @@
-import { Table } from "sst/node/table";
-import { ApiHandler, useCookie, useCookies, useHeaders } from "sst/node/api";
+import { ApiHandler, useCookies } from "sst/node/api";
 import { useSession } from "sst/node/auth";
-import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { fromID } from "@finvo/core/user";
 
 export const handler = ApiHandler(async () => {
-    const session = useSession();
+	const session = useSession();
+	const cookies = useCookies();
 
-    // Check user is authenticated
-    if (session.type !== "user") {
-        throw new Error("Not authenticated");
-    }
+	// Check user is authenticated
+	if (session.type !== "user") {
+		throw new Error("Not authenticated");
+	}
+	
+	const data = {
+		user: {},
+		token: ""
+	};
 
-    const ddb = new DynamoDBClient({});
-    const data = await ddb.send(
-        new GetItemCommand({
-            TableName: Table.users.tableName,
-            Key: marshall({
-                id: session.properties.userID,
-            }),
-        })
-    );
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify(unmarshall(data.Item!)),
-    };
+	const user = await fromID(session.properties.userID);
+	
+	data.user = user;
+	data.token = cookies["auth-token"];
+	
+	console.log("data:", data);
+	return {
+		statusCode: 200,
+		body: JSON.stringify(data),
+	};
 });

@@ -1,174 +1,155 @@
 import { DeleteItemCommand, DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import { Table } from "sst/node/table";
 import { Transaction } from "./transaction";
+import { create, fromID, remove } from "../account";
 
 export class Account {
-    id: string;
-    balance: number;
-    name: string;
-    userId: string;
+	id: string;
+	balance: number;
+	name: string;
+	userId: string;
 
-    static client = new DynamoDBClient({});
+	static client = new DynamoDBClient({});
 
-    constructor(id: string, name: string, userId: string, balance?: number) {
-        console.log(id, balance, name, userId)
-        if (!id || !name || !userId) {
-            throw new Error('Missing required parameter');
-        }
+	constructor(id: string, name: string, userId: string, balance?: number) {
+		console.log(id, balance, name, userId)
+		if (!id || !name || !userId) {
+			throw new Error('Missing required parameter');
+		}
 
-        this.id = id;
-        this.balance = balance || 0;
-        this.name = name;
-        this.userId = userId;
-    }
+		this.id = id;
+		this.balance = balance || 0;
+		this.name = name;
+		this.userId = userId;
+	}
 
-    async save(): Promise<void> {
-        try {
-            await Account.client.send(new PutItemCommand({
-                TableName: Table.accounts.tableName,
-                Item: {
-                    id: { S: this.id },
-                    balance: { N: this.balance.toString() },
-                    name: { S: this.name },
-                    userId: { S: this.userId },
-                },
-            }));
-            console.log(`Account ${this.id} saved successfully`);
-        } catch (error) {
-            throw new AccountSaveError(`Error saving account ${this.id}`, this.id);
-        }
-    }
+	async save(): Promise<void> {
+		try {
+			await create({ ...this })
+			console.log(`Account ${this.id} saved successfully`);
+		} catch (error) {
+			throw new AccountSaveError(`Error saving account ${this.id}`, this.id);
+		}
+	}
 
-    static async getAccountById(id: string, userId: string): Promise<Account> {
-        try {
-            const result = await Account.client.send(new GetItemCommand({
-                TableName: Table.accounts.tableName,
-                Key: {
-                    id: { S: id },
-                    userId: { S: userId },
-                },
-            }));
-            if (!result.Item) {
-                throw new AccountGetError(`Account with ID ${id} not found!`, id)
-            }
+	static async getAccountById(id: string): Promise<Account> {
+		try {
+			const result = await fromID(id);
 
-            return new Account(
-                result.Item.id.S ?? "",
-                result.Item.name.S ?? "",
-                result.Item.userId.S ?? "",
-                Number(result.Item.balance.N),
-            );
-        } catch (error) {
-            throw new AccountGetError(`Error getting account ${id} for user ${userId}: ${error}`, id)
-        }
-    }
+			if (!result) {
+				throw new AccountGetError(`Account with ID ${id} not found!`, id)
+			}
 
-    static async updateBalance(transaction: Transaction): Promise<void> {
-        const account = await this.getAccountById(transaction.accountId, transaction.userId);
+			return new Account(
+				result.id,
+				result.name,
+				result.userId,
+				result.balance
+			);
+		} catch (error) {
+			throw new AccountGetError(`Error getting account ${id}: ${error}`, id)
+		}
+	}
 
-        if (transaction.type === "expense") {
-            account.balance -= transaction.amount;
-        } else {
-            account.balance += transaction.amount;
-        }
+	static async updateBalance(transaction: Transaction): Promise<void> {
+		const account = await this.getAccountById(transaction.accountId, transaction.userId);
 
-        await account.save();
-    }
+		if (transaction.type === "expense") {
+			account.balance -= transaction.amount;
+		} else {
+			account.balance += transaction.amount;
+		}
 
-    static async updateAccountBalance(transaction: Transaction): Promise<void> {
-        const account = await this.getAccountById(transaction.accountId, transaction.userId);
+		await account.save();
+	}
 
-        const transactionResult = await Transaction.retrieve(transaction.id, transaction.accountId);
+	static async updateAccountBalance(transaction: Transaction): Promise<void> {
+		const account = await this.getAccountById(transaction.accountId, transaction.userId);
 
-        if (!transactionResult) {
-            throw new Error(`Transaction with ID ${transaction.id} not found`);
-        }
+		const transactionResult = await Transaction.retrieve(transaction.id, transaction.accountId);
 
-        const amountDifference = transaction.amount - transactionResult.amount;
+		if (!transactionResult) {
+			throw new Error(`Transaction with ID ${transaction.id} not found`);
+		}
 
-        if (transaction.type === "expense") {
-            account.balance -= amountDifference;
-        } else if (transaction.type === "income") {
-            account.balance += amountDifference;
-        }
+		const amountDifference = transaction.amount - transactionResult.amount;
 
-        await account.save();
-    }
+		if (transaction.type === "expense") {
+			account.balance -= amountDifference;
+		} else if (transaction.type === "income") {
+			account.balance += amountDifference;
+		}
 
-    async updateName(name: string): Promise<void> {
-        try {
-            await Account.client.send(new UpdateItemCommand({
-                TableName: Table.accounts.tableName,
-                Key: {
-                    id: { S: this.id },
-                    userId: { S: this.userId },
-                },
-                UpdateExpression: "SET #name = :name",
-                ExpressionAttributeNames: {
-                    "#name": "name",
-                },
-                ExpressionAttributeValues: {
-                    ":name": { S: name },
-                },
-            }));
-            console.log(`Account ${this.id} updated successfully`);
-        } catch (error) {
-            throw new AccountUpdateError(`Error updating account ${this.id}`, this.id);
-        }
-    }
+		await account.save();
+	}
 
-    async delete(): Promise<void> {
-        try {
+	async updateName(name: string): Promise<void> {
+		try {
+			await Account.client.send(new UpdateItemCommand({
+				TableName: Table.accounts.tableName,
+				Key: {
+					id: { S: this.id },
+					userId: { S: this.userId },
+				},
+				UpdateExpression: "SET #name = :name",
+				ExpressionAttributeNames: {
+					"#name": "name",
+				},
+				ExpressionAttributeValues: {
+					":name": { S: name },
+				},
+			}));
+			console.log(`Account ${this.id} updated successfully`);
+		} catch (error) {
+			throw new AccountUpdateError(`Error updating account ${this.id}`, this.id);
+		}
+	}
 
-            const transactions = await Transaction.getTransactionsByAccountId(this.id);
+	async delete(): Promise<void> {
+		try {
 
-            if (transactions.length > 0) {
-                console.log(`Deleting ${transactions.length} transactions for account ${this.id}`);
-                await Promise.all(
-                    transactions.map(async (transaction) => {
-                        await transaction.delete();
-                    })
-                );
-            } else {
-                console.log(`No transactions to delete for account ${this.id}`);
-            }
+			const transactions = await Transaction.getTransactionsByAccountId(this.id);
 
+			if (transactions.length > 0) {
+				console.log(`Deleting ${transactions.length} transactions for account ${this.id}`);
+				await Promise.all(
+					transactions.map(async (transaction) => {
+						await transaction.delete();
+					})
+				);
+			} else {
+				console.log(`No transactions to delete for account ${this.id}`);
+			}
 
-            await Account.client.send(new DeleteItemCommand({
-                TableName: Table.accounts.tableName,
-                Key: {
-                    id: { S: this.id },
-                    userId: { S: this.userId },
-                },
-            }));
+			const deleted = await remove({id: this.id, userId: this.userId});
 
-            console.log(`Account ${this.id} deleted successfully`);
-        } catch (error) {
-            throw new AccountUpdateError(`Error deleting account ${this.id}`, this.id);
-        }
-    }
+			console.log(`Account, ${this.name} - ${deleted[0]?.deletedId} deleted successfully`);
+		} catch (error) {
+			throw new AccountUpdateError(`Error deleting account ${this.id}: ${error}`, this.id);
+		}
+	}
 }
 
 export type AccountDTO = {
-    balance?: number;
-    name: string;
-    userId: string;
+	balance?: number;
+	name: string;
+	userId: string;
 }
 
 class AccountSaveError extends Error {
-    constructor(message: string, public accountId: string) {
-        super(message);
-    }
+	constructor(message: string, public accountId: string) {
+		super(message);
+	}
 }
 
 class AccountGetError extends Error {
-    constructor(message: string, public accountId: string) {
-        super(message);
-    }
+	constructor(message: string, public accountId: string) {
+		super(message);
+	}
 }
 
 class AccountUpdateError extends Error {
-    constructor(message: string, public accountId: string) {
-        super(message);
-    }
+	constructor(message: string, public accountId: string) {
+		super(message);
+	}
 }

@@ -18,7 +18,7 @@ export function Database({ stack }: StackContext) {
       name: "string",
       balance: "number",
     },
-    primaryIndex: { partitionKey: "id" , sortKey: "userId"},
+    primaryIndex: { partitionKey: "id", sortKey: "userId" },
     globalIndexes: {
       userIdIndex: {
         partitionKey: "userId",
