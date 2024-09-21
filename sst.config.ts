@@ -1,21 +1,14 @@
-import { SSTConfig } from "sst";
-import { Secrets } from "./stacks/secrets";
-import { API } from "./stacks/api";
-import { Web } from "./stacks/web";
-import { Auth } from "./stacks/auth";
+/// <reference path="./.sst/platform/config.d.ts" />
 
-export default {
-  config(_input) {
+export default $config({
+  app(input) {
     return {
       name: "finvo",
-      region: "us-east-1",
+      removal: input?.stage === "production" ? "retain" : "remove",
+      home: "aws",
     };
   },
-  stacks(app) {
-    app
-      .stack(Secrets)
-      .stack(API)
-      .stack(Web)
-      .stack(Auth)
+  async run() {
+    new sst.aws.Nextjs("MyWeb");
   },
-} satisfies SSTConfig;
+});

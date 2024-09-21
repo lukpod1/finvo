@@ -1,26 +1,27 @@
 {
   "name": "finvo",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "sst dev",
-    "build": "sst build",
-    "deploy": "sst deploy",
-    "remove": "sst remove",
-    "console": "sst console",
-    "typecheck": "tsc --noEmit"
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.2.13",
+    "react": "^18",
+    "react-dom": "^18",
+    "sst": "3.1.31"
   },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "^3.272.0",
-    "@aws-sdk/util-dynamodb": "^3.272.0",
-    "@tsconfig/node16": "^1.0.3",
-    "aws-cdk-lib": "2.124.0",
-    "constructs": "10.3.0",
-    "sst": "2.40.5",
-    "typescript": "^5.0.2"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
 }
